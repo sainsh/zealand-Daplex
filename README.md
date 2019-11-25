@@ -19,6 +19,11 @@ npm start
 ## Testing
 Vi benytter jester. Du kan læse deres dokumentation [her](https://jestjs.io/docs/en/getting-started.html).
 
+Kør testen
+```
+npm test
+```
+
 ## Arkitektur
 |   |   |
 |---|---|
