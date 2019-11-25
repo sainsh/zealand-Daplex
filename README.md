@@ -61,3 +61,26 @@ root/
 * **Der må ikke pushes noget der ikke kan kompileres/bygges**
 * **Branches skal kun oprettes hvis man skal eksperimentere med noget**
 * **Branches må ikke merges med master**
+
+
+### Routes
+Routes skal indeholder CRUD operation og kun det.
+<br>F.eks.
+```javascript
+/* (C) GET root page. */
+router.get('/', function(req, res, next) {
+  /* Handle root get request */
+});
+/* (R) POST root page. */
+router.post('/', function(req, res, next) {
+  /* Handle root post request */
+});
+/* (U) PUT root page. */
+router.put('/', function(req, res, next) {
+  /* Handle root put request */
+});
+/* (D) DELETE root page. */
+router.delete('/', function(req, res, next) {
+  /* Handle root delete request */
+});
+``` 
