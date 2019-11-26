@@ -1,5 +1,5 @@
-const sum = require('./sum');
+const string = require('./string');
 
 test('Returns string', () => {
-    expect(stringR("text")).toBe("text");
+    expect(string("text")).toBe("text");
 });
