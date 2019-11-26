@@ -1,0 +1,19 @@
+form(action='/import/csv', method='post', enctype="multipart/form-data")
+    h2 Upload csv:
+    br
+    input(type='file', name='csv-file', accept=".csv")
+    br
+    br
+    input(type='submit', value='Upload')
+
+br
+hr
+br
+
+form(action='/import/xlsx', method='post', enctype="multipart/form-data")
+    h2 Upload xlsx:
+    br
+    input(type='file', name='xlsx-file', accept=".xlsx")
+    br
+    br
+    input(type='submit', value='Upload')
