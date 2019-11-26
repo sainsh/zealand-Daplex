@@ -1,0 +1,5 @@
+1- Test method will return the original string
+
+2- Test connection to DB
+
+3- Test writing to DB success (Write and read it back from DB)
