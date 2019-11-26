@@ -1,4 +1,4 @@
-function stringR(text) {
+function string(text) {
     return text;
 }
 module.exports = string;
