@@ -114,8 +114,11 @@ exports.setupDatabase = async function (host = "localhost", user = "root", passw
         throw e;
     } finally {
         connection.end();
+        exports.setupTables();
     }
 };
+
+exports.setupDatabase();
 
 /**
  * Function for creating the tables.
