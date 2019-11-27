@@ -6,6 +6,7 @@ const XLSX = require('xlsx');
 exports.convertXlsxToCsv = function (inputFilePath, outputFilePath) {
     const workBook = XLSX.readFile(inputFilePath);
     XLSX.writeFile(workBook, outputFilePath, {bookType: "csv", FS: ";"});
+    return true;
 };
 
 exports.convertCsvToJson = async function (path) {
