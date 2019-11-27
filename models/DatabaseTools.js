@@ -1,8 +1,10 @@
 const mysql = require('mysql2/promise');
 const Sequelize = require('sequelize');
-const sequelize = new Sequelize('daplex', 'root', '', {
-    host: 'localhost',
-    password: '',
+const host = 'localhost';
+const user = 'root';
+const password = '';
+const sequelize = new Sequelize('daplex', user, password, {
+    host: host,
     dialect: 'mysql',
     define: {
         timestamps: false
@@ -100,7 +102,7 @@ function getHelpdeskTable() {
  * @param password
  * @returns {Promise<void>}
  */
-exports.setupDatabase = async function (host = "localhost", user = "root", password = "") {
+exports.setupDatabase = async function (host, user, password) {
     let connection;
     try {
         connection = await mysql.createConnection({
@@ -120,7 +122,7 @@ exports.setupDatabase = async function (host = "localhost", user = "root", passw
     }
 };
 
-exports.setupDatabase();
+exports.setupDatabase(host, user, password);
 
 /**
  * Function for creating the tables.
