@@ -66,4 +66,4 @@ async function createCsvPriorityCard() {
     await csvWriter.writeRecords(arrayOfObjects);
 }
 
-createCsvPriorityCard();
+// createCsvPriorityCard();
