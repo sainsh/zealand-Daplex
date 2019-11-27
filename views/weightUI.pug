@@ -1,10 +1,30 @@
-// currently works properly in Chrome only, JS fallback required for IE/FF
-script(src='assets/javascripts/slider.js')
-script(src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous")
-link(rel="stylesheet", href='assets/stylesheets/slider.css')
-h1 CSS-Only Range Slider
-h3 JS used for color-change and % label 
-#sliderin 
-    input(type='range' value= 0)
-#demo
-    h4 0
+
+link(rel="stylesheet", href="assets/stylesheets/slider.css")
+
+.container
+  .range-slider
+    p catogory 1
+    span#rs-bullet.rs-label 0
+    input#rs-range-line.rs-range(type='range' value='0' min='0' max='100')
+  .box-minmax
+    span 0
+    span 100
+
+.container
+  .range-slider
+    p catogory 1
+    span#rs-bullet2.rs-label 0
+    input#rs-range-line2.rs-range(type='range' value='0' min='0' max='100')
+  .box-minmax
+    span 0
+    span 100
+
+.container
+  .range-slider
+    p catogory 1
+    span#rs-bullet3.rs-label 0
+    input#rs-range-line3.rs-range(type='range' value='0' min='0' max='100')
+  .box-minmax
+    span 0
+    span 100
+  script(src="assets/javascripts/slider.js")
