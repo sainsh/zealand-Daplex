@@ -3,3 +3,49 @@ extends layout
 block content
   h1 limit page
   p Welcome to limit page
+  select
+    option(value="skole") skole
+    option(value="plejehjem") plejehjem
+  br 
+  p minimum værdi
+  input(type="text" name="minimum value")
+  |   per kvm. 
+  br 
+  p maximum værdi
+  input(type="text" name="maximum value")
+  |   per kvm. 
+  br
+  br
+  input(type="checkbox" name="indeklima" value="indeklima") 
+  | Indeklima 
+  br
+  input(type="checkbox" name="tekniske anlæg" value="tekniske anlæg") 
+  | tekniske anlæg
+  br
+  input(type="checkbox" name="Udv. belægning" value="Udv. belægning")
+  | Udv. belægning
+  br
+  input(type="checkbox" name="Murværk og facade" value="Murværk og facade")
+  | Murværk og facade
+  br
+  input(type="checkbox" name="Tag" value="Tag")
+  | Tag
+  br
+  input(type="checkbox" name="Udhæng og gavle" value="Udhæng og gavle")
+  | Udhæng og gavle
+  br
+  input(type="checkbox" name="Tagdækning" value="Tagdækning")
+  | Tagdækning
+  br
+  input(type="checkbox" name="Tagrender og nedløb" value="Tagrender og nedløb")
+  | Tagrender og nedløb
+  br
+  input(type="checkbox" name="Tagdækning" value="Tagdækning")
+  | Tagdækning
+  br
+  input(type="checkbox" name="Vinduer og udv. Døre" value="Vinduer og udv. Døre")
+  | Vinduer og udv. Døre
+  br
+  input(type="checkbox" name="Fundament og sokkel" value="Fundament og sokkel")
+  | Fundament og sokkel
+  br
