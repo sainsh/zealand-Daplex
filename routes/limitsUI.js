@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET UI-Limit page. */
+/* GET Limit-UI page. */
 router.get('/', function(req, res, next) {
-    res.render('UILimits');
+    res.render('limitsUI');
   });
   
   module.exports = router;
