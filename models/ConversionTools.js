@@ -2,6 +2,8 @@ const fs = require('fs');
 const fsPromises = require('fs').promises;
 const csv = require('csv-parser');
 const XLSX = require('xlsx');
+const databaseTools = require('./DatabaseTools');
+const createCsvWriter = require('csv-writer');
 
 exports.convertXlsxToCsv = function (inputFilePath, outputFilePath) {
     const workBook = XLSX.readFile(inputFilePath);
@@ -47,3 +49,21 @@ async function trimLines(path, trimUntil) {
 
     await fsPromises.writeFile(path, trimmedResult);
 }
+
+async function createCsvPriorityCard() {
+    const csvWriter = createCsvWriter.createObjectCsvWriter({
+        fieldDelimiter: ';', path: './temp/pk.csv',
+        header: [
+            {id: 'property_id', title: 'Ejendoms-id'},
+            {id: 'property_name', title: 'Ejendom'}
+        ]
+    });
+    let results = await databaseTools.readProperty();
+    let arrayOfObjects = [];
+    for (let result of results) {
+        arrayOfObjects.push(result.dataValues);
+    }
+    await csvWriter.writeRecords(arrayOfObjects);
+}
+
+// createCsvPriorityCard();

@@ -17,9 +17,14 @@ const upload = multer({
 // const upload = multer({ storage: storage });
 const databaseTools = require('../models/DatabaseTools');
 const conversionTools = require('../models/ConversionTools');
+const path = require('path');
 
 router.get('/', function (req, res, next) {
     res.render('import');
+});
+
+router.get('/getCard', function (req, res, next) {
+    res.download(path.join(__dirname, '../models/temp', 'pk.csv'), "Prioriteringskort.csv");
 });
 
 router.post('/csv', upload.single('csv-file'), function (req, res, next) {
