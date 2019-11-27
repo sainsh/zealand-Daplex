@@ -15,6 +15,10 @@ test('insert data from csv', async() =>{
     let jsonResult = await conversionTools.convertCsvToJson('test/testfiles/Helpdesk.csv');
     let result = await databaseTools.createHelpdesk(jsonResult);
     let res = await databaseTools.readProperty(1);
-    console.log(res[0].dataValues)
     expect(res[0].dataValues).toEqual({property_id:1, property_name: 'Kildemarksvej 114 + 118 - 128' })
+})
+
+test('try reading from properties where id is not a number', async()=>{
+    expect(databaseTools.readProperty('to')).rejects.toThrow();
+
 })

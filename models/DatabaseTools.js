@@ -207,7 +207,7 @@ exports.readProperty = async function (id) {
     try {
         let propertiesTable = getPropertiesTable();
         let result = await propertiesTable.findAll((id ? {where: {property_id: id}} : {})); // Add the "where" option, if the ID is not undefined
-        return result.length === 0 ? await Promise.reject() : result; // Return an error, if 0 results are found, else return the result(s)
+        return result.length === 0 ? await Promise.reject(new Error("failed to find id")) : result; // Return an error, if 0 results are found, else return the result(s)
     } catch (e) {
         throw e;
     }
