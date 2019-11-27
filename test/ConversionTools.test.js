@@ -22,7 +22,7 @@ function getFileContent(path) {
 
 test('create CSV priority card from database data', async () => {
     let baseDir = __dirname.slice(0, __dirname.indexOf("Daplex") + 6);
-    let dir1 = path.join(baseDir, 'models/temp', 'pk-test.csv');
+    let dir1 = path.join(baseDir, 'test/testfiles', 'pk-test.csv');
     let dir2 = path.join(baseDir, 'models/temp', 'pk.csv');
     await conversionTools.createCsvPriorityCard();
     let testFileContent = await getFileContent(dir1);
