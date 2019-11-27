@@ -7,7 +7,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var importRouter = require('./routes/import');
-var UILimitsRouter = require('./routes/UILimits');
+var UILimitsRouter = require('./routes/limitsUI');
 var weightUIRouter = require('./routes/weightUI');
 
 
@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/import', importRouter);
-app.use('/UILimits', UILimitsRouter);
+app.use('/limitsUI', UILimitsRouter);
 app.use('/weightUI', weightUIRouter);
 
 // catch 404 and forward to error handler

@@ -1,30 +1,22 @@
-
 link(rel="stylesheet", href="assets/stylesheets/slider.css")
-
-.container
-  .range-slider
-    p Helpdesk
-    span#rs-bullet.rs-label 0
-    input#rs-range-line.rs-range(type='range' value='0' min='0' max='100')
-  .box-minmax
-    span 0
-    span 100
-
-.container
-  .range-slider
-    p Energi
-    span#rs-bullet2.rs-label 0
-    input#rs-range-line2.rs-range(type='range' value='0' min='0' max='100')
-  .box-minmax
-    span 0
-    span 100
-
-.container
-  .range-slider
-    p Tilstand
-    span#rs-bullet3.rs-label 0
-    input#rs-range-line3.rs-range(type='range' value='0' min='0' max='100')
-  .box-minmax
-    span 0
-    span 100
+mixin slider(name, bullet, slider, id)
+  .container
+    .range-slider
+        p= name
+        span(id=`${bullet}` class=`rs-label` value="0" min="0" max="100") 0
+        input(id=`${slider}` class="rs-range" type='range' value='0' min='0' max='100')
+    .box-minmax
+        span 0
+        span 100
+ul
+  +slider('Indeklima', 'indeBullet', "indeSlider", 0)
+  +slider('Udv. belægning', 'udvBullet', 'udvSlider', 1)
+  +slider('Murværk og facade', 'murBullet', 'murSlider', 2)
+  +slider('Tag', 'tagBullet', "tagSlider", 3)
+  +slider('Udhæng og gavle', 'udBullet', "udSlider", 4)
+  +slider('Tagdækning', 'tagDækBullet', "tagDækSlider", 5)
+  +slider('Tagrender og nedløb', 'tagrenBullet', "tagrenSlider", 6)
+  +slider('Vinduer og udv. Døre', 'vinBullet', "vinSlider", 7)
+  +slider('Fundament og sokkel', 'funBullet', "funSlider", 8)
+  +slider('Tekniske anlæg', 'tekBullet',"tekSlider",9)
   script(src="assets/javascripts/slider.js")
