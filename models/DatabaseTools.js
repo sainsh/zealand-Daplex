@@ -113,7 +113,8 @@ exports.setupDatabase = async function (host = "localhost", user = "root", passw
     } catch (e) {
         throw e;
     } finally {
-        connection.end();
+        if (connection)
+            connection.end();
         exports.setupTables();
     }
 };
@@ -194,6 +195,16 @@ exports.createHelpdesk = async function (helpdeskArray) {
         }
 
         return resultsArray; // Return an array containing all inserted IDs
+    } catch (e) {
+        throw e;
+    }
+};
+
+exports.readProperty = async function (id) {
+    try {
+        let propertiesTable = getPropertiesTable();
+        let result = await propertiesTable.findAll((id ? {where: {fs_id: id}} : {})); // Add the "where" option, if the ID is not undefined
+        return result.length === 0 ? await Promise.reject() : result; // Return an error, if 0 results are found, else return the result(s)
     } catch (e) {
         throw e;
     }
