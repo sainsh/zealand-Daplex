@@ -2,7 +2,7 @@ const mysql = require('mysql2/promise');
 const Sequelize = require('sequelize');
 const host = 'localhost';
 const user = 'root';
-const password = '';
+const password = 'admin';
 const sequelize = new Sequelize('daplex', user, password, {
     host: host,
     dialect: 'mysql',
@@ -122,7 +122,7 @@ exports.setupDatabase = async function (host, user, password) {
     }
 };
 
-exports.setupDatabase(host, user, password);
+//exports.setupDatabase(host, user, password);
 
 /**
  * Function for creating the tables.
@@ -206,7 +206,7 @@ exports.createHelpdesk = async function (helpdeskArray) {
 exports.readProperty = async function (id) {
     try {
         let propertiesTable = getPropertiesTable();
-        let result = await propertiesTable.findAll((id ? {where: {fs_id: id}} : {})); // Add the "where" option, if the ID is not undefined
+        let result = await propertiesTable.findAll((id ? {where: {property_id: id}} : {})); // Add the "where" option, if the ID is not undefined
         return result.length === 0 ? await Promise.reject() : result; // Return an error, if 0 results are found, else return the result(s)
     } catch (e) {
         throw e;
