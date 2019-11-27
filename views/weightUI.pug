@@ -1,4 +1,3 @@
-
 link(rel="stylesheet", href="assets/stylesheets/slider.css")
 
 .container
@@ -27,4 +26,15 @@ link(rel="stylesheet", href="assets/stylesheets/slider.css")
   .box-minmax
     span 0
     span 100
+mixin slider(name, bullet, slider, id)
+  .container
+    .range-slider
+        p= name
+        span(id=`${bullet}` class=`rs-label` value="0" min="0" max="100") 0
+        input(id=`${slider}` class="rs-range" type='range' value='0' min='0' max='100')
+    .box-minmax
+        span 0
+        span 100
+ul
+  +slider('Indeklima', 'indeBullet', "indeSlider", 0)
   script(src="assets/javascripts/slider.js")
