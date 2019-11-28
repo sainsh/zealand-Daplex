@@ -94,6 +94,7 @@ function getHelpdeskTable() {
         }
     });
 }
+//
 
 function getHelpdeskWeightTable() {
     return sequelize.define('helpdesk_weight_data', {
