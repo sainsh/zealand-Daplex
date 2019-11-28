@@ -1,14 +1,16 @@
-link(rel="stylesheet", href="assets/stylesheets/slider.css")
+link(rel="stylesheet", href="/assets/stylesheets/slider.css")
 mixin slider(name, bullet, slider, id)
   .container
     .range-slider
         p= name
         span(id=`${bullet}` class=`rs-label` value="0" min="0" max="100") 0
-        input(id=`${slider}` class="rs-range" type='range' value='0' min='0' max='100')
+        input(id=`${slider}` class="rs-range" name=`${slider}` type='range' value='0' min='0' max='100')
     .box-minmax
         span 0
         span 100
-ul
+
+
+form(action="/weightUI/", method="post")
   +slider('Indeklima', 'indeBullet', "indeSlider", 0)
   +slider('Udv. belægning', 'udvBullet', 'udvSlider', 1)
   +slider('Murværk og facade', 'murBullet', 'murSlider', 2)
@@ -19,5 +21,5 @@ ul
   +slider('Vinduer og udv. Døre', 'vinBullet', "vinSlider", 7)
   +slider('Fundament og sokkel', 'funBullet', "funSlider", 8)
   +slider('Tekniske anlæg', 'tekBullet',"tekSlider",9)
-  button#btn Send Data 
-  script(src="assets/javascripts/slider.js")
+  input(type="submit", value="Set Sliders") 
+script(src="/assets/javascripts/slider.js")

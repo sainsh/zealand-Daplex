@@ -2,7 +2,7 @@ const mysql = require('mysql2/promise');
 const Sequelize = require('sequelize');
 const host = 'localhost';
 const user = 'root';
-const password = '';
+const password = 'password';
 const sequelize = new Sequelize('daplex', user, password, {
     host: host,
     dialect: 'mysql',
@@ -212,9 +212,9 @@ exports.setupDatabase = async function (host, user, password) {
     } catch (e) {
         throw e;
     } finally {
-        if (connection)
-            connection.end();
-        exports.setupTables();
+        if (connection) 
+         connection.end();
+        exports.setupTables(); 
     }
 };
 
@@ -228,7 +228,7 @@ exports.setupTables = async function () {
     let propertiesTable = getPropertiesTable();
     let helpdeskTable = getHelpdeskTable();
     let helpdeskWeightTable = getHelpdeskWeightTable();
-    let getHelpdeskLimitsTable = getHelpdeskLimitsTable();
+    let helpdeskLimitsTable = getHelpdeskLimitsTable();
 
     helpdeskTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
 
@@ -321,8 +321,8 @@ exports.createHelpdeskWeightTable = async function (helpdeskWeightArray) {
             helpdesk_teknisk: helpdeskWeightArray[9]
         });
 
-        resultsArray.push(result.dataValues)
-
+        resultsArray.push(result.dataValues.helpdesk_id);
+        console.log(resultsArray);
         return resultsArray; // Return an array containing all inserted IDs
     } catch (e) {
         throw e;
