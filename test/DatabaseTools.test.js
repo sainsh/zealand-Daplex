@@ -13,7 +13,7 @@ test('test create database with wrong username',  () => {
 
 test('insert data from csv', async() =>{
     let jsonResult = await conversionTools.convertCsvToJson('test/testfiles/Helpdesk.csv');
-    let result = await databaseTools.createHelpdesk(jsonResult);
+    let result = await databaseTools.createHelpdeskData(jsonResult);
     let res = await databaseTools.readProperty(1);
     expect(res[0].dataValues).toEqual({property_id:1, property_name: 'Kildemarksvej 114 + 118 - 128' })
 })

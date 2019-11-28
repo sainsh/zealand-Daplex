@@ -38,7 +38,7 @@ router.post('/xlsx', upload.single('xlsx-file'), async function (req, res, next)
     conversionTools.convertXlsxToCsv(req.file.path, outputFilePath);
     let jsonResult = await conversionTools.convertCsvToJson(outputFilePath);
     console.log(jsonResult);
-    let idResults = databaseTools.createHelpdesk(jsonResult);
+    let idResults = databaseTools.createHelpdeskData(jsonResult);
     console.log(idResults);
     res.redirect("/import");
 });

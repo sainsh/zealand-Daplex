@@ -95,8 +95,8 @@ function getHelpdeskTable() {
     });
 }
 
-function gethelpdeskWeightTable(){
-    return sequelize.define('helpde1sk_weight_data', {
+function getHelpdeskWeightTable() {
+    return sequelize.define('helpdesk_weight_data', {
         helpdesk_indeklima: {
             type: Sequelize.INTEGER,
             allowNull: false
@@ -177,7 +177,7 @@ exports.setupDatabase = async function (host, user, password) {
 exports.setupTables = async function () {
     let propertiesTable = getPropertiesTable();
     let helpdeskTable = getHelpdeskTable();
-    let helpdeskWeightTable = gethelpdeskWeightTable();
+    let helpdeskWeightTable = getHelpdeskWeightTable();
 
     helpdeskTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
 
@@ -210,12 +210,13 @@ exports.createProperty = async function (property_name) {
  * @param helpdeskArray
  * @returns {Promise<[]>}
  */
-exports.createHelpdesk = async function (helpdeskArray) {
+exports.createHelpdeskData = async function (helpdeskArray) {
     try {
-        let helpdeskWeihtTable = getHelpdeskWeightTable();
+        let helpdeskTable = getHelpdeskTable();
         let resultsArray = [];
+        let propertiesTable = getPropertiesTable();
 
-        for (let helpdeskObject of helpdeskWeightArray) { // Loop through all the data
+        for (let helpdeskObject of helpdeskArray) { // Loop through all the data
             let propertyId = await propertiesTable.findAll(({where: {property_name: helpdeskObject['Ejendom']}})); // Check whether the property exists
 
             if (propertyId.length === 0) // If the results array have a length of 0, the property doesn't exist
@@ -255,21 +256,20 @@ exports.createHelpdeskWeightTable = async function (helpdeskWeightArray) {
         let helpdeskWeightTable = getHelpdeskWeightTable();
         let resultsArray = [];
 
-            let result = await helpdeskWeightTable.create({
-                
-                helpdesk_indeklima: helpdeskWeightArray[0],
-                helpdesk_udv_b: helpdeskWeightArray[1],
-                helpdesk_mur_facade: helpdeskWeightArray[2],
-                helpdesk_tag: helpdeskWeightArray[3],
-                helpdesk_ud_gavl: helpdeskWeightArray[4],
-                helpdesk_tagdaekning: helpdeskWeightArray[5],
-                helpdesk_tag_ned: helpdeskWeightArray[6],
-                helpdesk_vinduer: helpdeskWeightArray[7],
-                helpdesk_fundament: helpdeskWeightArray[8],
-                helpdesk_teknisk: helpdeskWeightArray[9]
-            });
+        let result = await helpdeskWeightTable.create({
+            helpdesk_indeklima: helpdeskWeightArray[0],
+            helpdesk_udv_b: helpdeskWeightArray[1],
+            helpdesk_mur_facade: helpdeskWeightArray[2],
+            helpdesk_tag: helpdeskWeightArray[3],
+            helpdesk_ud_gavl: helpdeskWeightArray[4],
+            helpdesk_tagdaekning: helpdeskWeightArray[5],
+            helpdesk_tag_ned: helpdeskWeightArray[6],
+            helpdesk_vinduer: helpdeskWeightArray[7],
+            helpdesk_fundament: helpdeskWeightArray[8],
+            helpdesk_teknisk: helpdeskWeightArray[9]
+        });
 
-            resultsArray.push(result.dataValues)
+        resultsArray.push(result.dataValues)
 
         return resultsArray; // Return an array containing all inserted IDs
     } catch (e) {
