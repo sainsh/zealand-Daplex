@@ -140,6 +140,51 @@ function getHelpdeskWeightTable() {
     });
 }
 
+function getHelpdeskLimitsTable() {
+    return sequelize.define('helpdesk_limits_data', {
+        helpdesk_indeklima: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        helpdesk_tekniske_anlaeg: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        helpdesk_udv_belaegning: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        helpdesk_murwaerk_og_facade: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        helpdesk_tag: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        helpdesk_udhaeng_og_gavle: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        helpdesk_tagdaekning: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        helpdesk_tagrender_og_nedløb: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        helpdesk_vinduer_og_udv_doere: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        helpdesk_fundament_og_sokkel: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        }
+    });
+}
+
 
 /**
  * Function for creating the database itself. Sequelize can't do that.
@@ -178,12 +223,14 @@ exports.setupTables = async function () {
     let propertiesTable = getPropertiesTable();
     let helpdeskTable = getHelpdeskTable();
     let helpdeskWeightTable = getHelpdeskWeightTable();
+    let getHelpdeskLimitsTable = getHelpdeskLimitsTable();
 
     helpdeskTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
 
     await propertiesTable.sync({force: false});
     await helpdeskTable.sync({force: false});
     await helpdeskWeightTable.sync({force: false});
+    await helpdeskLimitsTable.sync({force: false});
 };
 
 /**
@@ -267,6 +314,32 @@ exports.createHelpdeskWeightTable = async function (helpdeskWeightArray) {
             helpdesk_vinduer: helpdeskWeightArray[7],
             helpdesk_fundament: helpdeskWeightArray[8],
             helpdesk_teknisk: helpdeskWeightArray[9]
+        });
+
+        resultsArray.push(result.dataValues)
+
+        return resultsArray; // Return an array containing all inserted IDs
+    } catch (e) {
+        throw e;
+    }
+};
+
+exports.createHelpdeskLimitsTable = async function (helpdesklimitsArray) {
+    try {
+        let helpdeskLimitsTable = getHelpdeskLimitsTable();
+        let resultsArray = [];
+
+        let result = await helpdeskLimitsTable.create({
+            helpdesk_indeklima: helpdesklimitsArray[0],
+            helpdesk_tekniske_anlaeg: helpdesklimitsArray[1],
+            helpdesk_udv_belaegning: helpdesklimitsArray[2],
+            helpdesk_murwaerk_og_facade: helpdesklimitsArray[3],
+            helpdesk_tag: helpdesklimitsArray[4],
+            helpdesk_udhaeng_og_gavle: helpdesklimitsArray[5],
+            helpdesk_tagdaekning: helpdesklimitsArray[6],
+            helpdesk_tagrender_og_nedløb: helpdesklimitsArray[7],
+            helpdesk_vinduer_og_udv_doere: helpdesklimitsArray[8],
+            helpdesk_fundament_og_sokkel: helpdesklimitsArray[9]
         });
 
         resultsArray.push(result.dataValues)
