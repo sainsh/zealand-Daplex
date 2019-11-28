@@ -137,7 +137,9 @@ function gethelpdeskWeightTable(){
             type: Sequelize.INTEGER,
             allowNull: false
         }
+    });
 }
+
 
 /**
  * Function for creating the database itself. Sequelize can't do that.
