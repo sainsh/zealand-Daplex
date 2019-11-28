@@ -1,4 +1,7 @@
+const db = require('../../../models/DatabaseTools');
 var button = document.getElementById('btn');
+
+db.
 
 function createSliderLogic(nameBullet, nameSlider){
 var bullet = document.getElementById(nameBullet);

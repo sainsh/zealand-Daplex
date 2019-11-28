@@ -95,6 +95,50 @@ function getHelpdeskTable() {
     });
 }
 
+function gethelpdeskWeightTable(){
+    return sequelize.define('helpde1sk_weight_data', {
+        helpdesk_indeklima: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        helpdesk_udv_b: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        helpdesk_mur_facade: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        helpdesk_tag: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        helpdesk_ud_gavl: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        helpdesk_tagdaekning: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        helpdesk_tag_ned: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        helpdesk_vinduer: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        helpdesk_fundament: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        helpdesk_teknisk: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        }
+}
+
 /**
  * Function for creating the database itself. Sequelize can't do that.
  * @param host
@@ -131,6 +175,7 @@ exports.setupDatabase = async function (host, user, password) {
 exports.setupTables = async function () {
     let propertiesTable = getPropertiesTable();
     let helpdeskTable = getHelpdeskTable();
+    let helpdeskWeightTable = gethelpdeskWeightTable();
 
     helpdeskTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
 
