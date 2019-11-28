@@ -2,7 +2,7 @@ const mysql = require('mysql2/promise');
 const Sequelize = require('sequelize');
 const host = 'localhost';
 const user = 'root';
-const password = 'admin';
+const password = '';
 const sequelize = new Sequelize('daplex', user, password, {
     host: host,
     dialect: 'mysql',
@@ -168,7 +168,7 @@ exports.setupDatabase = async function (host, user, password) {
     }
 };
 
-//exports.setupDatabase(host, user, password);
+exports.setupDatabase(host, user, password);
 
 /**
  * Function for creating the tables.
