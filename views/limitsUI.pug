@@ -1,4 +1,5 @@
 extends layout
+  
 
 block content
   h1 limit page
@@ -12,14 +13,15 @@ block content
   |   per kvm. 
   br 
   p maximum værdi
-  input(type="number" name="maximum value" id="maxvalue")
+  input#maxvalue(type="number" name="maximum value")
   |   per kvm. 
   br
   br
 
-  input(type="submit")
+  button(type="button" onclick="submit()") Submit
 
   br
+  
   br
   input(type="checkbox" name="indeklima" value="indeklima") 
   | Indeklima 
@@ -54,3 +56,5 @@ block content
   input(type="checkbox" name="Fundament og sokkel" value="Fundament og sokkel")
   | Fundament og sokkel
   br
+
+  script(src="/assets/javascripts/limits.js")
