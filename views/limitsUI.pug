@@ -1,4 +1,5 @@
 extends layout
+  
 
 block content
   h1 limit page
@@ -8,13 +9,19 @@ block content
     option(value="plejehjem") plejehjem
   br 
   p minimum værdi
-  input(type="number" name="minimum value")
+  input(type="number" name="minimum value" id="minvalue")
   |   per kvm. 
   br 
   p maximum værdi
-  input(type="number" name="maximum value")
+  input#maxvalue(type="number" name="maximum value")
   |   per kvm. 
   br
+  br
+
+  button(type="button" onclick="submit()") Submit
+
+  br
+  
   br
   input(type="checkbox" name="indeklima" value="indeklima") 
   | Indeklima 
@@ -49,3 +56,5 @@ block content
   input(type="checkbox" name="Fundament og sokkel" value="Fundament og sokkel")
   | Fundament og sokkel
   br
+
+  script(src="/assets/javascripts/limits.js")
