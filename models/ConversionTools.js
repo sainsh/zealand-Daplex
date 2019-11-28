@@ -4,6 +4,7 @@ const csv = require('csv-parser');
 const XLSX = require('xlsx');
 const databaseTools = require('./DatabaseTools');
 const createCsvWriter = require('csv-writer');
+const path = require('path');
 
 exports.convertXlsxToCsv = function (inputFilePath, outputFilePath) {
     const workBook = XLSX.readFile(inputFilePath);
@@ -50,9 +51,12 @@ async function trimLines(path, trimUntil) {
     await fsPromises.writeFile(path, trimmedResult);
 }
 
-async function createCsvPriorityCard() {
+exports.createCsvPriorityCard = async function () {
+    let baseDir = __dirname.slice(0, __dirname.indexOf("Daplex") + 6);
+    let dir = path.join(baseDir, 'models/temp', 'pk.csv');
+
     const csvWriter = createCsvWriter.createObjectCsvWriter({
-        fieldDelimiter: ';', path: './temp/pk.csv',
+        fieldDelimiter: ';', path: dir,
         header: [
             {id: 'property_id', title: 'Ejendoms-id'},
             {id: 'property_name', title: 'Ejendom'}
@@ -64,6 +68,6 @@ async function createCsvPriorityCard() {
         arrayOfObjects.push(result.dataValues);
     }
     await csvWriter.writeRecords(arrayOfObjects);
-}
+};
 
-// createCsvPriorityCard();
+// exports.createCsvPriorityCard();
