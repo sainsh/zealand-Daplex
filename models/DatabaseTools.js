@@ -183,6 +183,7 @@ exports.setupTables = async function () {
 
     await propertiesTable.sync({force: false});
     await helpdeskTable.sync({force: false});
+    await helpdeskWeightTable.sync({force: false});
 };
 
 /**
@@ -211,11 +212,10 @@ exports.createProperty = async function (property_name) {
  */
 exports.createHelpdesk = async function (helpdeskArray) {
     try {
-        let helpdeskTable = getHelpdeskTable();
+        let helpdeskWeihtTable = getHelpdeskWeightTable();
         let resultsArray = [];
-        let propertiesTable = getPropertiesTable();
 
-        for (let helpdeskObject of helpdeskArray) { // Loop through all the data
+        for (let helpdeskObject of helpdeskWeightArray) { // Loop through all the data
             let propertyId = await propertiesTable.findAll(({where: {property_name: helpdeskObject['Ejendom']}})); // Check whether the property exists
 
             if (propertyId.length === 0) // If the results array have a length of 0, the property doesn't exist
@@ -243,6 +243,33 @@ exports.createHelpdesk = async function (helpdeskArray) {
 
             resultsArray.push(result.dataValues.helpdesk_id)
         }
+
+        return resultsArray; // Return an array containing all inserted IDs
+    } catch (e) {
+        throw e;
+    }
+};
+
+exports.createHelpdeskWeightTable = async function (helpdeskWeightArray) {
+    try {
+        let helpdeskWeightTable = getHelpdeskWeightTable();
+        let resultsArray = [];
+
+            let result = await helpdeskWeightTable.create({
+                
+                helpdesk_indeklima: helpdeskWeightArray[0],
+                helpdesk_udv_b: helpdeskWeightArray[1],
+                helpdesk_mur_facade: helpdeskWeightArray[2],
+                helpdesk_tag: helpdeskWeightArray[3],
+                helpdesk_ud_gavl: helpdeskWeightArray[4],
+                helpdesk_tagdaekning: helpdeskWeightArray[5],
+                helpdesk_tag_ned: helpdeskWeightArray[6],
+                helpdesk_vinduer: helpdeskWeightArray[7],
+                helpdesk_fundament: helpdeskWeightArray[8],
+                helpdesk_teknisk: helpdeskWeightArray[9]
+            });
+
+            resultsArray.push(result.dataValues)
 
         return resultsArray; // Return an array containing all inserted IDs
     } catch (e) {

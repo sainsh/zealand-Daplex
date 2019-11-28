@@ -1,7 +1,5 @@
-const db = require('../../../models/DatabaseTools');
+//const db = require('./../../models/DatabaseTools');
 var button = document.getElementById('btn');
-
-db.
 
 function createSliderLogic(nameBullet, nameSlider){
 var bullet = document.getElementById(nameBullet);
@@ -26,6 +24,8 @@ function sendData() {
     var funSlider = document.getElementById('funSlider').value;
     var vinSlider = document.getElementById('vinSlider').value;
 
+    var data = [indeslider, udvSlider, murSlider, tagSlider, udSlider, tagDækSlider, tagrenSlider, vinSlider, funSlider, tekSlider];
+    //db.createHelpdeskWeightTable(data);
 }
 
 btn.addEventListener("click", sendData);
