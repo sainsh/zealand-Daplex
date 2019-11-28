@@ -97,7 +97,16 @@ function getHelpdeskTable() {
 
 function getHelpdeskWeightTable() {
     return sequelize.define('helpdesk_weight_data', {
+        property_type_id: {
+            type: Sequelize.INTEGER,
+            autoIncrement: false,
+            primaryKey: true
+        },
         helpdesk_indeklima: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        helpdesk_teknisk: {
             type: Sequelize.INTEGER,
             allowNull: false
         },
@@ -130,10 +139,6 @@ function getHelpdeskWeightTable() {
             allowNull: false
         },
         helpdesk_fundament: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_teknisk: {
             type: Sequelize.INTEGER,
             allowNull: false
         }
