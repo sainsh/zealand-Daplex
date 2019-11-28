@@ -8,7 +8,7 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/', (req, res, next) => {
-  
+
   var indeslider = req.body.indeSlider;
   console.log(indeslider);
   var udvSlider = req.body.udvSlider;
@@ -20,9 +20,9 @@ router.post('/', (req, res, next) => {
   var tagrenSlider = req.body.tagrenSlider;
   var funSlider = req.body.funSlider;
   var vinSlider = req.body.vinSlider;
-  
+
   var data = [indeslider, udvSlider, murSlider, tagSlider, udSlider, tagDækSlider, tagrenSlider, vinSlider, funSlider, tekSlider];
-  db.createHelpdeskWeightTable(data);
+  db.createHelpdeskWeight(data);
  //res.redirect('/weightUI/');
 })
 module.exports = router;
