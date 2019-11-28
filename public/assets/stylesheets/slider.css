@@ -111,3 +111,8 @@ body {
     letter-spacing: 0.07em;
     margin-top: -2px;
 }
+
+#btn {
+    font-size: 20px;
+    justify-content: center;
+}
