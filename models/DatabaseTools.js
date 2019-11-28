@@ -477,4 +477,4 @@ exports.processHelpdeskData = async function () {
     return resultPerProperty;
 };
 
-exports.processHelpdeskData();
+// exports.processHelpdeskData();
