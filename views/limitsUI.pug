@@ -4,6 +4,20 @@ extends layout
 block content
   h1 limit page
   p Welcome to limit page
+  p vælg kategori
+  select
+    option(value="indeklima") Indeklima
+    option(value="tekniske anlæg") Tekniske anlæg 
+    option(value="udv. belægning") Udv belægning
+    option(value="murværk og facade") Murværk og facade
+    option(value="tag") Tag
+    option(value="udhæng og gavle") Udhæng og gavle
+    option(value="tagdækning") Tagdækning
+    option(value="tagrender og nedløb") Tagrender og nedløb
+    option(value="vinduer og udv. døre") Vinduer og udv. Døre
+    option(value="fundament og sokkel") Fundament og sokkel
+  br
+  p vælg bygningstype
   select
     option(value="skole") skole
     option(value="plejehjem") plejehjem
@@ -20,38 +34,5 @@ block content
 
   button(type="button" onclick="submit()") Submit
 
-  br
-  
-  br
-  input(type="checkbox" name="indeklima" value="indeklima" id="indeKlimaLimits") 
-  | Indeklima 
-  br
-  input(type="checkbox" name="tekniske anlæg" value="tekniske anlæg" id="tekAnlLimits") 
-  | tekniske anlæg
-  br
-  input(type="checkbox" name="Udv. belægning" value="Udv. belægning" id="udvBelLimits")
-  | Udv. belægning
-  br
-  input(type="checkbox" name="Murværk og facade" value="Murværk og facade" id="murFacLimits")
-  | Murværk og facade
-  br
-  input(type="checkbox" name="Tag" value="Tag" id="tagLimits")
-  | Tag
-  br
-  input(type="checkbox" name="Udhæng og gavle" value="Udhæng og gavle" id="udhGavLimits")
-  | Udhæng og gavle
-  br
-  input(type="checkbox" name="Tagdækning" value="Tagdækning" id="tagDækLimits")
-  | Tagdækning
-  br
-  input(type="checkbox" name="Tagrender og nedløb" value="Tagrender og nedløb" id="tagrenNedløbLimits")
-  | Tagrender og nedløb
-  br
-  input(type="checkbox" name="Vinduer og udv. Døre" value="Vinduer og udv. Døre" id="vinUdvDøreLimits")
-  | Vinduer og udv. Døre
-  br
-  input(type="checkbox" name="Fundament og sokkel" value="Fundament og sokkel" id="funSokkelLimits")
-  | Fundament og sokkel
-  br
 
   script(src="/assets/javascripts/limits.js")
