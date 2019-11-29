@@ -326,17 +326,17 @@ exports.createHelpdeskWeightTable = async function (helpdeskWeightArray) {
         let resultsArray = [];
         console.log(helpdeskWeightArray[0]);
         let result = await helpdeskWeightTable.create({
-            helpdesk_indeklima: helpdeskWeightArray[0],
-            helpdesk_udv_b: helpdeskWeightArray[1],
-            helpdesk_mur_facade: helpdeskWeightArray[2],
-            helpdesk_tag: helpdeskWeightArray[3],
-            helpdesk_ud_gavl: helpdeskWeightArray[4],
-            helpdesk_tagdaekning: helpdeskWeightArray[5],
-            helpdesk_tag_ned: helpdeskWeightArray[6],
-            helpdesk_vinduer: helpdeskWeightArray[7],
-            helpdesk_fundament: helpdeskWeightArray[8],
-            helpdesk_teknisk: helpdeskWeightArray[9],
-            property_type_id: helpdeskWeightArray[10]
+            property_type_id: helpdeskWeightArray[0],
+            helpdesk_indeklima: helpdeskWeightArray[1],
+            helpdesk_teknisk: helpdeskWeightArray[2],
+            helpdesk_udv_b: helpdeskWeightArray[3],
+            helpdesk_mur_facade: helpdeskWeightArray[4],
+            helpdesk_tag: helpdeskWeightArray[5],
+            helpdesk_ud_gavl: helpdeskWeightArray[6],
+            helpdesk_tagdaekning: helpdeskWeightArray[7],
+            helpdesk_tag_ned: helpdeskWeightArray[8],
+            helpdesk_vinduer: helpdeskWeightArray[9],
+            helpdesk_fundament: helpdeskWeightArray[10]
         });
         
         
@@ -355,17 +355,17 @@ exports.updateHelpdeskWeightTable = async function (helpdeskWeightArray) {
         let resultsArray = [];
         console.log(helpdeskWeightArray[1]);
         let result = await helpdeskWeightTable.update({
-            helpdesk_indeklima: helpdeskWeightArray[0],
-            helpdesk_udv_b: helpdeskWeightArray[1],
-            helpdesk_mur_facade: helpdeskWeightArray[2],
-            helpdesk_tag: helpdeskWeightArray[3],
-            helpdesk_ud_gavl: helpdeskWeightArray[4],
-            helpdesk_tagdaekning: helpdeskWeightArray[5],
-            helpdesk_tag_ned: helpdeskWeightArray[6],
-            helpdesk_vinduer: helpdeskWeightArray[7],
-            helpdesk_fundament: helpdeskWeightArray[8],
-            helpdesk_teknisk: helpdeskWeightArray[9]
-        }, {returning: true, where: {property_type_id: helpdeskWeightArray[10]}});
+            helpdesk_indeklima: helpdeskWeightArray[1],
+            helpdesk_teknisk: helpdeskWeightArray[2],
+            helpdesk_udv_b: helpdeskWeightArray[3],
+            helpdesk_mur_facade: helpdeskWeightArray[4],
+            helpdesk_tag: helpdeskWeightArray[5],
+            helpdesk_ud_gavl: helpdeskWeightArray[6],
+            helpdesk_tagdaekning: helpdeskWeightArray[7],
+            helpdesk_tag_ned: helpdeskWeightArray[8],
+            helpdesk_vinduer: helpdeskWeightArray[9],
+            helpdesk_fundament: helpdeskWeightArray[10]
+        }, {returning: true, where: {property_type_id: helpdeskWeightArray[0]}});
         
         
         resultsArray.push(result.dataValues);
