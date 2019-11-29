@@ -229,6 +229,17 @@ exports.createProperty = async function (propertyName, propertySize = 100, prope
     }
 };
 
+exports.updatePropertyColor = async function (id, color) {
+    try {
+        let propertiesTable = getPropertiesTable();
+        await propertiesTable.update(
+            {color: color},
+            {where: {property_id: id}});
+    } catch (e) {
+        throw e;
+    }
+};
+
 /**
  * Function for creating new helpdesk data.
  * @param helpdeskArray
@@ -279,7 +290,7 @@ exports.createHelpdeskWeight = async function (helpdeskWeightArray) {
     try {
         let helpdeskWeightTable = getHelpdeskWeightTable();
         let resultsArray = [];
-
+        console.log(helpdeskWeightArray[0]);
         let result = await helpdeskWeightTable.create({
             property_type_id: helpdeskWeightArray[0],
             helpdesk_indeklima: helpdeskWeightArray[1],
@@ -294,15 +305,53 @@ exports.createHelpdeskWeight = async function (helpdeskWeightArray) {
             helpdesk_fundament: helpdeskWeightArray[10]
         });
 
-        resultsArray.push(result.dataValues.helpdesk_id);
-        console.log(resultsArray);
+
+        resultsArray.push(result.dataValues.property_type_id);
+        console.log(resultsArray[0]);
+    
         return resultsArray; // Return an array containing all inserted IDs
     } catch (e) {
         throw e;
     }
 };
 
-// exports.createHelpdeskWeight([420, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]);
+exports.updateHelpdeskWeightTable = async function (helpdeskWeightArray) {
+    try {
+        let helpdeskWeightTable = getHelpdeskWeightTable();
+        let resultsArray = [];
+        console.log(helpdeskWeightArray[1]);
+        let result = await helpdeskWeightTable.update({
+            helpdesk_indeklima: helpdeskWeightArray[1],
+            helpdesk_teknisk: helpdeskWeightArray[2],
+            helpdesk_udv_b: helpdeskWeightArray[3],
+            helpdesk_mur_facade: helpdeskWeightArray[4],
+            helpdesk_tag: helpdeskWeightArray[5],
+            helpdesk_ud_gavl: helpdeskWeightArray[6],
+            helpdesk_tagdaekning: helpdeskWeightArray[7],
+            helpdesk_tag_ned: helpdeskWeightArray[8],
+            helpdesk_vinduer: helpdeskWeightArray[9],
+            helpdesk_fundament: helpdeskWeightArray[10]
+        }, {returning: true, where: {property_type_id: helpdeskWeightArray[0]}});
+        
+        
+        resultsArray.push(result.dataValues);
+        console.log(resultsArray[0]);
+    
+        return resultsArray; // Return an array containing all inserted IDs
+    } catch (e) {
+        throw e;
+    }
+};
+
+exports.readHelpdeskWeightData = async function (id) {
+    try {
+        let weightTable = getHelpdeskWeightTable();
+        let result = await weightTable.findAll((id ? {where: {property_type_id: id}} : {})); // Add the "where" option, if the ID is not undefined
+        return result.length === 0 ? await Promise.reject(new Error("No properties found")) : result; // Return an error, if 0 results are found, else return the result(s)
+    } catch (e) {
+        throw e;
+    }
+};
 
 exports.createHelpdeskLimit = async function (helpdeskLimitArray) {
     try {
@@ -433,3 +482,24 @@ exports.processHelpdeskData = async function () {
 };
 
 // exports.processHelpdeskData();
+
+exports.calculateScore = async function () {
+    let helpdeskScoresObjects = await exports.processHelpdeskData();
+
+    console.log(helpdeskScoresObjects);
+
+    for (let propertyId in helpdeskScoresObjects) {
+        if (helpdeskScoresObjects.hasOwnProperty(propertyId)) {
+            let score = helpdeskScoresObjects[propertyId].score;
+            console.log(score);
+            if (score < 0.3)
+                exports.updatePropertyColor(propertyId, "Grøn");
+            else if (score < 0.6)
+                exports.updatePropertyColor(propertyId, "Gul");
+            else
+                exports.updatePropertyColor(propertyId, "Rød");
+        }
+    }
+};
+
+// exports.calculateScore();

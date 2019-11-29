@@ -3,6 +3,8 @@ extends layout
 
 block content
   h1 limit page
+  button 
+    a(href="http://localhost:3000/") Home
   p Welcome to limit page
   p vælg kategori
   select
@@ -22,11 +24,11 @@ block content
     option(value="skole") skole
     option(value="plejehjem") plejehjem
   br 
-  p minimum værdi
+  p gul grænse
   input(type="number" name="minimum value" id="minvalue")
   |   per kvm. 
   br 
-  p maximum værdi
+  p rød grænse
   input#maxvalue(type="number" name="maximum value")
   |   per kvm. 
   br
