@@ -107,7 +107,6 @@ function getHelpdeskTable() {
     });
 }
 
-//
 
 function getHelpdeskWeightTable() {
     return sequelize.define('helpdesk_weight_data', {
@@ -159,50 +158,6 @@ function getHelpdeskWeightTable() {
     });
 }
 
-function getHelpdeskLimitsTable() {
-    return sequelize.define('helpdesk_limits_data', {
-        helpdesk_indeklima: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_tekniske_anlaeg: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_udv_belaegning: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_murwaerk_og_facade: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_tag: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_udhaeng_og_gavle: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_tagdaekning: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_tagrender_og_nedloeb: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_vinduer_og_udv_doere: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_fundament_og_sokkel: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        }
-    });
-}
 
 /**
  * Function for creating the database itself. Sequelize can't do that.
