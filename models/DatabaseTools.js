@@ -2,7 +2,7 @@ const mysql = require('mysql2/promise');
 const Sequelize = require('sequelize');
 const host = 'localhost';
 const user = 'root';
-const password = 'root';
+const password = '';
 const sequelize = new Sequelize('daplex', user, password, {
     host: host,
     dialect: 'mysql',
