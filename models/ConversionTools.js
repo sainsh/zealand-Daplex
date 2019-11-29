@@ -59,7 +59,10 @@ exports.createCsvPriorityCard = async function () {
         fieldDelimiter: ';', path: dir,
         header: [
             {id: 'property_id', title: 'Ejendoms-id'},
-            {id: 'property_name', title: 'Ejendom'}
+            {id: 'property_name', title: 'Ejendom'},
+            {id: 'property_size', title: 'Størrelse'},
+            {id: 'property_type_id', title: 'Ejendomstype-id'},
+            {id: 'color', title: 'Farve'}
         ]
     });
     let results = await databaseTools.readProperty();

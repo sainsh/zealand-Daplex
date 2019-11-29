@@ -2,7 +2,7 @@ const mysql = require('mysql2/promise');
 const Sequelize = require('sequelize');
 const host = 'localhost';
 const user = 'root';
-const password = 'root';
+const password = '';
 const sequelize = new Sequelize('daplex', user, password, {
     host: host,
     dialect: 'mysql',
@@ -274,6 +274,17 @@ exports.createProperty = async function (propertyName, propertySize = 100, prope
     }
 };
 
+exports.updatePropertyColor = async function (id, color) {
+    try {
+        let propertiesTable = getPropertiesTable();
+        await propertiesTable.update(
+            {color: color},
+            {where: {property_id: id}});
+    } catch (e) {
+        throw e;
+    }
+};
+
 /**
  * Function for creating new helpdesk data.
  * @param helpdeskArray
@@ -320,7 +331,7 @@ exports.createHelpdeskData = async function (helpdeskArray) {
     }
 };
 
-exports.createHelpdeskWeightTable = async function (helpdeskWeightArray) {
+exports.createHelpdeskWeight = async function (helpdeskWeightArray) {
     try {
         let helpdeskWeightTable = getHelpdeskWeightTable();
         let resultsArray = [];
@@ -338,9 +349,9 @@ exports.createHelpdeskWeightTable = async function (helpdeskWeightArray) {
             helpdesk_vinduer: helpdeskWeightArray[9],
             helpdesk_fundament: helpdeskWeightArray[10]
         });
-        
-        
-        resultsArray.push(result.dataValues);
+
+
+        resultsArray.push(result.dataValues.property_type_id);
         console.log(resultsArray[0]);
     
         return resultsArray; // Return an array containing all inserted IDs
@@ -386,8 +397,6 @@ exports.readHelpdeskWeightData = async function (id) {
         throw e;
     }
 };
-
-// exports.createHelpdeskWeight([420, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]);
 
 exports.createHelpdeskLimit = async function (helpdeskLimitArray) {
     try {
@@ -518,3 +527,24 @@ exports.processHelpdeskData = async function () {
 };
 
 // exports.processHelpdeskData();
+
+exports.calculateScore = async function () {
+    let helpdeskScoresObjects = await exports.processHelpdeskData();
+
+    console.log(helpdeskScoresObjects);
+
+    for (let propertyId in helpdeskScoresObjects) {
+        if (helpdeskScoresObjects.hasOwnProperty(propertyId)) {
+            let score = helpdeskScoresObjects[propertyId].score;
+            console.log(score);
+            if (score < 0.3)
+                exports.updatePropertyColor(propertyId, "Grøn");
+            else if (score < 0.6)
+                exports.updatePropertyColor(propertyId, "Gul");
+            else
+                exports.updatePropertyColor(propertyId, "Rød");
+        }
+    }
+};
+
+// exports.calculateScore();
