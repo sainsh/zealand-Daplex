@@ -7,8 +7,7 @@ test('Returns string', () => {
 
 test('Reads from helpdesk_weight_table', async() =>{
     let mockData = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 420];
-    await db.createHelpdeskWeightTable(mockData);
+    await db.updateHelpdeskWeightTable(mockData);
     let result = await db.readHelpdeskWeightData(420);
-    console.log(result);
-    //expect(result).toBe(mockData);
+    expect(Object.values(result[0].dataValues)).toBe(mockData);
 });
