@@ -308,7 +308,7 @@ exports.createHelpdeskWeightTable = async function (helpdeskWeightArray) {
     try {
         let helpdeskWeightTable = getHelpdeskWeightTable();
         let resultsArray = [];
-
+        console.log(helpdeskWeightArray[0]);
         let result = await helpdeskWeightTable.create({
             helpdesk_indeklima: helpdeskWeightArray[0],
             helpdesk_udv_b: helpdeskWeightArray[1],
@@ -319,11 +319,14 @@ exports.createHelpdeskWeightTable = async function (helpdeskWeightArray) {
             helpdesk_tag_ned: helpdeskWeightArray[6],
             helpdesk_vinduer: helpdeskWeightArray[7],
             helpdesk_fundament: helpdeskWeightArray[8],
-            helpdesk_teknisk: helpdeskWeightArray[9]
+            helpdesk_teknisk: helpdeskWeightArray[9],
+            property_type_id: 1
         });
-
-        resultsArray.push(result.dataValues.helpdesk_id);
-        console.log(resultsArray);
+        
+        
+        resultsArray.push(result.dataValues.property_type_id);
+        console.log(resultsArray[0]);
+    
         return resultsArray; // Return an array containing all inserted IDs
     } catch (e) {
         throw e;
