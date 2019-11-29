@@ -337,30 +337,28 @@ exports.createHelpdeskWeight = async function (helpdeskWeightArray) {
         let resultsArray = [];
         console.log(helpdeskWeightArray[0]);
         let result = await helpdeskWeightTable.create({
-            helpdesk_indeklima: helpdeskWeightArray[0],
-            helpdesk_udv_b: helpdeskWeightArray[1],
-            helpdesk_mur_facade: helpdeskWeightArray[2],
-            helpdesk_tag: helpdeskWeightArray[3],
-            helpdesk_ud_gavl: helpdeskWeightArray[4],
-            helpdesk_tagdaekning: helpdeskWeightArray[5],
-            helpdesk_tag_ned: helpdeskWeightArray[6],
-            helpdesk_vinduer: helpdeskWeightArray[7],
-            helpdesk_fundament: helpdeskWeightArray[8],
-            helpdesk_teknisk: helpdeskWeightArray[9],
-            property_type_id: helpdeskWeightArray[10]
+            property_type_id: helpdeskWeightArray[0],
+            helpdesk_indeklima: helpdeskWeightArray[1],
+            helpdesk_teknisk: helpdeskWeightArray[2],
+            helpdesk_udv_b: helpdeskWeightArray[3],
+            helpdesk_mur_facade: helpdeskWeightArray[4],
+            helpdesk_tag: helpdeskWeightArray[5],
+            helpdesk_ud_gavl: helpdeskWeightArray[6],
+            helpdesk_tagdaekning: helpdeskWeightArray[7],
+            helpdesk_tag_ned: helpdeskWeightArray[8],
+            helpdesk_vinduer: helpdeskWeightArray[9],
+            helpdesk_fundament: helpdeskWeightArray[10]
         });
 
 
         resultsArray.push(result.dataValues.property_type_id);
         console.log(resultsArray[0]);
-
+    
         return resultsArray; // Return an array containing all inserted IDs
     } catch (e) {
         throw e;
     }
 };
-
-// exports.createHelpdeskWeight([10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 420]);
 
 exports.updateHelpdeskWeightTable = async function (helpdeskWeightArray) {
     try {
@@ -368,23 +366,33 @@ exports.updateHelpdeskWeightTable = async function (helpdeskWeightArray) {
         let resultsArray = [];
         console.log(helpdeskWeightArray[1]);
         let result = await helpdeskWeightTable.update({
-            helpdesk_indeklima: helpdeskWeightArray[0],
-            helpdesk_udv_b: helpdeskWeightArray[1],
-            helpdesk_mur_facade: helpdeskWeightArray[2],
-            helpdesk_tag: helpdeskWeightArray[3],
-            helpdesk_ud_gavl: helpdeskWeightArray[4],
-            helpdesk_tagdaekning: helpdeskWeightArray[5],
-            helpdesk_tag_ned: helpdeskWeightArray[6],
-            helpdesk_vinduer: helpdeskWeightArray[7],
-            helpdesk_fundament: helpdeskWeightArray[8],
-            helpdesk_teknisk: helpdeskWeightArray[9]
-        }, {returning: true, where: {property_type_id: helpdeskWeightArray[10]}});
-
-
-        resultsArray.push(result.dataValues.property_type_id);
+            helpdesk_indeklima: helpdeskWeightArray[1],
+            helpdesk_teknisk: helpdeskWeightArray[2],
+            helpdesk_udv_b: helpdeskWeightArray[3],
+            helpdesk_mur_facade: helpdeskWeightArray[4],
+            helpdesk_tag: helpdeskWeightArray[5],
+            helpdesk_ud_gavl: helpdeskWeightArray[6],
+            helpdesk_tagdaekning: helpdeskWeightArray[7],
+            helpdesk_tag_ned: helpdeskWeightArray[8],
+            helpdesk_vinduer: helpdeskWeightArray[9],
+            helpdesk_fundament: helpdeskWeightArray[10]
+        }, {returning: true, where: {property_type_id: helpdeskWeightArray[0]}});
+        
+        
+        resultsArray.push(result.dataValues);
         console.log(resultsArray[0]);
-
+    
         return resultsArray; // Return an array containing all inserted IDs
+    } catch (e) {
+        throw e;
+    }
+};
+
+exports.readHelpdeskWeightData = async function (id) {
+    try {
+        let weightTable = getHelpdeskWeightTable();
+        let result = await weightTable.findAll((id ? {where: {property_type_id: id}} : {})); // Add the "where" option, if the ID is not undefined
+        return result.length === 0 ? await Promise.reject(new Error("No properties found")) : result; // Return an error, if 0 results are found, else return the result(s)
     } catch (e) {
         throw e;
     }
