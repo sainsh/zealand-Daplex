@@ -20,8 +20,9 @@ router.post('/', (req, res, next) => {
   var tagrenSlider = req.body.tagrenSlider;
   var funSlider = req.body.funSlider;
   var vinSlider = req.body.vinSlider;
+  var select = req.body.select;
   
-  var data = [indeslider, udvSlider, murSlider, tagSlider, udSlider, tagDækSlider, tagrenSlider, vinSlider, funSlider, tekSlider];
+  var data = [indeslider, udvSlider, murSlider, tagSlider, udSlider, tagDækSlider, tagrenSlider, vinSlider, funSlider, tekSlider, select];
   db.createHelpdeskWeightTable(data);
  //res.redirect('/weightUI/');
 })

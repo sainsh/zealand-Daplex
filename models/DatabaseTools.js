@@ -320,7 +320,7 @@ exports.createHelpdeskWeightTable = async function (helpdeskWeightArray) {
             helpdesk_vinduer: helpdeskWeightArray[7],
             helpdesk_fundament: helpdeskWeightArray[8],
             helpdesk_teknisk: helpdeskWeightArray[9],
-            property_type_id: 1
+            property_type_id: helpdeskWeightArray[10]
         });
         
         
