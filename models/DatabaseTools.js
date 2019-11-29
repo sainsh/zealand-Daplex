@@ -377,6 +377,16 @@ exports.updateHelpdeskWeightTable = async function (helpdeskWeightArray) {
     }
 };
 
+exports.readHelpdeskWeightData = async function (id) {
+    try {
+        let weightTable = getHelpdeskWeightTable();
+        let result = await weightTable.findAll((id ? {where: {property_type_id: id}} : {})); // Add the "where" option, if the ID is not undefined
+        return result.length === 0 ? await Promise.reject(new Error("No properties found")) : result; // Return an error, if 0 results are found, else return the result(s)
+    } catch (e) {
+        throw e;
+    }
+};
+
 // exports.createHelpdeskWeight([420, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]);
 
 exports.createHelpdeskLimit = async function (helpdeskLimitArray) {
