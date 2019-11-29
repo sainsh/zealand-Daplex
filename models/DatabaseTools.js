@@ -2,7 +2,7 @@ const mysql = require('mysql2/promise');
 const Sequelize = require('sequelize');
 const host = 'localhost';
 const user = 'root';
-const password = '';
+const password = 'password';
 const sequelize = new Sequelize('daplex', user, password, {
     host: host,
     dialect: 'mysql',
@@ -320,7 +320,7 @@ exports.createHelpdeskData = async function (helpdeskArray) {
     }
 };
 
-exports.createHelpdeskWeight = async function (helpdeskWeightArray) {
+exports.createHelpdeskWeightTable = async function (helpdeskWeightArray) {
     try {
         let helpdeskWeightTable = getHelpdeskWeightTable();
         let resultsArray = [];
@@ -340,7 +340,7 @@ exports.createHelpdeskWeight = async function (helpdeskWeightArray) {
         });
         
         
-        resultsArray.push(result.dataValues.property_type_id);
+        resultsArray.push(result.dataValues);
         console.log(resultsArray[0]);
     
         return resultsArray; // Return an array containing all inserted IDs
@@ -368,7 +368,7 @@ exports.updateHelpdeskWeightTable = async function (helpdeskWeightArray) {
         }, {returning: true, where: {property_type_id: helpdeskWeightArray[10]}});
         
         
-        resultsArray.push(result.dataValues.property_type_id);
+        resultsArray.push(result.dataValues);
         console.log(resultsArray[0]);
     
         return resultsArray; // Return an array containing all inserted IDs
