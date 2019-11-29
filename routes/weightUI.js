@@ -8,7 +8,7 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/', (req, res, next) => {
-  
+
   var indeslider = req.body.indeSlider;
   console.log(indeslider);
   var udvSlider = req.body.udvSlider;
