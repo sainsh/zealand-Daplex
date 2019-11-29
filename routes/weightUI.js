@@ -24,6 +24,9 @@ router.post('/', (req, res, next) => {
   
   var data = [indeslider, udvSlider, murSlider, tagSlider, udSlider, tagDækSlider, tagrenSlider, vinSlider, funSlider, tekSlider, select];
   db.createHelpdeskWeightTable(data);
+  db.updateHelpdeskWeightTable(data);
  //res.redirect('/weightUI/');
 })
+
+
 module.exports = router;

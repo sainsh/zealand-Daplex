@@ -333,6 +333,34 @@ exports.createHelpdeskWeightTable = async function (helpdeskWeightArray) {
     }
 };
 
+exports.updateHelpdeskWeightTable = async function (helpdeskWeightArray) {
+    try {
+        let helpdeskWeightTable = getHelpdeskWeightTable();
+        let resultsArray = [];
+        console.log(helpdeskWeightArray[1]);
+        let result = await helpdeskWeightTable.update({
+            helpdesk_indeklima: helpdeskWeightArray[0],
+            helpdesk_udv_b: helpdeskWeightArray[1],
+            helpdesk_mur_facade: helpdeskWeightArray[2],
+            helpdesk_tag: helpdeskWeightArray[3],
+            helpdesk_ud_gavl: helpdeskWeightArray[4],
+            helpdesk_tagdaekning: helpdeskWeightArray[5],
+            helpdesk_tag_ned: helpdeskWeightArray[6],
+            helpdesk_vinduer: helpdeskWeightArray[7],
+            helpdesk_fundament: helpdeskWeightArray[8],
+            helpdesk_teknisk: helpdeskWeightArray[9]
+        }, {returning: true, where: {property_type_id: helpdeskWeightArray[10]}});
+        
+        
+        resultsArray.push(result.dataValues.property_type_id);
+        console.log(resultsArray[0]);
+    
+        return resultsArray; // Return an array containing all inserted IDs
+    } catch (e) {
+        throw e;
+    }
+};
+
 exports.createHelpdeskLimitsTable = async function (helpdesklimitsArray) {
     try {
         let helpdeskLimitsTable = getHelpdeskLimitsTable();
