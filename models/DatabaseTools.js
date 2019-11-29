@@ -2,7 +2,7 @@ const mysql = require('mysql2/promise');
 const Sequelize = require('sequelize');
 const host = 'localhost';
 const user = 'root';
-const password = '';
+const password = 'root';
 const sequelize = new Sequelize('daplex', user, password, {
     host: host,
     dialect: 'mysql',
@@ -331,7 +331,7 @@ exports.createHelpdeskData = async function (helpdeskArray) {
     }
 };
 
-exports.createHelpdeskWeight = async function (helpdeskWeightArray) {
+exports.createHelpdeskWeightTable = async function (helpdeskWeightArray) {
     try {
         let helpdeskWeightTable = getHelpdeskWeightTable();
         let resultsArray = [];
