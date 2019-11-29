@@ -274,6 +274,17 @@ exports.createProperty = async function (propertyName, propertySize = 100, prope
     }
 };
 
+exports.updatePropertyColor = async function (id, color) {
+    try {
+        let propertiesTable = getPropertiesTable();
+        await propertiesTable.update(
+            {color: color},
+            {where: {property_id: id}});
+    } catch (e) {
+        throw e;
+    }
+};
+
 /**
  * Function for creating new helpdesk data.
  * @param helpdeskArray
@@ -338,16 +349,18 @@ exports.createHelpdeskWeight = async function (helpdeskWeightArray) {
             helpdesk_teknisk: helpdeskWeightArray[9],
             property_type_id: helpdeskWeightArray[10]
         });
-        
-        
+
+
         resultsArray.push(result.dataValues.property_type_id);
         console.log(resultsArray[0]);
-    
+
         return resultsArray; // Return an array containing all inserted IDs
     } catch (e) {
         throw e;
     }
 };
+
+// exports.createHelpdeskWeight([10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 420]);
 
 exports.updateHelpdeskWeightTable = async function (helpdeskWeightArray) {
     try {
@@ -366,18 +379,16 @@ exports.updateHelpdeskWeightTable = async function (helpdeskWeightArray) {
             helpdesk_fundament: helpdeskWeightArray[8],
             helpdesk_teknisk: helpdeskWeightArray[9]
         }, {returning: true, where: {property_type_id: helpdeskWeightArray[10]}});
-        
-        
+
+
         resultsArray.push(result.dataValues.property_type_id);
         console.log(resultsArray[0]);
-    
+
         return resultsArray; // Return an array containing all inserted IDs
     } catch (e) {
         throw e;
     }
 };
-
-// exports.createHelpdeskWeight([420, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]);
 
 exports.createHelpdeskLimit = async function (helpdeskLimitArray) {
     try {
@@ -508,3 +519,24 @@ exports.processHelpdeskData = async function () {
 };
 
 // exports.processHelpdeskData();
+
+exports.calculateScore = async function () {
+    let helpdeskScoresObjects = await exports.processHelpdeskData();
+
+    console.log(helpdeskScoresObjects);
+
+    for (let propertyId in helpdeskScoresObjects) {
+        if (helpdeskScoresObjects.hasOwnProperty(propertyId)) {
+            let score = helpdeskScoresObjects[propertyId].score;
+            console.log(score);
+            if (score < 0.3)
+                exports.updatePropertyColor(propertyId, "Grøn");
+            else if (score < 0.6)
+                exports.updatePropertyColor(propertyId, "Gul");
+            else
+                exports.updatePropertyColor(propertyId, "Rød");
+        }
+    }
+};
+
+// exports.calculateScore();

@@ -23,7 +23,9 @@ router.get('/', function (req, res, next) {
     res.render('import');
 });
 
-router.get('/getCard', function (req, res, next) {
+router.get('/getCard', async function (req, res, next) {
+    await databaseTools.calculateScore();
+    await conversionTools.createCsvPriorityCard();
     res.download(path.join(__dirname, '../models/temp', 'pk.csv'), "Prioriteringskort.csv");
 });
 
