@@ -2,7 +2,7 @@ const mysql = require('mysql2/promise');
 const Sequelize = require('sequelize');
 const host = 'localhost';
 const user = 'root';
-const password = '';
+const password = 'password';
 const sequelize = new Sequelize('daplex', user, password, {
     host: host,
     dialect: 'mysql',
@@ -339,15 +339,15 @@ exports.createHelpdeskWeightTable = async function (helpdeskWeightArray) {
         let result = await helpdeskWeightTable.create({
             property_type_id: helpdeskWeightArray[0],
             helpdesk_indeklima: helpdeskWeightArray[1],
-            helpdesk_teknisk: helpdeskWeightArray[2],
-            helpdesk_udv_b: helpdeskWeightArray[3],
-            helpdesk_mur_facade: helpdeskWeightArray[4],
-            helpdesk_tag: helpdeskWeightArray[5],
-            helpdesk_ud_gavl: helpdeskWeightArray[6],
-            helpdesk_tagdaekning: helpdeskWeightArray[7],
-            helpdesk_tag_ned: helpdeskWeightArray[8],
-            helpdesk_vinduer: helpdeskWeightArray[9],
-            helpdesk_fundament: helpdeskWeightArray[10]
+            helpdesk_udv_b: helpdeskWeightArray[2],
+            helpdesk_mur_facade: helpdeskWeightArray[3],
+            helpdesk_tag: helpdeskWeightArray[4],
+            helpdesk_ud_gavl: helpdeskWeightArray[5],
+            helpdesk_tagdaekning: helpdeskWeightArray[6],
+            helpdesk_tag_ned: helpdeskWeightArray[7],
+            helpdesk_vinduer: helpdeskWeightArray[8],
+            helpdesk_fundament: helpdeskWeightArray[9],
+            helpdesk_teknisk: helpdeskWeightArray[10]
         });
 
 
@@ -371,15 +371,15 @@ exports.updateHelpdeskWeightTable = async function (helpdeskWeightArray) {
         console.log(helpdeskWeightArray[1]);
         let result = await helpdeskWeightTable.update({
             helpdesk_indeklima: helpdeskWeightArray[1],
-            helpdesk_teknisk: helpdeskWeightArray[2],
-            helpdesk_udv_b: helpdeskWeightArray[3],
-            helpdesk_mur_facade: helpdeskWeightArray[4],
-            helpdesk_tag: helpdeskWeightArray[5],
-            helpdesk_ud_gavl: helpdeskWeightArray[6],
-            helpdesk_tagdaekning: helpdeskWeightArray[7],
-            helpdesk_tag_ned: helpdeskWeightArray[8],
-            helpdesk_vinduer: helpdeskWeightArray[9],
-            helpdesk_fundament: helpdeskWeightArray[10]
+            helpdesk_udv_b: helpdeskWeightArray[2],
+            helpdesk_mur_facade: helpdeskWeightArray[3],
+            helpdesk_tag: helpdeskWeightArray[4],
+            helpdesk_ud_gavl: helpdeskWeightArray[5],
+            helpdesk_tagdaekning: helpdeskWeightArray[6],
+            helpdesk_tag_ned: helpdeskWeightArray[7],
+            helpdesk_vinduer: helpdeskWeightArray[8],
+            helpdesk_fundament: helpdeskWeightArray[9],
+            helpdesk_teknisk: helpdeskWeightArray[10],
         }, {returning: true, where: {property_type_id: helpdeskWeightArray[0]}});
         
         
@@ -408,16 +408,16 @@ exports.createHelpdeskLimit = async function (helpdeskLimitArray) {
         let resultsArray = [];
 
         let result = await helpdeskLimitsTable.create({
-            helpdesk_indeklima: helpdeskLimitArray[0],
-            helpdesk_tekniske_anlaeg: helpdeskLimitArray[1],
-            helpdesk_udv_belaegning: helpdeskLimitArray[2],
-            helpdesk_murwaerk_og_facade: helpdeskLimitArray[3],
-            helpdesk_tag: helpdeskLimitArray[4],
-            helpdesk_udhaeng_og_gavle: helpdeskLimitArray[5],
-            helpdesk_tagdaekning: helpdeskLimitArray[6],
-            helpdesk_tagrender_og_nedloeb: helpdeskLimitArray[7],
-            helpdesk_vinduer_og_udv_doere: helpdeskLimitArray[8],
-            helpdesk_fundament_og_sokkel: helpdeskLimitArray[9]
+            helpdesk_indeklima: helpdeskLimitArray[1],
+            helpdesk_tekniske_anlaeg: helpdeskLimitArray[2],
+            helpdesk_udv_belaegning: helpdeskLimitArray[3],
+            helpdesk_murwaerk_og_facade: helpdeskLimitArray[4],
+            helpdesk_tag: helpdeskLimitArray[5],
+            helpdesk_udhaeng_og_gavle: helpdeskLimitArray[6],
+            helpdesk_tagdaekning: helpdeskLimitArray[7],
+            helpdesk_tagrender_og_nedloeb: helpdeskLimitArray[8],
+            helpdesk_vinduer_og_udv_doere: helpdeskLimitArray[9],
+            helpdesk_fundament_og_sokkel: helpdeskLimitArray[10]
         });
 
         resultsArray.push(result.dataValues);
