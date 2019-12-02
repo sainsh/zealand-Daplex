@@ -29,7 +29,7 @@ router.post('/csv', upload.single('csv-file'), async function (req, res, next) {
         case 'Helpdesk':
             var idResults = databaseTools.createHelpdeskData(jsonResult);
             break;
-        case 'Vedligeholdelse':
+        case 'Tilstand':
             //var idResults=databaseTools.createVedligeholdelseData(jsonResult);
             break;
     }
@@ -47,7 +47,7 @@ router.post('/xlsx', upload.single('xlsx-file'), async function (req, res, next)
             jsonResult = await conversionTools.convertCsvToJson(outputFilePath, "Nr.;");
             idResults = databaseTools.createHelpdeskData(jsonResult);
             break;
-        case 'Vedligeholdelse':
+        case 'Tilstand':
             jsonResult = await conversionTools.convertCsvToJson(outputFilePath);
             idResults = databaseTools.createMaintenanceData(jsonResult);
             break;

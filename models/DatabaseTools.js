@@ -2,7 +2,7 @@ const mysql = require('mysql2/promise');
 const Sequelize = require('sequelize');
 const host = 'localhost';
 const user = 'root';
-const password = 'password';
+const password = '';
 const sequelize = new Sequelize('daplex', user, password, {
     host: host,
     dialect: 'mysql',
@@ -526,21 +526,21 @@ exports.createMaintenanceData = async function (maintenanceDataArray) {
         for (let maintenanceObject of maintenanceDataArray) { // Loop through all the data
             let propertyNameTrimmed = maintenanceObject['Ejendom'].replace(/\(.+\)/, "").trim();
             let propertyId = await propertiesTable.findAll(({where: {property_name: propertyNameTrimmed}})); // Check whether the property exists
-            let propertyExistsInMaintenanceTable = await maintenanceTable.findAll(({where: {property_id: propertyId}})); // Check whether the property exists
 
-            if (propertyExistsInMaintenanceTable.length === 0) {
+            if (propertyId.length === 0) // If the results array have a length of 0, the property doesn't exist
+                propertyId = await exports.createProperty(propertyNameTrimmed); // Create a new property
+            else
+                propertyId = propertyId[0].dataValues.property_id;
 
-                if (propertyId.length === 0) // If the results array have a length of 0, the property doesn't exist
-                    propertyId = await exports.createProperty(maintenanceObject['Ejendom']); // Create a new property
-                else
-                    propertyId = propertyId[0].dataValues.property_id;
+            let propertyExistsInMaintenanceTable = await maintenanceTable.findAll(({where: {property_id: propertyId}})); // Check whether the property exists in the maintenance table
 
+            if (propertyExistsInMaintenanceTable.length === 0) { // Only create maintenance data if the property doesn't already exist in the maintenance table
                 let result = await maintenanceTable.create({
                     property_id: propertyId,
                     cost: maintenanceObject['2019']
                 });
 
-                resultsArray.push(result.dataValues.helpdesk_id)
+                resultsArray.push(result.dataValues.maintenance_id)
             }
         }
 
