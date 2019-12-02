@@ -2,7 +2,7 @@ const mysql = require('mysql2/promise');
 const Sequelize = require('sequelize');
 const host = 'localhost';
 const user = 'root';
-const password = 'password';
+const password = 'root';
 const sequelize = new Sequelize('daplex', user, password, {
     host: host,
     dialect: 'mysql',
@@ -339,15 +339,15 @@ exports.createHelpdeskWeightTable = async function (helpdeskWeightArray) {
         let result = await helpdeskWeightTable.create({
             property_type_id: helpdeskWeightArray[0],
             helpdesk_indeklima: helpdeskWeightArray[1],
-            helpdesk_udv_b: helpdeskWeightArray[2],
-            helpdesk_mur_facade: helpdeskWeightArray[3],
-            helpdesk_tag: helpdeskWeightArray[4],
-            helpdesk_ud_gavl: helpdeskWeightArray[5],
-            helpdesk_tagdaekning: helpdeskWeightArray[6],
-            helpdesk_tag_ned: helpdeskWeightArray[7],
-            helpdesk_vinduer: helpdeskWeightArray[8],
-            helpdesk_fundament: helpdeskWeightArray[9],
-            helpdesk_teknisk: helpdeskWeightArray[10]
+            helpdesk_teknisk: helpdeskWeightArray[2],
+            helpdesk_udv_b: helpdeskWeightArray[3],
+            helpdesk_mur_facade: helpdeskWeightArray[4],
+            helpdesk_tag: helpdeskWeightArray[5],
+            helpdesk_ud_gavl: helpdeskWeightArray[6],
+            helpdesk_tagdaekning: helpdeskWeightArray[7],
+            helpdesk_tag_ned: helpdeskWeightArray[8],
+            helpdesk_vinduer: helpdeskWeightArray[9],
+            helpdesk_fundament: helpdeskWeightArray[10]
         });
 
 
@@ -371,15 +371,15 @@ exports.updateHelpdeskWeightTable = async function (helpdeskWeightArray) {
         console.log(helpdeskWeightArray[1]);
         let result = await helpdeskWeightTable.update({
             helpdesk_indeklima: helpdeskWeightArray[1],
-            helpdesk_udv_b: helpdeskWeightArray[2],
-            helpdesk_mur_facade: helpdeskWeightArray[3],
-            helpdesk_tag: helpdeskWeightArray[4],
-            helpdesk_ud_gavl: helpdeskWeightArray[5],
-            helpdesk_tagdaekning: helpdeskWeightArray[6],
-            helpdesk_tag_ned: helpdeskWeightArray[7],
-            helpdesk_vinduer: helpdeskWeightArray[8],
-            helpdesk_fundament: helpdeskWeightArray[9],
-            helpdesk_teknisk: helpdeskWeightArray[10],
+            helpdesk_teknisk: helpdeskWeightArray[2],
+            helpdesk_udv_b: helpdeskWeightArray[3],
+            helpdesk_mur_facade: helpdeskWeightArray[4],
+            helpdesk_tag: helpdeskWeightArray[5],
+            helpdesk_ud_gavl: helpdeskWeightArray[6],
+            helpdesk_tagdaekning: helpdeskWeightArray[7],
+            helpdesk_tag_ned: helpdeskWeightArray[8],
+            helpdesk_vinduer: helpdeskWeightArray[9],
+            helpdesk_fundament: helpdeskWeightArray[10],
         }, {returning: true, where: {property_type_id: helpdeskWeightArray[0]}});
         
         
