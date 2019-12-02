@@ -7,7 +7,6 @@ const sequelize = new Sequelize('daplex', user, password, {
     host: host,
     dialect: 'mysql',
     define: {
-
         timestamps: false
     }
 });
@@ -509,7 +508,7 @@ exports.createMaintenanceData = async function (maintenanceDataArray) {
     }
 };
 
-exports.createMaintenanceData([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+//exports.createMaintenanceData([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
 exports.readProperty = async function (id) {
     try {
