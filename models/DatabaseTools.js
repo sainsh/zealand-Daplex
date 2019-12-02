@@ -2,7 +2,7 @@ const mysql = require('mysql2/promise');
 const Sequelize = require('sequelize');
 const host = 'localhost';
 const user = 'root';
-const password = '';
+const password = 'password';
 const sequelize = new Sequelize('daplex', user, password, {
     host: host,
     dialect: 'mysql',
@@ -103,6 +103,28 @@ function getHelpdeskTable() {
         status: {
             type: Sequelize.STRING,
             allowNull: true
+        }
+    });
+}
+
+function getStateWeightTable() {
+    return sequelize.define('state_weight_data', {
+        property_type_id: {
+            type: Sequelize.INTEGER,
+            autoIncrement: false,
+            primaryKey: true
+        },
+        state_tekniske: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        state_udvendige: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        state_osv: {
+            type: Sequelize.INTEGER,
+            allowNull: false
         }
     });
 }
@@ -262,6 +284,7 @@ exports.setupTables = async function () {
     let helpdeskWeightTable = getHelpdeskWeightTable();
     let helpdeskLimitsTable = getHelpdeskLimitsTable();
     let maintenanceTable = getMaintenanceTable();
+    let stateWeightTable = getStateWeightTable();
 
     helpdeskTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
     maintenanceTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
@@ -269,6 +292,7 @@ exports.setupTables = async function () {
     await propertiesTable.sync({force: false});
     await helpdeskTable.sync({force: false});
     await helpdeskWeightTable.sync({force: false});
+    await stateWeightTable.sync({force: false});
     await helpdeskLimitsTable.sync({force: false});
     await maintenanceTable.sync({force: false});
 };
@@ -382,6 +406,28 @@ exports.createHelpdeskWeightTable = async function (helpdeskWeightArray) {
     }
 };
 
+exports.createStateWeightTable = async function (stateWeightArray) {
+    try {
+        let stateWeightTable = getStateWeightTable();
+        let resultsArray = [];
+        console.log(stateWeightArray[0]);
+        let result = await stateWeightTable.create({
+            property_type_id: stateWeightArray[0],
+            state_tekniske: stateWeightArray[1],
+            state_udvendige: stateWeightArray[2],
+            state_osv: stateWeightArray[3]
+        });
+
+
+        resultsArray.push(result.dataValues.property_type_id);
+        console.log(resultsArray[0]);
+
+        return resultsArray; // Return an array containing all inserted IDs
+    } catch (e) {
+        throw e;
+    }
+};
+
 // SLET VENLIGST IKKE DENNE LINJE
 // exports.createHelpdeskWeightTable([420, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]);
 // SLET VENLIGST IKKE DENNE LINJE
@@ -403,6 +449,27 @@ exports.updateHelpdeskWeightTable = async function (helpdeskWeightArray) {
             helpdesk_vinduer: helpdeskWeightArray[9],
             helpdesk_fundament: helpdeskWeightArray[10],
         }, {returning: true, where: {property_type_id: helpdeskWeightArray[0]}});
+
+
+        resultsArray.push(result.dataValues);
+        console.log(resultsArray[0]);
+
+        return resultsArray; // Return an array containing all inserted IDs
+    } catch (e) {
+        throw e;
+    }
+};
+
+exports.updateStateWeightTable = async function (stateWeightArray) {
+    try {
+        let stateWeightTable = getStateWeightTable();
+        let resultsArray = [];
+        console.log(stateWeightArray[1]);
+        let result = await stateWeightTable.update({
+            state_tekniske: stateWeightArray[1],
+            state_udvendige: stateWeightArray[2],
+            state_osv: stateWeightArray[3],
+        }, {returning: true, where: {property_type_id: stateWeightArray[0]}});
 
 
         resultsArray.push(result.dataValues);
