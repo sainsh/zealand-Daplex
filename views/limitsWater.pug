@@ -4,15 +4,14 @@ block content
   h1 Grænser for vand
   button 
     a(href="http://localhost:3000/") Home
+
   p vælg bygningstype
 
-  br
   select
     option(value="skole") skole
     option(value="plejehjem") plejehjem
   br 
   p sæt grænse for antallet af M^3 vand pr. kvm
-  br
   p gul grænse
   input(type="number" name="minimum value" id="minvalue")
   |   per kvm. 
@@ -20,3 +19,10 @@ block content
   p rød grænse
   input#maxvalue(type="number" name="maximum value")
   |   per kvm. 
+  br
+  br
+
+  button(type="button" onclick="submit()") Submit
+
+
+  script(src="/assets/javascripts/limits.js")
