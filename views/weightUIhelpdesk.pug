@@ -1,0 +1,37 @@
+extends layout
+
+
+
+block content
+  link(rel="stylesheet", href="/assets/stylesheets/slider.css")
+  H1 Vægtning Helpdesk
+  button 
+    a(href="http://localhost:3000/") Home
+  form(action="/weightUI/helpdesk", method="post")
+    select#select(name = `select`)
+      option(value='420') Skole
+      option(value='440') Dag Institutioner
+    +slider('Indeklima', 'indeBullet', "indeSlider", 0)
+    +slider('Udv. belægning', 'udvBullet', 'udvSlider', 1)
+    +slider('Murværk og facade', 'murBullet', 'murSlider', 2)
+    +slider('Tag', 'tagBullet', "tagSlider", 3)
+    +slider('Udhæng og gavle', 'udBullet', "udSlider", 4)
+    +slider('Tagdækning', 'tagDækBullet', "tagDækSlider", 5)
+    +slider('Tagrender og nedløb', 'tagrenBullet', "tagrenSlider", 6)
+    +slider('Vinduer og udv. Døre', 'vinBullet', "vinSlider", 7)
+    +slider('Fundament og sokkel', 'funBullet', "funSlider", 8)
+    +slider('Tekniske anlæg', 'tekBullet',"tekSlider",9)
+    input(type="submit", value="Send data") 
+  script(src="/assets/javascripts/slider.js")
+
+
+
+mixin slider(name, bullet, slider, id)
+  .container
+    .range-slider
+        p= name
+        span(id=`${bullet}` class=`rs-label` value="0" min="0" max="100") 0
+        input(id=`${slider}` class="rs-range" name=`${slider}` type='range' value='0' min='0' max='100')
+    .box-minmax
+        span 0
+        span 100
