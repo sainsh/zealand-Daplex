@@ -1,18 +1,19 @@
 extends layout
-  
 
 block content
-  h1 limit page
+  h1 Grænser for vand
   button 
     a(href="http://localhost:3000/") Home
-  p Welcome to limit page
-  
-  br
+  button
+    a(href="http://localhost:3000/limits/") Tilbage
+
   p vælg bygningstype
+
   select
     option(value="skole") skole
     option(value="plejehjem") plejehjem
   br 
+  p sæt grænse for antallet af M^3 vand pr. kvm
   p gul grænse
   input(type="number" name="minimum value" id="minvalue")
   |   per kvm. 
