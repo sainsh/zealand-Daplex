@@ -200,14 +200,15 @@ exports.setupTables = async function () {
     let propertiesTable = getPropertiesTable();
     let helpdeskTable = getHelpdeskTable();
     let helpdeskWeightTable = getHelpdeskWeightTable();
-    let helpdeskLimitsTable = getHelpdeskLimitsTable();
+    let helpdeskThresholdTable = htt.getHelpdeskThresholdsTable(sequelize, Sequelize);
 
     helpdeskTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
 
     await propertiesTable.sync({force: false});
     await helpdeskTable.sync({force: false});
     await helpdeskWeightTable.sync({force: false});
-    await helpdeskLimitsTable.sync({force: false});
+    await helpdeskThresholdTable.sync({force: false});
+
 };
 
 /**
@@ -508,8 +509,11 @@ exports.calculateScore = async function () {
 
 // exports.calculateScore();
 
-exports.createHelpdeskThreshold = (yellowThreshold, redThreshold, propertyId) => {htt.createHelpdeskThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};
 
+
+// DB Tools export from ThresholdDbTools
+exports.createHelpdeskThreshold = (yellowThreshold, redThreshold, propertyId) => {htt.createHelpdeskThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};
+exports.readHelpdeskThreshold = (id) => {htt.readHelpdeskThreshold(id, sequelize, Sequelize)}; 
 
 
 

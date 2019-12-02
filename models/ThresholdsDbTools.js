@@ -21,8 +21,8 @@ createHelpdeskThreshold = async function(yellowThreshold, redThreshold, property
     let debugMessage = headerName + "createHelpdeskThreshold: ";
 
     console.log(debugMessage + "Starting... \n" + 
-                                "yellowThreshold = " + yellowThreshold + 
-                                "redThreshold = " + redThreshold + 
+                                "yellowThreshold = " + yellowThreshold + "\n" +
+                                "redThreshold = " + redThreshold + "\n" +
                                 "propertyId = " + propertyId);
 
 
@@ -45,11 +45,29 @@ createHelpdeskThreshold = async function(yellowThreshold, redThreshold, property
 
 }
 
+/**
+ * READ method helpdesk Thresholds
+ */
+readHelpdeskThreshold = async function(id, sequelize, Sequelize){
+
+    let debugMessage = headerName + 'readHelpdeskThresholdTable: '; 
+
+    console.log(debugMessage + 'Read initialized...')
+
+    let helpdeskThresholds = this.getHelpdeskThresholdsTable(sequelize, Sequelize);
+    let result = await helpdeskThresholds.findall((id ? {where: {id: id}} : {}));
+
+    console.log(debugMessage + 'Read from database = ' + result); 
+
+    return result.length === 0 ? await Promise.reject(new Error("No helpdesk threshold data found")) : result;
+}
+
 
 /** 
  * Method returning the threshold limits table (layout).
  * @param sequelize: from DB tools 
  * @param Sequelize: from DB tools
+ * @returns table setup for threshold in daplex db
  */
 getHelpdeskThresholdsTable = (sequelize, Sequelize) => {
     return sequelize.define('helpdesk_thresholds', {
@@ -76,9 +94,8 @@ getHelpdeskThresholdsTable = (sequelize, Sequelize) => {
 }
 
 
-
-
 exports.getHelpdeskThresholdsTable = getHelpdeskThresholdsTable;
 exports.createHelpdeskThreshold = createHelpdeskThreshold;
+exports.readHelpdeskThreshold = readHelpdeskThreshold;
 
 

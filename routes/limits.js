@@ -8,9 +8,20 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/helpdesk', function(req, res, next){
-  dbTools.createHelpdeskThreshold(50,50,420);
   res.render('limitsHelpdesk');
 }); 
+
+router.get('/helpdesk/create', function(req, res, next){
+  //Inserting data in Thresholds DB
+  dbTools.createHelpdeskThreshold(50,50,420);
+});
+
+router.get('/helpdesk/read', function(req, res, next){
+
+  //Inserting data in Thresholds DB
+  dbTools.readHelpdeskThreshold(1);
+  
+});
 
 router.get('/power', function(req, res, next){
   res.render('limitsPower');
