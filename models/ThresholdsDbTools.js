@@ -13,6 +13,9 @@
  * CRUD for thresholds table 
  */
  
+ /**
+  * Create method for helpdesk Thresholds
+  */
 createHelpdeskThreshold = async function(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize){
 
     let debugMessage = headerName + "createHelpdeskThreshold: ";
@@ -26,7 +29,6 @@ createHelpdeskThreshold = async function(yellowThreshold, redThreshold, property
     try{
         console.log(debugMessage + "Getting HelpdeskThresholdsTable.")
         let thresholdTable = getHelpdeskThresholdsTable(sequelize, Sequelize);
-        let insertedData = {};
 
         let result = await thresholdTable.create({
             property_id: propertyId, 
@@ -34,41 +36,14 @@ createHelpdeskThreshold = async function(yellowThreshold, redThreshold, property
             threshold_red: redThreshold
         });
         
-
+        console.log(debugMessage + result.dataValues.id);
+        
+    } catch(e){
+        console.log(debugMessage + "\n"  + e);
     }
     
 
 }
-
-async function (helpdeskWeightArray) {
-    try {
-        let helpdeskWeightTable = getHelpdeskWeightTable();
-        let resultsArray = [];
-        console.log(helpdeskWeightArray[0]);
-        let result = await helpdeskWeightTable.create({
-            property_type_id: helpdeskWeightArray[0],
-            helpdesk_indeklima: helpdeskWeightArray[1],
-            helpdesk_udv_b: helpdeskWeightArray[2],
-            helpdesk_mur_facade: helpdeskWeightArray[3],
-            helpdesk_tag: helpdeskWeightArray[4],
-            helpdesk_ud_gavl: helpdeskWeightArray[5],
-            helpdesk_tagdaekning: helpdeskWeightArray[6],
-            helpdesk_tag_ned: helpdeskWeightArray[7],
-            helpdesk_vinduer: helpdeskWeightArray[8],
-            helpdesk_fundament: helpdeskWeightArray[9],
-            helpdesk_teknisk: helpdeskWeightArray[10]
-        });
-
-
-        resultsArray.push(result.dataValues.property_type_id);
-        console.log(resultsArray[0]);
-    
-        return resultsArray; // Return an array containing all inserted IDs
-    } catch (e) {
-        throw e;
-    }
-};
-
 
 
 /** 
