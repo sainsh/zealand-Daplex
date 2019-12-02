@@ -8,6 +8,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/helpdesk', function(req, res, next){
+  dbTools.createHelpdeskThreshold(50,50,420);
   res.render('limitsHelpdesk');
 }); 
 

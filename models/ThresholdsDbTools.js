@@ -78,7 +78,7 @@ getHelpdeskThresholdsTable = (sequelize, Sequelize) => {
 
 
 
-exports.getHelpdeskThresholdsTable;
-exports.createHelpdeskThreshold;
+exports.getHelpdeskThresholdsTable = getHelpdeskThresholdsTable;
+exports.createHelpdeskThreshold = createHelpdeskThreshold;
 
 
