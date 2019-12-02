@@ -6,15 +6,33 @@
  *  - Team Cyclone
  */
 
+ const headerName = "ThresholdsDbTools.js: ";
+
 
 /**
  * CRUD for thresholds table 
  */
  
-createHelpdeskThreshold = async function(yellowThreshold, redThreshold, propertyId){
+createHelpdeskThreshold = async function(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize){
+
+    let debugMessage = headerName + "createHelpdeskThreshold: ";
+
+    console.log(debugMessage + "Starting... \n" + 
+                                "yellowThreshold = " + yellowThreshold + 
+                                "redThreshold = " + redThreshold + 
+                                "propertyId = " + propertyId);
+
 
     try{
-        let thresholdTable = getHelpdeskThresholdsTable();
+        console.log(debugMessage + "Getting HelpdeskThresholdsTable.")
+        let thresholdTable = getHelpdeskThresholdsTable(sequelize, Sequelize);
+        let insertedData = {};
+
+        let result = await thresholdTable.create({
+            property_id: propertyId, 
+            threshold_yellow: yellowThreshold,
+            threshold_red: redThreshold
+        });
         
 
     }
