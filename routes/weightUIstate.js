@@ -16,8 +16,8 @@ router.post('/', (req, res, next) => {
 
 
     var data = [select, tekSlider, udvSlider, osvSlider];
-    db.createHelpdeskWeightTable(data);
-    db.updateHelpdeskWeightTable(data);
+    db.createStateWeightTable(data);
+    db.updateStateWeightTable(data);
     res.redirect("/weightUI/state/#top");
     //res.redirect('/weightUI/');
 })

@@ -107,6 +107,28 @@ function getHelpdeskTable() {
     });
 }
 
+function getStateWeightTable() {
+    return sequelize.define('state_weight_data', {
+        property_type_id: {
+            type: Sequelize.INTEGER,
+            autoIncrement: false,
+            primaryKey: true
+        },
+        state_tekniske: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        state_udvendige: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        state_osv: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        }
+    });
+}
+
 //
 
 function getHelpdeskWeightTable() {
@@ -414,6 +436,28 @@ exports.createHelpdeskWeightTable = async function (helpdeskWeightArray) {
     }
 };
 
+exports.createStatekWeightTable = async function (stateWeightArray) {
+    try {
+        let stateWeightTable = getStateWeightTable();
+        let resultsArray = [];
+        console.log(stateWeightArray[0]);
+        let result = await stateWeightTable.create({
+            property_type_id: stateWeightArray[0],
+            state_tekniske: stateWeightArray[1],
+            state_udvendige: stateWeightArray[2],
+            state_osv: stateWeightArray[3]
+        });
+
+
+        resultsArray.push(result.dataValues.property_type_id);
+        console.log(resultsArray[0]);
+
+        return resultsArray; // Return an array containing all inserted IDs
+    } catch (e) {
+        throw e;
+    }
+};
+
 // SLET VENLIGST IKKE DENNE LINJE
 // exports.createHelpdeskWeightTable([420, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]);
 // SLET VENLIGST IKKE DENNE LINJE
@@ -440,6 +484,27 @@ exports.updateHelpdeskWeightTable = async function (helpdeskWeightArray) {
         resultsArray.push(result.dataValues);
         console.log(resultsArray[0]);
     
+        return resultsArray; // Return an array containing all inserted IDs
+    } catch (e) {
+        throw e;
+    }
+};
+
+exports.updateStateWeightTable = async function (stateWeightArray) {
+    try {
+        let stateWeightTable = getStateWeightTable();
+        let resultsArray = [];
+        console.log(stateWeightArray[1]);
+        let result = await stateWeightTable.update({
+            state_tekniske: stateWeightArray[1],
+            state_udvendige: stateWeightArray[2],
+            state_osv: stateWeightArray[3],
+        }, {returning: true, where: {property_type_id: stateWeightArray[0]}});
+
+
+        resultsArray.push(result.dataValues);
+        console.log(resultsArray[0]);
+
         return resultsArray; // Return an array containing all inserted IDs
     } catch (e) {
         throw e;
