@@ -25,6 +25,7 @@ router.post('/', (req, res, next) => {
   var data = [select, indeslider, udvSlider, murSlider, tagSlider, udSlider, tagDækSlider, tagrenSlider, vinSlider, funSlider, tekSlider];
   db.createHelpdeskWeightTable(data);
   db.updateHelpdeskWeightTable(data);
+  res.redirect("/weightUI/#top");
  //res.redirect('/weightUI/');
 })
 

@@ -1,0 +1,11 @@
+extends layout
+
+block content
+    h1 Export af XLSX og CSV filer
+
+    button
+        a(href="http://localhost:3000/") Home
+    form(action='/export/getCard', method='get')
+        h2 Download csv:
+        br
+        input(type='submit', value='Download')

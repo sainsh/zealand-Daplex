@@ -7,6 +7,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var importRouter = require('./routes/import');
+var exportRouter = require('./routes/export');
 var UILimitsRouter = require('./routes/limitsUI');
 var weightUIRouter = require('./routes/weightUI');
 
@@ -26,6 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/import', importRouter);
+app.use('/export', exportRouter);
 app.use('/limitsUI', UILimitsRouter);
 app.use('/weightUI', weightUIRouter);
 
