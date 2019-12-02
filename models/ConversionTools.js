@@ -12,8 +12,9 @@ exports.convertXlsxToCsv = function (inputFilePath, outputFilePath) {
     return true;
 };
 
-exports.convertCsvToJson = async function (path) {
-    await trimLines(path, "Nr.;");
+exports.convertCsvToJson = async function (path, trimUntil) {
+    if (trimUntil)
+        await trimLines(path, trimUntil);
 
     let results = [];
 

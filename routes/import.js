@@ -24,14 +24,14 @@ router.get('/', function (req, res, next) {
 
 router.post('/csv', upload.single('csv-file'), async function (req, res, next) {
     let test = req.file.path;
-    let jsonResult= await conversionTools.convertCsvToJson(test);
-    switch(req.body.kategori){
-        case 'Helpdesk':  
-          var idResults=databaseTools.createHelpdeskData(jsonResult);
-          break;
+    let jsonResult = await conversionTools.convertCsvToJson(test);
+    switch (req.body.kategori) {
+        case 'Helpdesk':
+            var idResults = databaseTools.createHelpdeskData(jsonResult);
+            break;
         case 'Vedligeholdelse':
-          //var idResults=databaseTools.createVedligeholdelseData(jsonResult);
-          break;
+            //var idResults=databaseTools.createVedligeholdelseData(jsonResult);
+            break;
     }
     console.log(`${req.body.kategori}:  ${new Date()}`);
     res.redirect("/import/");
@@ -40,16 +40,19 @@ router.post('/csv', upload.single('csv-file'), async function (req, res, next) {
 router.post('/xlsx', upload.single('xlsx-file'), async function (req, res, next) {
     let outputFilePath = req.file.path + "-converted";
     conversionTools.convertXlsxToCsv(req.file.path, outputFilePath);
-    let jsonResult = await conversionTools.convertCsvToJson(outputFilePath);
-    switch(req.body.kategori){
-        case 'Helpdesk':  
-          var idResults=databaseTools.createHelpdeskData(jsonResult);
-          break;
+    let jsonResult;
+    let idResults;
+    switch (req.body.kategori) {
+        case 'Helpdesk':
+            jsonResult = await conversionTools.convertCsvToJson(outputFilePath, "Nr.;");
+            idResults = databaseTools.createHelpdeskData(jsonResult);
+            break;
         case 'Vedligeholdelse':
-          //var idResults=databaseTools.createVedligeholdelseData(jsonResult);
-          break;
+            jsonResult = await conversionTools.convertCsvToJson(outputFilePath);
+            idResults = databaseTools.createMaintenanceData(jsonResult);
+            break;
     }
-    console.log(`${req.body.kategori}:  ${new Date()}`);
+    console.log(`${req.body.kategori}: ${new Date()}`);
     res.redirect("/import/");
 });
 

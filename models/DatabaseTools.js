@@ -216,39 +216,7 @@ function getMaintenanceTable() {
             type: Sequelize.INTEGER,
             allowNull: true
         },
-        tekniske_anlaeg: {
-            type: Sequelize.DOUBLE,
-            allowNull: true
-        },
-        udv_belaegning: {
-            type: Sequelize.DOUBLE,
-            allowNull: true
-        },
-        murwaerk_og_facade: {
-            type: Sequelize.DOUBLE,
-            allowNull: true
-        },
-        tag: {
-            type: Sequelize.DOUBLE,
-            allowNull: true
-        },
-        udhaeng_og_gavle: {
-            type: Sequelize.DOUBLE,
-            allowNull: true
-        },
-        tagdaekning: {
-            type: Sequelize.DOUBLE,
-            allowNull: true
-        },
-        tagrender_og_nedloeb: {
-            type: Sequelize.DOUBLE,
-            allowNull: true
-        },
-        vinduer_og_udv_doere: {
-            type: Sequelize.DOUBLE,
-            allowNull: true
-        },
-        fundament_og_sokkel: {
+        cost: {
             type: Sequelize.DOUBLE,
             allowNull: true
         }
@@ -407,7 +375,7 @@ exports.createHelpdeskWeightTable = async function (helpdeskWeightArray) {
 
         resultsArray.push(result.dataValues.property_type_id);
         console.log(resultsArray[0]);
-    
+
         return resultsArray; // Return an array containing all inserted IDs
     } catch (e) {
         throw e;
@@ -435,11 +403,11 @@ exports.updateHelpdeskWeightTable = async function (helpdeskWeightArray) {
             helpdesk_vinduer: helpdeskWeightArray[9],
             helpdesk_fundament: helpdeskWeightArray[10],
         }, {returning: true, where: {property_type_id: helpdeskWeightArray[0]}});
-        
-        
+
+
         resultsArray.push(result.dataValues);
         console.log(resultsArray[0]);
-    
+
         return resultsArray; // Return an array containing all inserted IDs
     } catch (e) {
         throw e;
@@ -486,29 +454,34 @@ exports.createMaintenanceData = async function (maintenanceDataArray) {
     try {
         let maintenanceTable = getMaintenanceTable();
         let resultsArray = [];
+        let propertiesTable = getPropertiesTable();
 
-        let result = await maintenanceTable.create({
-            property_id: maintenanceDataArray[0],
-            tekniske_anlaeg: maintenanceDataArray[1],
-            udv_belaegning: maintenanceDataArray[2],
-            murwaerk_og_facade: maintenanceDataArray[3],
-            tag: maintenanceDataArray[4],
-            udhaeng_og_gavle: maintenanceDataArray[5],
-            tagdaekning: maintenanceDataArray[6],
-            tagrender_og_nedloeb: maintenanceDataArray[7],
-            vinduer_og_udv_doere: maintenanceDataArray[8],
-            fundament_og_sokkel: maintenanceDataArray[9]
-        });
+        for (let maintenanceObject of maintenanceDataArray) { // Loop through all the data
+            let propertyNameTrimmed = maintenanceObject['Ejendom'].replace(/\(.+\)/, "").trim();
+            let propertyId = await propertiesTable.findAll(({where: {property_name: propertyNameTrimmed}})); // Check whether the property exists
+            let propertyExistsInMaintenanceTable = await maintenanceTable.findAll(({where: {property_id: propertyId}})); // Check whether the property exists
 
-        resultsArray.push(result.dataValues);
+            if (propertyExistsInMaintenanceTable.length === 0) {
+
+                if (propertyId.length === 0) // If the results array have a length of 0, the property doesn't exist
+                    propertyId = await exports.createProperty(maintenanceObject['Ejendom']); // Create a new property
+                else
+                    propertyId = propertyId[0].dataValues.property_id;
+
+                let result = await maintenanceTable.create({
+                    property_id: propertyId,
+                    cost: maintenanceObject['2019']
+                });
+
+                resultsArray.push(result.dataValues.helpdesk_id)
+            }
+        }
 
         return resultsArray; // Return an array containing all inserted IDs
     } catch (e) {
         throw e;
     }
 };
-
-//exports.createMaintenanceData([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
 exports.readProperty = async function (id) {
     try {
@@ -544,7 +517,7 @@ exports.readMaintenanceData = async function (id) {
     try {
         let maintenanceTable = getMaintenanceTable();
         let result = await maintenanceTable.findAll((id ? {where: {property_id: id}} : {})); // Add the "where" option, if the ID is not undefined
-        return result.length === 0 ? await Promise.reject(new Error("No properties found")) : result; // Return an error, if 0 results are found, else return the result(s)
+        return result.length === 0 ? await Promise.reject(new Error("No maintenance data found")) : result; // Return an error, if 0 results are found, else return the result(s)
     } catch (e) {
         throw e;
     }
