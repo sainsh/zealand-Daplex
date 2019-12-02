@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  h1 limit page
+  button 
+    a(href="http://localhost:3000/") Home
+  p vælg bygningstype
+
+  br
+  select
+    option(value="skole") skole
+    option(value="plejehjem") plejehjem
+  br 
+  p sæt grænse for antallet af M^3 vand pr. kvm
+  br
+  p gul grænse
+  input(type="number" name="minimum value" id="minvalue")
+  |   per kvm. 
+  br 
+  p rød grænse
+  input#maxvalue(type="number" name="maximum value")
+  |   per kvm. 
