@@ -8,7 +8,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var importRouter = require('./routes/import');
 var exportRouter = require('./routes/export');
-var UILimitsRouter = require('./routes/limitsUI');
+var UILimitsRouter = require('./routes/limits');
 var weightUIRouter = require('./routes/weightUI');
 
 
