@@ -6,7 +6,7 @@ router.get('/', function(req, res, next) {
   res.render('limitsHelpdesk');
 });
 
-/**router.get('/', function(req, res, next){
+/**router.get('/helpdesk', function(req, res, next){
 
 }); */
 
