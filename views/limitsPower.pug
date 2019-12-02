@@ -1,0 +1,23 @@
+extends layout
+  
+
+block content
+  h1 El grænseside
+  button 
+    a(href="http://localhost:3000/") Home
+  p velkommen til grænsesiden for el
+  
+  p gul grænse
+  input(type="number" name="minimum value" id="minvalue")
+  |   per kvm. 
+  br 
+  p rød grænse
+  input#maxvalue(type="number" name="maximum value")
+  |   per kvm. 
+  br
+  br
+
+  button(type="button" onclick="submit()") Submit
+
+
+  script(src="/assets/javascripts/limits.js")
