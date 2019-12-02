@@ -540,6 +540,18 @@ exports.readHelpdeskWeight = async function (id) {
     }
 };
 
+exports.readMaintenanceData = async function (id) {
+    try {
+        let maintenanceTable = getMaintenanceTable();
+        let result = await maintenanceTable.findAll((id ? {where: {property_id: id}} : {})); // Add the "where" option, if the ID is not undefined
+        return result.length === 0 ? await Promise.reject(new Error("No properties found")) : result; // Return an error, if 0 results are found, else return the result(s)
+    } catch (e) {
+        throw e;
+    }
+};
+
+//exports.readMaintenanceData().then(res => console.log(res[0].dataValues));
+
 exports.processHelpdeskData = async function () {
     let results = await exports.readHelpdeskData();
     // console.log(results);
