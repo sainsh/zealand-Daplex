@@ -2,7 +2,7 @@ const mysql = require('mysql2/promise');
 const Sequelize = require('sequelize');
 const host = 'localhost';
 const user = 'root';
-const password = 'root';
+const password = 'password';
 const sequelize = new Sequelize('daplex', user, password, {
     host: host,
     dialect: 'mysql',
@@ -316,6 +316,7 @@ exports.setupTables = async function () {
     let helpdeskWeightTable = getHelpdeskWeightTable();
     let helpdeskLimitsTable = getHelpdeskLimitsTable();
     let maintenanceTable = getMaintenanceTable();
+    let stateWeightTable = getStateWeightTable();
 
     helpdeskTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
     maintenanceTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
@@ -323,6 +324,7 @@ exports.setupTables = async function () {
     await propertiesTable.sync({force: false});
     await helpdeskTable.sync({force: false});
     await helpdeskWeightTable.sync({force: false});
+    await stateWeightTable.sync({force: false});
     await helpdeskLimitsTable.sync({force: false});
     await maintenanceTable.sync({force: false});
 };
@@ -436,7 +438,7 @@ exports.createHelpdeskWeightTable = async function (helpdeskWeightArray) {
     }
 };
 
-exports.createStatekWeightTable = async function (stateWeightArray) {
+exports.createStateWeightTable = async function (stateWeightArray) {
     try {
         let stateWeightTable = getStateWeightTable();
         let resultsArray = [];
