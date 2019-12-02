@@ -524,7 +524,7 @@ exports.createMaintenanceData = async function (maintenanceDataArray) {
         let propertiesTable = getPropertiesTable();
 
         for (let maintenanceObject of maintenanceDataArray) { // Loop through all the data
-            let propertyNameTrimmed = maintenanceObject['Ejendom'].replace(/\(.+\)/, "").trim();
+            let propertyNameTrimmed = maintenanceObject['Ejendom'].replace(/\(\d+\)/, "").trim();
             let propertyId = await propertiesTable.findAll(({where: {property_name: propertyNameTrimmed}})); // Check whether the property exists
 
             if (propertyId.length === 0) // If the results array have a length of 0, the property doesn't exist
