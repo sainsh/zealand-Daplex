@@ -2,11 +2,12 @@ const mysql = require('mysql2/promise');
 const Sequelize = require('sequelize');
 const host = 'localhost';
 const user = 'root';
-const password = 'password';
+const password = '';
 const sequelize = new Sequelize('daplex', user, password, {
     host: host,
     dialect: 'mysql',
     define: {
+
         timestamps: false
     }
 });
@@ -204,6 +205,57 @@ function getHelpdeskLimitsTable() {
     });
 }
 
+
+function getMaintenanceTable() {
+    return sequelize.define('maintenance_data', {
+        maintenance_id: {
+            type: Sequelize.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
+        property_id: {
+            type: Sequelize.INTEGER,
+            allowNull: true
+        },
+        tekniske_anlaeg: {
+            type: Sequelize.DOUBLE,
+            allowNull: true
+        },
+        udv_belaegning: {
+            type: Sequelize.DOUBLE,
+            allowNull: true
+        },
+        murwaerk_og_facade: {
+            type: Sequelize.DOUBLE,
+            allowNull: true
+        },
+        tag: {
+            type: Sequelize.DOUBLE,
+            allowNull: true
+        },
+        udhaeng_og_gavle: {
+            type: Sequelize.DOUBLE,
+            allowNull: true
+        },
+        tagdaekning: {
+            type: Sequelize.DOUBLE,
+            allowNull: true
+        },
+        tagrender_og_nedloeb: {
+            type: Sequelize.DOUBLE,
+            allowNull: true
+        },
+        vinduer_og_udv_doere: {
+            type: Sequelize.DOUBLE,
+            allowNull: true
+        },
+        fundament_og_sokkel: {
+            type: Sequelize.DOUBLE,
+            allowNull: true
+        }
+    });
+}
+
 /**
  * Function for creating the database itself. Sequelize can't do that.
  * @param host
@@ -242,13 +294,16 @@ exports.setupTables = async function () {
     let helpdeskTable = getHelpdeskTable();
     let helpdeskWeightTable = getHelpdeskWeightTable();
     let helpdeskLimitsTable = getHelpdeskLimitsTable();
+    let maintenanceTable = getMaintenanceTable();
 
     helpdeskTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
+    maintenanceTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
 
     await propertiesTable.sync({force: false});
     await helpdeskTable.sync({force: false});
     await helpdeskWeightTable.sync({force: false});
     await helpdeskLimitsTable.sync({force: false});
+    await maintenanceTable.sync({force: false});
 };
 
 /**
@@ -427,6 +482,34 @@ exports.createHelpdeskLimit = async function (helpdeskLimitArray) {
         throw e;
     }
 };
+
+exports.createMaintenanceData = async function (maintenanceDataArray) {
+    try {
+        let maintenanceTable = getMaintenanceTable();
+        let resultsArray = [];
+
+        let result = await maintenanceTable.create({
+            property_id: maintenanceDataArray[0],
+            tekniske_anlaeg: maintenanceDataArray[1],
+            udv_belaegning: maintenanceDataArray[2],
+            murwaerk_og_facade: maintenanceDataArray[3],
+            tag: maintenanceDataArray[4],
+            udhaeng_og_gavle: maintenanceDataArray[5],
+            tagdaekning: maintenanceDataArray[6],
+            tagrender_og_nedloeb: maintenanceDataArray[7],
+            vinduer_og_udv_doere: maintenanceDataArray[8],
+            fundament_og_sokkel: maintenanceDataArray[9]
+        });
+
+        resultsArray.push(result.dataValues);
+
+        return resultsArray; // Return an array containing all inserted IDs
+    } catch (e) {
+        throw e;
+    }
+};
+
+exports.createMaintenanceData([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
 exports.readProperty = async function (id) {
     try {
