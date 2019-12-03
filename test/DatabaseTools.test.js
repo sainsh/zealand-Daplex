@@ -12,10 +12,11 @@ test('test create database with wrong username',  () => {
 
 
 test('insert data from csv', async() =>{
-    let jsonResult = await conversionTools.convertCsvToJson('test/testfiles/Helpdesk.csv');
+    let csv = await conversionTools.convertXlsxToCsv('./test/testfiles/helpdesk.xlsx', './test/testfiles/helpdesk.csv')
+    let jsonResult = await conversionTools.convertCsvToJson('./test/testfiles/Helpdesk.csv', 'Nr.');
     let result = await databaseTools.createHelpdeskData(jsonResult);
     let res = await databaseTools.readProperty(1);
-    expect(res[0].dataValues).toEqual({property_id:1, property_name: 'Kildemarksvej 114 + 118 - 128' })
+    await expect(res[0].dataValues).toEqual({color: null, property_id:1, property_name: 'Kildemarksvej 114 + 118 - 128', property_size: 100, property_type_id: 420 })
 })
 
 test('try reading from properties where id is not a number', async()=>{
