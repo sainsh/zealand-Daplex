@@ -9,7 +9,7 @@ exports.wtt = wtt;
 
 const host = 'localhost';
 const user = 'root';
-const password = '';
+const password = 'password';
 const sequelize = new Sequelize('daplex', user, password, {
     host: host,
     dialect: 'mysql',
@@ -721,5 +721,9 @@ exports.readHelpdeskThreshold = (id) => {htt.readHelpdeskThreshold(id, sequelize
 exports.createWaterThreshold = (yellowThreshold, redThreshold, propertyId) => {wtt.createWaterThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};
 exports.readWaterThreshold = (id) => {wtt.createWaterThreshold(id, sequelize, Sequelize)};
 
+
+exports.updateHelpdeskThreshold = (id, propertyId, yellowThreshold, redThreshold) => htt.updateHelpdeskThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
+
+ 
 
 
