@@ -307,6 +307,7 @@ exports.setupTables = async function () {
     let helpdeskLimitsTable = getHelpdeskLimitsTable();
     let maintenanceTable = getMaintenanceTable();
     let stateWeightTable = getStateWeightTable();
+    let overallWeightTable = getOverallWeightTable();
 
     helpdeskTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
     maintenanceTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
@@ -531,7 +532,6 @@ exports.updateOverallWeightTable = async function (overallWeightArray) {
     try {
         let overallWeightTable = getOverallWeightTable();
         let resultsArray = [];
-        console.log(overallWeightArray[1]);
         let result = await overallWeightTable.update({
             overall_tilstand: overallWeightArray[1],
             overall_energi: overallWeightArray[2],

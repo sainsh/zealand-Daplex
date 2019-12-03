@@ -62,6 +62,7 @@ router.post('/overall', (req, res, next) => {
 
 
   var data = [select, tilsSlider, energiSlider, helpSlider];
+  console.log(`${select} ${tilsSlider} ${energiSlider} ${helpSlider}`);
   db.createOverallWeightTable(data);
   db.updateOverallWeightTable(data);
   res.redirect("/weightUI/overall/#top");

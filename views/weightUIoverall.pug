@@ -8,6 +8,9 @@ block content
     button
         a(href="http://localhost:3000/") Home
     form(action="/weightUI/overall", method="post")
+        select#select(name = `select`)
+            option(value='420') Skole
+            option(value='440') Dag Institutioner
         +slider('Tilstand', 'tilsBullet', "tilsSlider", 0)
         +slider('Energi', 'energiBullet', 'energiSlider', 1)
         +slider('Helpdesk', 'helpBullet', 'helpSlider', 2)
