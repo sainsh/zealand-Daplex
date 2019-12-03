@@ -19,19 +19,18 @@ router.get('/overall', function (req, res, next) {
 router.post('/helpdesk', (req, res, next) => {
 
   var select = req.body.select;
-  var indeslider = req.body.indeSlider;
-  console.log(indeslider);
+  var indeSlider = req.body.indeSlider;
+  var tekSlider = req.body.tekSlider;
   var udvSlider = req.body.udvSlider;
   var murSlider = req.body.murSlider;
   var tagSlider = req.body.tagSlider;
   var udSlider = req.body.udSlider;
   var tagDækSlider = req.body.tagDækSlider;
-  var tekSlider = req.body.tekSlider;
   var tagrenSlider = req.body.tagrenSlider;
-  var funSlider = req.body.funSlider;
   var vinSlider = req.body.vinSlider;
+  var funSlider = req.body.funSlider;
 
-  var data = [select, indeslider, udvSlider, murSlider, tagSlider, udSlider, tagDækSlider, tagrenSlider, vinSlider, funSlider, tekSlider];
+  var data = [select, indeSlider, tekSlider, udvSlider, murSlider, tagSlider, udSlider, tagDækSlider, tagrenSlider, vinSlider, funSlider];
   db.createHelpdeskWeightTable(data);
   db.updateHelpdeskWeightTable(data);
   res.redirect("/weightUI/helpdesk/#top");

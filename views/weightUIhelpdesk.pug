@@ -11,22 +11,22 @@ block content
     select#select(name = `select`)
       option(value='420') Skole
       option(value='440') Dag Institutioner
-    +slider('Indeklima', 'indeBullet', "indeSlider", 0)
-    +slider('Udv. belægning', 'udvBullet', 'udvSlider', 1)
-    +slider('Murværk og facade', 'murBullet', 'murSlider', 2)
-    +slider('Tag', 'tagBullet', "tagSlider", 3)
-    +slider('Udhæng og gavle', 'udBullet', "udSlider", 4)
-    +slider('Tagdækning', 'tagDækBullet', "tagDækSlider", 5)
-    +slider('Tagrender og nedløb', 'tagrenBullet', "tagrenSlider", 6)
-    +slider('Vinduer og udv. Døre', 'vinBullet', "vinSlider", 7)
-    +slider('Fundament og sokkel', 'funBullet', "funSlider", 8)
-    +slider('Tekniske anlæg', 'tekBullet',"tekSlider",9)
+    +slider('Indeklima', 'indeBullet', "indeSlider")
+    +slider('Tekniske anlæg', 'tekBullet',"tekSlider")
+    +slider('Udv. belægning', 'udvBullet', 'udvSlider')
+    +slider('Murværk og facade', 'murBullet', 'murSlider')
+    +slider('Tag', 'tagBullet', "tagSlider")
+    +slider('Udhæng og gavle', 'udBullet', "udSlider")
+    +slider('Tagdækning', 'tagDækBullet', "tagDækSlider")
+    +slider('Tagrender og nedløb', 'tagrenBullet', "tagrenSlider")
+    +slider('Vinduer og udv. Døre', 'vinBullet', "vinSlider")
+    +slider('Fundament og sokkel', 'funBullet', "funSlider")
     input(type="submit", value="Send data") 
   script(src="/assets/javascripts/helpdeskslider.js")
 
 
 
-mixin slider(name, bullet, slider, id)
+mixin slider(name, bullet, slider)
   .container
     .range-slider
         p= name
