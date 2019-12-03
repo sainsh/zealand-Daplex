@@ -1,4 +1,4 @@
-
+var select = document.getElementById("select");
 
 function createSliderLogic(nameBullet, nameSlider){
 var bullet = document.getElementById(nameBullet);
@@ -17,7 +17,7 @@ req.open('POST', '/weightUI/helpdesk/sliders');
 req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 req.onload = () => {
     var sliderValues = req.response;
-    console.log(sliderValues);
+    console.log(JSON.stringify(sliderValues));
 
 
     createSliderLogic("indeBullet", "indeSlider");
@@ -31,4 +31,4 @@ req.onload = () => {
     createSliderLogic("funBullet", "funSlider");
     createSliderLogic("vinBullet", "vinSlider");
 }
-req.send("id=420");
+req.send(`id=${select.value}`);

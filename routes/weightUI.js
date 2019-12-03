@@ -18,8 +18,12 @@ router.get('/overall', function (req, res, next) {
 //function to set sliders to current value from database
 router.post('/helpdesk/sliders', async function (req, res) {
   var result = await db.readHelpdeskWeightData(req.body.id);
-  console.log("Search result: " + JSON.stringify(result));
-  res.send('weightUIhelpdesk');
+  var resultArray = [];
+  for (var value in result[0].dataValues){
+    resultArray.push(result[0][value]);
+  }
+  resultArray.shift();
+  res.send(resultArray);
 });
 
 router.post('/helpdesk', (req, res, next) => {
