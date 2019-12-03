@@ -16,6 +16,13 @@ router.get('/overall', function (req, res, next) {
   res.render('weightUIoverall');
 });
 
+//function to set sliders to current value from database
+router.get('/helpdesk/sliders', function (req, res, next) {
+  var result = db.readHelpdeskData(req.body);
+  console.log(result);
+  res.send('weightUIhelpdesk');
+});
+
 router.post('/helpdesk', (req, res, next) => {
 
   var select = req.body.select;
