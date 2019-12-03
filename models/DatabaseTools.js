@@ -2,7 +2,7 @@ const mysql = require('mysql2/promise');
 const Sequelize = require('sequelize');
 const host = 'localhost';
 const user = 'root';
-const password = 'password';
+const password = '';
 const sequelize = new Sequelize('daplex', user, password, {
     host: host,
     dialect: 'mysql',
@@ -319,7 +319,6 @@ exports.setupTables = async function () {
     await helpdeskLimitsTable.sync({force: false});
     await maintenanceTable.sync({force: false});
     await overallWeightTable.sync({force: false});
-
 };
 
 /**
@@ -329,7 +328,7 @@ exports.setupTables = async function () {
  * @param propertyTypeId
  * @returns {Promise<properties.property_id|{autoIncrement, type, primaryKey}|helpdesk_data.property_id|{allowNull, type}|*|number>}
  */
-exports.createProperty = async function (propertyName, propertySize = 100, propertyTypeId = 420) {
+exports.createProperty = async function (propertyName, propertySize = 1000, propertyTypeId = 420) {
     try {
         let propertiesTable = getPropertiesTable();
 
@@ -659,16 +658,12 @@ exports.readMaintenanceData = async function (id) {
 
 //exports.readMaintenanceData().then(res => console.log(res[0].dataValues));
 
-exports.processHelpdeskData = async function () {
-    let results = await exports.readHelpdeskData();
-    // console.log(results);
+exports.processHelpdeskData = async function (resultPerProperty) {
+    let helpdeskData = await exports.readHelpdeskData();
 
-    let resultPerProperty = {};
-
-    // Count helpdesk reports for each property
-    for (let result of results) {
-        let helpdeskSubject = result.dataValues.subject;
-        let propertyId = result.dataValues.property_id;
+    for (let data of helpdeskData) { // Count helpdesk reports for each property
+        let helpdeskSubject = data.dataValues.subject;
+        let propertyId = data.dataValues.property_id;
 
         if (!resultPerProperty[propertyId])
             resultPerProperty[propertyId] = {};
@@ -676,11 +671,7 @@ exports.processHelpdeskData = async function () {
         resultPerProperty[propertyId][helpdeskSubject] = (resultPerProperty[propertyId][helpdeskSubject] ? resultPerProperty[propertyId][helpdeskSubject] + 1 : 1);
     }
 
-    // console.log(resultPerProperty);
-
     let helpdeskWeights = await exports.readHelpdeskWeight();
-    console.log(helpdeskWeights);
-
     let map = {
         'Lys og el': 'helpdesk_indeklima',
         'Tekniske anlæg': 'helpdesk_teknisk',
@@ -698,8 +689,6 @@ exports.processHelpdeskData = async function () {
         if (resultPerProperty.hasOwnProperty(propertyId)) {
             let property = await exports.readProperty(propertyId);
             let propertyTypeId = property[0].dataValues.property_type_id;
-            console.log(propertyTypeId);
-
             let weightsObject;
 
             for (let helpdeskWeight of helpdeskWeights) { // Loop through helpdesk weights to find the matching weight for the property type
@@ -709,7 +698,7 @@ exports.processHelpdeskData = async function () {
                 }
             }
 
-            let score = 0;
+            let totalScore = 0;
 
             for (let subject in resultPerProperty[propertyId]) { // Loop through each individual helpdesk subject, which has 1 or more reports
                 if (resultPerProperty[propertyId].hasOwnProperty(subject)) {
@@ -717,37 +706,64 @@ exports.processHelpdeskData = async function () {
                     let subjectDatabaseName = map[subject];
                     let multiplier = weightsObject[subjectDatabaseName] / 100; // Get the multiplier for the current subject
                     console.log(multiplier);
-                    score += numberOfReports * multiplier; // Add the score to the total score
+                    totalScore += numberOfReports * multiplier; // Add the score to the total score
                 }
             }
 
-            // console.log(score);
-
-            resultPerProperty[propertyId].score = score;
+            resultPerProperty[propertyId].helpdeskScore = totalScore;
         }
     }
 
-    console.log(resultPerProperty);
     return resultPerProperty;
 };
 
 // exports.processHelpdeskData();
 
+exports.processMaintenanceData = async function (resultPerProperty) {
+    let maintenanceData = await exports.readMaintenanceData();
+    let propertiesTable = getPropertiesTable();
+
+    for (let data of maintenanceData) {
+        let propertyId = data.dataValues.property_id;
+
+        if (!resultPerProperty[propertyId])
+            resultPerProperty[propertyId] = {};
+
+        let property = await propertiesTable.findAll(({where: {property_id: propertyId}}));
+        let propertySize = property[0].dataValues.property_size;
+        resultPerProperty[propertyId].maintenanceScore = data.dataValues.cost / propertySize;
+    }
+
+    return resultPerProperty;
+};
+
+// exports.processMaintenanceData({});
+
 exports.calculateScore = async function () {
-    let helpdeskScoresObjects = await exports.processHelpdeskData();
+    let resultPerProperty = {};
+    resultPerProperty = await exports.processHelpdeskData(resultPerProperty);
+    resultPerProperty = await exports.processMaintenanceData(resultPerProperty);
 
-    console.log(helpdeskScoresObjects);
+    for (let propertyId in resultPerProperty) {
+        if (resultPerProperty.hasOwnProperty(propertyId)) {
+            let totalScore = 0;
 
-    for (let propertyId in helpdeskScoresObjects) {
-        if (helpdeskScoresObjects.hasOwnProperty(propertyId)) {
-            let score = helpdeskScoresObjects[propertyId].score;
-            console.log(score);
-            if (score < 0.3)
-                exports.updatePropertyColor(propertyId, "Grøn");
-            else if (score < 0.6)
-                exports.updatePropertyColor(propertyId, "Gul");
+            if (resultPerProperty[propertyId].helpdeskScore) {
+                let helpdeskScore = resultPerProperty[propertyId].helpdeskScore;
+                totalScore += (helpdeskScore <= 0.3 ? 1 : (helpdeskScore <= 0.6) ? 2 : 3);
+            }
+
+            if (resultPerProperty[propertyId].maintenanceScore) {
+                let maintenanceScore = resultPerProperty[propertyId].maintenanceScore;
+                totalScore += (maintenanceScore <= 3 ? 1 : (maintenanceScore <= 6) ? 2 : 3);
+            }
+
+            if (totalScore < 1)
+                await exports.updatePropertyColor(propertyId, "Grøn");
+            else if (totalScore < 3)
+                await exports.updatePropertyColor(propertyId, "Gul");
             else
-                exports.updatePropertyColor(propertyId, "Rød");
+                await exports.updatePropertyColor(propertyId, "Rød");
         }
     }
 };

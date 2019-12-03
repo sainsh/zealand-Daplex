@@ -1,8 +1,10 @@
 var express = require('express');
 var router = express.Router();
 const multer = require('multer');
+const path = require('path');
 const upload = multer({
-    dest: './models/temp',
+    // dest: './models/temp',
+    dest: path.join(__dirname.slice(0, __dirname.indexOf("Daplex") + 6), 'models/temp')
 });
 // const storage = multer.diskStorage({
 //     destination: function (req, file, cb) {
