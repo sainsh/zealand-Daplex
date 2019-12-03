@@ -7,6 +7,7 @@ test('adds 1 + 2 to equal 3', () => {
 const conversionTools = require('../models/ConversionTools');
 const fs = require('fs');
 const path = require('path');
+var parse = require('csv-parse/lib/sync');
 
 test('inputFile.xlsx gets converted to .csv file', () => {
     expect(conversionTools.convertXlsxToCsv('./test/testfiles/Helpdesk.xlsx', './test/testfiles/Helpdesk.csv')).toBeTruthy();
@@ -34,4 +35,26 @@ test('create CSV priority card from database data', async () => {
     let testFileContent = await getFileContent(dir1);
     let newFileContent = await getFileContent(dir2);
     expect(testFileContent).toEqual(newFileContent);
-});*/
+});
+
+test('create csv from xlsx file cuting rows and columns', async()=>{
+    await conversionTools.convertXLSXToCSV('./test/testfiles/tilstand Fra Dalux.csv', './test/testfiles/tilstand.csv');
+    await conversionTools.trimExcessColumnsAndRows('./test/testfiles/tilstand.csv');
+    var records = parse('./test/testfiles/tilstand.csv', {columns: true});
+
+    var columnResults = {};
+
+    for(var row =0; row < records.length; row++){
+        for(var column in records[row]){
+            if(!columnResults[column]){
+                columnResults[column] = [];
+            }
+            columnResults[column].push(records[row][column]);
+        }
+    }
+    exprect(Object.keys(columnResults).length).toBe(3)
+})
+
+
+*/
+
