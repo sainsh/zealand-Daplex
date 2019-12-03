@@ -129,6 +129,28 @@ function getStateWeightTable() {
     });
 }
 
+function getOverallWeightTable() {
+    return sequelize.define('overall_weight_data', {
+        property_type_id: {
+            type: Sequelize.INTEGER,
+            autoIncrement: false,
+            primaryKey: true
+        },
+        overall_tilstand: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        overall_energi: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        overall_helpdesk: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        }
+    });
+}
+
 //
 
 function getHelpdeskWeightTable() {
@@ -428,6 +450,28 @@ exports.createStateWeightTable = async function (stateWeightArray) {
     }
 };
 
+exports.createOverallWeightTable = async function (overallWeightArray) {
+    try {
+        let overallWeightTable = getOverallWeightTable();
+        let resultsArray = [];
+        console.log(overallWeightArray[0]);
+        let result = await overallWeightTable.create({
+            property_type_id: overallWeightArray[0],
+            overall_tilstand: overallWeightArray[1],
+            overall_energi: overallWeightArray[2],
+            overall_helpdesk: overallWeightArray[3]
+        });
+
+
+        resultsArray.push(result.dataValues.property_type_id);
+        console.log(resultsArray[0]);
+
+        return resultsArray; // Return an array containing all inserted IDs
+    } catch (e) {
+        throw e;
+    }
+};
+
 // SLET VENLIGST IKKE DENNE LINJE
 // exports.createHelpdeskWeightTable([420, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]);
 // SLET VENLIGST IKKE DENNE LINJE
@@ -470,6 +514,27 @@ exports.updateStateWeightTable = async function (stateWeightArray) {
             state_udvendige: stateWeightArray[2],
             state_osv: stateWeightArray[3],
         }, {returning: true, where: {property_type_id: stateWeightArray[0]}});
+
+
+        resultsArray.push(result.dataValues);
+        console.log(resultsArray[0]);
+
+        return resultsArray; // Return an array containing all inserted IDs
+    } catch (e) {
+        throw e;
+    }
+};
+
+exports.updateOverallWeightTable = async function (overallWeightArray) {
+    try {
+        let overallWeightTable = getOverallWeightTable();
+        let resultsArray = [];
+        console.log(overallWeightArray[1]);
+        let result = await overallWeightTable.update({
+            overall_tilstand: overallWeightArray[1],
+            overall_energi: overallWeightArray[2],
+            overall_helpdesk: overallWeightArray[3],
+        }, {returning: true, where: {property_type_id: overallWeightArray[0]}});
 
 
         resultsArray.push(result.dataValues);
