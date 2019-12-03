@@ -13,14 +13,16 @@ router.get('/helpdesk', function(req, res, next){
 
 router.get('/helpdesk/create', function(req, res, next){
   //Inserting data in Thresholds DB
-  dbTools.createHelpdeskThreshold(50,50,420);
+  dbTools.createHelpdeskThreshold(2,2,1000);
+  res.send();
 });
 
 router.get('/helpdesk/read', function(req, res, next){
 
   //Inserting data in Thresholds DB
-  dbTools.readHelpdeskThreshold(1);
-  
+  dbTools.readHelpdeskThreshold(420);
+  res.send();
+
 });
 
 router.get('/power', function(req, res, next){

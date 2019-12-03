@@ -36,7 +36,7 @@ createHelpdeskThreshold = async function(yellowThreshold, redThreshold, property
             threshold_red: redThreshold
         });
         
-        console.log(debugMessage + result.dataValues.id);
+        console.log(debugMessage + "ID's inserted = " + result.dataValues.id);
         
     } catch(e){
         console.log(debugMessage + "\n"  + e);
@@ -52,12 +52,12 @@ readHelpdeskThreshold = async function(id, sequelize, Sequelize){
 
     let debugMessage = headerName + 'readHelpdeskThresholdTable: '; 
 
-    console.log(debugMessage + 'Read initialized...')
+    console.log(debugMessage + 'Read initialized...');
 
-    let helpdeskThresholds = this.getHelpdeskThresholdsTable(sequelize, Sequelize);
-    let result = await helpdeskThresholds.findall((id ? {where: {id: id}} : {}));
+    let helpdeskThresholds = getHelpdeskThresholdsTable(sequelize, Sequelize);
+    let result = await helpdeskThresholds.findAll((id ? {where: {property_id: id}} : {}));
 
-    console.log(debugMessage + 'Read from database = ' + result); 
+    console.log(debugMessage + result.length === 0 ? result : 'nothing was found with the specified id'); 
 
     return result.length === 0 ? await Promise.reject(new Error("No helpdesk threshold data found")) : result;
 }
