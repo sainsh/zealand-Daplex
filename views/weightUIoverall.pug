@@ -11,20 +11,10 @@ block content
         select#select(name = `select`)
             option(value='420') Skole
             option(value='440') Dag Institutioner
-        +slider('Tilstand', 'tilsBullet', "tilsSlider", 0)
-        +slider('Energi', 'energiBullet', 'energiSlider', 1)
-        +slider('Helpdesk', 'helpBullet', 'helpSlider', 2)
+        +slider('Tilstand', 'tilsBullet', "tilsSlider")
+        +slider('Energi', 'energiBullet', 'energiSlider')
+        +slider('Helpdesk', 'helpBullet', 'helpSlider')
         input(type="submit", value="Send data")
     script(src="/assets/javascripts/overallslider.js")
 
-
-
-mixin slider(name, bullet, slider, id)
-    .container
-        .range-slider
-            p= name
-            span(id=`${bullet}` class=`rs-label` value="0" min="0" max="100") 0
-            input(id=`${slider}` class="rs-range" name=`${slider}` type='range' value='0' min='0' max='100')
-        .box-minmax
-            span 0
-            span 100
+include slider

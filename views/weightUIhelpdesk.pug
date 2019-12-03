@@ -24,14 +24,4 @@ block content
     input(type="submit", value="Send data") 
   script(src="/assets/javascripts/helpdeskslider.js")
 
-
-
-mixin slider(name, bullet, slider)
-  .container
-    .range-slider
-        p= name
-        span(id=`${bullet}` class=`rs-label` value="0" min="0" max="100") 0
-        input(id=`${slider}` class="rs-range" name=`${slider}` type='range' value='0' min='0' max='100')
-    .box-minmax
-        span 0
-        span 100
+include slider
