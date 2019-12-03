@@ -1,7 +1,6 @@
 var express = require('express');
 var db = require('../models/DatabaseTools')
 var router = express.Router();
-var endpointrouter = require
 
 router.get('/', function (req, res, next) {
   res.render('weightUI');
@@ -17,9 +16,9 @@ router.get('/overall', function (req, res, next) {
 });
 
 //function to set sliders to current value from database
-router.get('/helpdesk/sliders', function (req, res, next) {
-  var result = db.readHelpdeskData(req.body);
-  console.log(result);
+router.post('/helpdesk/sliders', async function (req, res) {
+  var result = await db.readHelpdeskWeightData(req.body.id);
+  console.log("Search result: " + JSON.stringify(result));
   res.send('weightUIhelpdesk');
 });
 
