@@ -31,7 +31,7 @@ createHelpdeskThreshold = async function(yellowThreshold, redThreshold, property
         let thresholdTable = getHelpdeskThresholdsTable(sequelize, Sequelize);
 
         let result = await thresholdTable.create({
-            property_id: propertyId, 
+            property_type_id: propertyId, 
             threshold_yellow: yellowThreshold,
             threshold_red: redThreshold
         });
@@ -55,11 +55,40 @@ readHelpdeskThreshold = async function(id, sequelize, Sequelize){
     console.log(debugMessage + 'Read initialized...');
 
     let helpdeskThresholds = getHelpdeskThresholdsTable(sequelize, Sequelize);
-    let result = await helpdeskThresholds.findAll((id ? {where: {property_id: id}} : {}));
+    let result = await helpdeskThresholds.findAll((id ? {where: {property_type_id: id}} : {}));
 
     console.log(debugMessage + result.length === 0 ? result : 'nothing was found with the specified id'); 
 
     return result.length === 0 ? await Promise.reject(new Error("No helpdesk threshold data found")) : result;
+}
+
+updateHelpdeskThresholdTable = async function(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize){
+    
+    let debugMessage = headerName + 'updateHelpdeskThresholdTable: '; 
+
+    console.log(debugMessage + 'Update initialized...');
+
+    try {
+        console.log(debugMessage + 'Getting Table...');
+        let thresholdTable = getHelpdeskThresholdsTable();
+
+        console.log(debugMessage + 'Updating Table...');
+        let result = await thresholdTable.update({
+            property_type_id: propertyId,
+            threshold_yellow: yellowThreshold,
+            threshold_red: redThreshold
+        }, {returning: true, where: {id: id}});
+    
+        console.log(debugMessage + "Result = " + result);
+
+        return resultsArray; // Return an array containing all inserted IDs
+    
+    
+    } catch (e) {
+        console.log(debugMessage + "database error occurred.")
+        throw e;
+    }
+
 }
 
 
@@ -77,7 +106,7 @@ getHelpdeskThresholdsTable = (sequelize, Sequelize) => {
             autoIncrement: true, 
             primaryKey: true,
         },
-        property_id: {
+        property_type_id: {
             type: Sequelize.INTEGER,
             refrences: 'properties',
             refrencesKey: 'property_id'
