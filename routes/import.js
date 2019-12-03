@@ -1,8 +1,10 @@
 var express = require('express');
 var router = express.Router();
 const multer = require('multer');
+const path = require('path');
 const upload = multer({
-    dest: './models/temp',
+    // dest: './models/temp',
+    dest: path.join(__dirname.slice(0, __dirname.indexOf("Daplex") + 6), 'models/temp')
 });
 // const storage = multer.diskStorage({
 //     destination: function (req, file, cb) {
@@ -19,7 +21,7 @@ const databaseTools = require('../models/DatabaseTools');
 const conversionTools = require('../models/ConversionTools');
 
 router.get('/', function (req, res, next) {
-    res.render('import');
+    res.render('import', (req.query.xlsxFileUploaded ? {xlsxFileUploaded: true} : {}));
 });
 
 router.post('/csv', upload.single('csv-file'), async function (req, res, next) {
@@ -48,12 +50,13 @@ router.post('/xlsx', upload.single('xlsx-file'), async function (req, res, next)
             idResults = databaseTools.createHelpdeskData(jsonResult);
             break;
         case 'Tilstand':
-            jsonResult = await conversionTools.convertCsvToJson(outputFilePath);
+            jsonResult = await conversionTools.convertCsvToJson(outputFilePath, "Status;");
             idResults = databaseTools.createMaintenanceData(jsonResult);
             break;
     }
     console.log(`${req.body.kategori}: ${new Date()}`);
-    res.redirect("/import/");
+    // res.redirect("/import/");
+    res.redirect("/import?xlsxFileUploaded=true");
 });
 
 module.exports = router;
