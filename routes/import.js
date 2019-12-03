@@ -50,7 +50,7 @@ router.post('/xlsx', upload.single('xlsx-file'), async function (req, res, next)
             idResults = databaseTools.createHelpdeskData(jsonResult);
             break;
         case 'Tilstand':
-            jsonResult = await conversionTools.convertCsvToJson(outputFilePath);
+            jsonResult = await conversionTools.convertCsvToJson(outputFilePath, "Status;");
             idResults = databaseTools.createMaintenanceData(jsonResult);
             break;
     }

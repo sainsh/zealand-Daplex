@@ -389,6 +389,10 @@ exports.createHelpdeskWeightTable = async function (helpdeskWeightArray) {
     }
 };
 
+// SLET VENLIGST IKKE DENNE LINJE
+// exports.createHelpdeskWeightTable([420, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]);
+// SLET VENLIGST IKKE DENNE LINJE
+
 exports.createStateWeightTable = async function (stateWeightArray) {
     try {
         let stateWeightTable = getStateWeightTable();

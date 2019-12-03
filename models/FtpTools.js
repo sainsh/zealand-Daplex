@@ -24,6 +24,9 @@ async function listDir(path) {
 // listDir('/');
 // listDir('/lower');
 
+// setInterval(listDir.bind(null, '/'), 3600000); // Check once an hour
+// setInterval(listDir.bind(null, '/'), 2000);
+
 async function downloadFile() {
     let ftp;
     try {
