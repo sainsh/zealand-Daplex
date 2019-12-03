@@ -3,14 +3,14 @@ extends layout
 block content
     h1 Import af XLSX og CSV filer
 
-    button 
+    button
         a(href="http://localhost:3000/") Home
     form(action='/import/csv', method='post', enctype="multipart/form-data")
         h2 Upload csv:
         br
         select(name="kategori")
-          option(value="Helpdesk") Helpdesk
-          option(value="Vedligeholdelse") Vedligeholdelse
+            option(value="Helpdesk") Helpdesk
+            option(value="Tilstand") Tilstand
         br
         br
         input(type='file', name='csv-file', accept=".csv")
@@ -26,8 +26,8 @@ block content
         h2 Upload xlsx:
         br
         select(name="kategori")
-          option(value="Helpdesk") Helpdesk
-          option(value="Vedligeholdelse") Vedligeholdelse
+            option(value="Helpdesk") Helpdesk
+            option(value="Tilstand") Tilstand
         br
         br
         input(type='file', name='xlsx-file', accept=".xlsx")
