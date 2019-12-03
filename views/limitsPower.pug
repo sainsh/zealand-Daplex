@@ -5,8 +5,14 @@ block content
   h1 El grænseside
   button 
     a(href="http://localhost:3000/") Home
-  p velkommen til grænsesiden for el
-  
+  button
+    a(href="http://localhost:3000/limits/") Tilbage
+  p velkommen til grænsesiden for KWh el per kvm
+  p vælg bygningstype
+  select
+    option(value="skole") skole
+    option(value="plejehjem") plejehjem
+
   p gul grænse
   input(type="number" name="minimum value" id="minvalue")
   |   per kvm. 
@@ -20,4 +26,4 @@ block content
   button(type="button" onclick="submit()") Submit
 
 
-  script(src="/assets/javascripts/limits.js")
+  script(src="/assets/javascripts/limitsPower.js")

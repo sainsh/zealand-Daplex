@@ -1,0 +1,30 @@
+extends layout
+
+
+
+block content
+    link(rel="stylesheet", href="/assets/stylesheets/slider.css")
+    H1 Vægtning Helpdesk
+    button
+        a(href="http://localhost:3000/") Home
+    form(action="/weightUI/state", method="post")
+        select#select(name = `select`)
+            option(value='420') Skole
+            option(value='440') Dag Institutioner
+        +slider('Tekniske anlæg', 'tekBullet', "tekSlider", 0)
+        +slider('Udv. belægning', 'udvBullet', 'udvSlider', 1)
+        +slider('OSV....', 'osvBullet', 'osvSlider', 2)
+        input(type="submit", value="Send data")
+    script(src="/assets/javascripts/stateslider.js")
+
+
+
+mixin slider(name, bullet, slider, id)
+    .container
+        .range-slider
+            p= name
+            span(id=`${bullet}` class=`rs-label` value="0" min="0" max="100") 0
+            input(id=`${slider}` class="rs-range" name=`${slider}` type='range' value='0' min='0' max='100')
+        .box-minmax
+            span 0
+            span 100

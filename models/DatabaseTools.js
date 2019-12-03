@@ -111,6 +111,29 @@ function getHelpdeskTable() {
     });
 }
 
+function getStateWeightTable() {
+    return sequelize.define('state_weight_data', {
+        property_type_id: {
+            type: Sequelize.INTEGER,
+            autoIncrement: false,
+            primaryKey: true
+        },
+        state_tekniske: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        state_udvendige: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        state_osv: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        }
+    });
+}
+
+//
 
 function getHelpdeskWeightTable() {
     return sequelize.define('helpdesk_weight_data', {
@@ -163,6 +186,25 @@ function getHelpdeskWeightTable() {
 }
 
 
+
+function getMaintenanceTable() {
+    return sequelize.define('maintenance_data', {
+        maintenance_id: {
+            type: Sequelize.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
+        property_id: {
+            type: Sequelize.INTEGER,
+            allowNull: true
+        },
+        cost: {
+            type: Sequelize.DOUBLE,
+            allowNull: true
+        }
+    });
+}
+
 /**
  * Function for creating the database itself. Sequelize can't do that.
  * @param host
@@ -201,14 +243,18 @@ exports.setupTables = async function () {
     let helpdeskTable = getHelpdeskTable();
     let helpdeskWeightTable = getHelpdeskWeightTable();
     let helpdeskThresholdTable = htt.getHelpdeskThresholdsTable(sequelize, Sequelize);
+    let maintenanceTable = getMaintenanceTable();
+    let stateWeightTable = getStateWeightTable();
 
     helpdeskTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
+    maintenanceTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
 
     await propertiesTable.sync({force: false});
     await helpdeskTable.sync({force: false});
     await helpdeskWeightTable.sync({force: false});
     await helpdeskThresholdTable.sync({force: false});
-
+    await stateWeightTable.sync({force: false});
+    await maintenanceTable.sync({force: false});
 };
 
 /**
@@ -313,7 +359,29 @@ exports.createHelpdeskWeight = async function (helpdeskWeightArray) {
 
         resultsArray.push(result.dataValues.property_type_id);
         console.log(resultsArray[0]);
-    
+
+        return resultsArray; // Return an array containing all inserted IDs
+    } catch (e) {
+        throw e;
+    }
+};
+
+exports.createStateWeightTable = async function (stateWeightArray) {
+    try {
+        let stateWeightTable = getStateWeightTable();
+        let resultsArray = [];
+        console.log(stateWeightArray[0]);
+        let result = await stateWeightTable.create({
+            property_type_id: stateWeightArray[0],
+            state_tekniske: stateWeightArray[1],
+            state_udvendige: stateWeightArray[2],
+            state_osv: stateWeightArray[3]
+        });
+
+
+        resultsArray.push(result.dataValues.property_type_id);
+        console.log(resultsArray[0]);
+
         return resultsArray; // Return an array containing all inserted IDs
     } catch (e) {
         throw e;
@@ -337,11 +405,32 @@ exports.updateHelpdeskWeightTable = async function (helpdeskWeightArray) {
             helpdesk_vinduer: helpdeskWeightArray[9],
             helpdesk_fundament: helpdeskWeightArray[10]
         }, {returning: true, where: {property_type_id: helpdeskWeightArray[0]}});
-        
-        
+
+
         resultsArray.push(result.dataValues);
         console.log(resultsArray[0]);
-    
+
+        return resultsArray; // Return an array containing all inserted IDs
+    } catch (e) {
+        throw e;
+    }
+};
+
+exports.updateStateWeightTable = async function (stateWeightArray) {
+    try {
+        let stateWeightTable = getStateWeightTable();
+        let resultsArray = [];
+        console.log(stateWeightArray[1]);
+        let result = await stateWeightTable.update({
+            state_tekniske: stateWeightArray[1],
+            state_udvendige: stateWeightArray[2],
+            state_osv: stateWeightArray[3],
+        }, {returning: true, where: {property_type_id: stateWeightArray[0]}});
+
+
+        resultsArray.push(result.dataValues);
+        console.log(resultsArray[0]);
+
         return resultsArray; // Return an array containing all inserted IDs
     } catch (e) {
         throw e;
@@ -384,6 +473,39 @@ exports.createHelpdeskLimit = async function (helpdeskLimitArray) {
     }
 };
 
+exports.createMaintenanceData = async function (maintenanceDataArray) {
+    try {
+        let maintenanceTable = getMaintenanceTable();
+        let resultsArray = [];
+        let propertiesTable = getPropertiesTable();
+
+        for (let maintenanceObject of maintenanceDataArray) { // Loop through all the data
+            let propertyNameTrimmed = maintenanceObject['Ejendom'].replace(/\(.+\)/, "").trim();
+            let propertyId = await propertiesTable.findAll(({where: {property_name: propertyNameTrimmed}})); // Check whether the property exists
+            let propertyExistsInMaintenanceTable = await maintenanceTable.findAll(({where: {property_id: propertyId}})); // Check whether the property exists
+
+            if (propertyExistsInMaintenanceTable.length === 0) {
+
+                if (propertyId.length === 0) // If the results array have a length of 0, the property doesn't exist
+                    propertyId = await exports.createProperty(maintenanceObject['Ejendom']); // Create a new property
+                else
+                    propertyId = propertyId[0].dataValues.property_id;
+
+                let result = await maintenanceTable.create({
+                    property_id: propertyId,
+                    cost: maintenanceObject['2019']
+                });
+
+                resultsArray.push(result.dataValues.helpdesk_id)
+            }
+        }
+
+        return resultsArray; // Return an array containing all inserted IDs
+    } catch (e) {
+        throw e;
+    }
+};
+
 exports.readProperty = async function (id) {
     try {
         let propertiesTable = getPropertiesTable();
@@ -413,6 +535,18 @@ exports.readHelpdeskWeight = async function (id) {
         throw e;
     }
 };
+
+exports.readMaintenanceData = async function (id) {
+    try {
+        let maintenanceTable = getMaintenanceTable();
+        let result = await maintenanceTable.findAll((id ? {where: {property_id: id}} : {})); // Add the "where" option, if the ID is not undefined
+        return result.length === 0 ? await Promise.reject(new Error("No maintenance data found")) : result; // Return an error, if 0 results are found, else return the result(s)
+    } catch (e) {
+        throw e;
+    }
+};
+
+//exports.readMaintenanceData().then(res => console.log(res[0].dataValues));
 
 exports.processHelpdeskData = async function () {
     let results = await exports.readHelpdeskData();
