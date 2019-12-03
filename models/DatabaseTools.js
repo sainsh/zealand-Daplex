@@ -6,7 +6,7 @@ exports.htt = htt;
 
 const host = 'localhost';
 const user = 'root';
-const password = 'password';
+const password = 'root';
 const sequelize = new Sequelize('daplex', user, password, {
     host: host,
     dialect: 'mysql',

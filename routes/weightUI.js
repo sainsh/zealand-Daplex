@@ -5,8 +5,14 @@ var router = express.Router();
 router.get('/', function (req, res, next) {
   res.render('weightUI');
 });
-router.get('/helpdesk', function (req, res, next) {
-  res.render('weightUIhelpdesk');
+router.get('/helpdesk', async function (req, res, next) {
+  var result = await db.readHelpdeskWeightData(420);
+  var resultArray = [];
+  for (var value in result[0].dataValues){
+    resultArray.push(result[0][value]);
+  }
+  resultArray.shift();
+  res.render('weightUIhelpdesk', {values: resultArray});
 });
 router.get('/state', function (req, res, next) {
   res.render('weightUIstate');
