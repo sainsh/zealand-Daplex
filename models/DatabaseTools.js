@@ -1,5 +1,9 @@
 const mysql = require('mysql2/promise');
 const Sequelize = require('sequelize');
+
+const htt = require('./ThresholdsDbTools');
+exports.htt = htt;
+
 const host = 'localhost';
 const user = 'root';
 const password = 'root';
@@ -203,50 +207,6 @@ function getHelpdeskWeightTable() {
     });
 }
 
-function getHelpdeskLimitsTable() {
-    return sequelize.define('helpdesk_limits_data', {
-        helpdesk_indeklima: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_tekniske_anlaeg: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_udv_belaegning: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_murwaerk_og_facade: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_tag: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_udhaeng_og_gavle: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_tagdaekning: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_tagrender_og_nedloeb: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_vinduer_og_udv_doere: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_fundament_og_sokkel: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        }
-    });
-}
 
 
 function getMaintenanceTable() {
@@ -304,7 +264,7 @@ exports.setupTables = async function () {
     let propertiesTable = getPropertiesTable();
     let helpdeskTable = getHelpdeskTable();
     let helpdeskWeightTable = getHelpdeskWeightTable();
-    let helpdeskLimitsTable = getHelpdeskLimitsTable();
+    let helpdeskThresholdTable = htt.getHelpdeskThresholdsTable(sequelize, Sequelize);
     let maintenanceTable = getMaintenanceTable();
     let stateWeightTable = getStateWeightTable();
     let overallWeightTable = getOverallWeightTable();
@@ -315,8 +275,8 @@ exports.setupTables = async function () {
     await propertiesTable.sync({force: false});
     await helpdeskTable.sync({force: false});
     await helpdeskWeightTable.sync({force: false});
+    await helpdeskThresholdTable.sync({force: false});
     await stateWeightTable.sync({force: false});
-    await helpdeskLimitsTable.sync({force: false});
     await maintenanceTable.sync({force: false});
     await overallWeightTable.sync({force: false});
 
@@ -402,7 +362,7 @@ exports.createHelpdeskData = async function (helpdeskArray) {
     }
 };
 
-exports.createHelpdeskWeightTable = async function (helpdeskWeightArray) {
+exports.createHelpdeskWeight = async function (helpdeskWeightArray) {
     try {
         let helpdeskWeightTable = getHelpdeskWeightTable();
         let resultsArray = [];
@@ -453,32 +413,6 @@ exports.createStateWeightTable = async function (stateWeightArray) {
     }
 };
 
-exports.createOverallWeightTable = async function (overallWeightArray) {
-    try {
-        let overallWeightTable = getOverallWeightTable();
-        let resultsArray = [];
-        console.log(overallWeightArray[0]);
-        let result = await overallWeightTable.create({
-            property_type_id: overallWeightArray[0],
-            overall_tilstand: overallWeightArray[1],
-            overall_energi: overallWeightArray[2],
-            overall_helpdesk: overallWeightArray[3]
-        });
-
-
-        resultsArray.push(result.dataValues.property_type_id);
-        console.log(resultsArray[0]);
-
-        return resultsArray; // Return an array containing all inserted IDs
-    } catch (e) {
-        throw e;
-    }
-};
-
-// SLET VENLIGST IKKE DENNE LINJE
-// exports.createHelpdeskWeightTable([420, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]);
-// SLET VENLIGST IKKE DENNE LINJE
-
 exports.updateHelpdeskWeightTable = async function (helpdeskWeightArray) {
     try {
         let helpdeskWeightTable = getHelpdeskWeightTable();
@@ -494,7 +428,7 @@ exports.updateHelpdeskWeightTable = async function (helpdeskWeightArray) {
             helpdesk_tagdaekning: helpdeskWeightArray[7],
             helpdesk_tag_ned: helpdeskWeightArray[8],
             helpdesk_vinduer: helpdeskWeightArray[9],
-            helpdesk_fundament: helpdeskWeightArray[10],
+            helpdesk_fundament: helpdeskWeightArray[10]
         }, {returning: true, where: {property_type_id: helpdeskWeightArray[0]}});
 
 
@@ -564,16 +498,16 @@ exports.createHelpdeskLimit = async function (helpdeskLimitArray) {
         let resultsArray = [];
 
         let result = await helpdeskLimitsTable.create({
-            helpdesk_indeklima: helpdeskLimitArray[1],
-            helpdesk_tekniske_anlaeg: helpdeskLimitArray[2],
-            helpdesk_udv_belaegning: helpdeskLimitArray[3],
-            helpdesk_murwaerk_og_facade: helpdeskLimitArray[4],
-            helpdesk_tag: helpdeskLimitArray[5],
-            helpdesk_udhaeng_og_gavle: helpdeskLimitArray[6],
-            helpdesk_tagdaekning: helpdeskLimitArray[7],
-            helpdesk_tagrender_og_nedloeb: helpdeskLimitArray[8],
-            helpdesk_vinduer_og_udv_doere: helpdeskLimitArray[9],
-            helpdesk_fundament_og_sokkel: helpdeskLimitArray[10]
+            helpdesk_indeklima: helpdeskLimitArray[0],
+            helpdesk_tekniske_anlaeg: helpdeskLimitArray[1],
+            helpdesk_udv_belaegning: helpdeskLimitArray[2],
+            helpdesk_murwaerk_og_facade: helpdeskLimitArray[3],
+            helpdesk_tag: helpdeskLimitArray[4],
+            helpdesk_udhaeng_og_gavle: helpdeskLimitArray[5],
+            helpdesk_tagdaekning: helpdeskLimitArray[6],
+            helpdesk_tagrender_og_nedloeb: helpdeskLimitArray[7],
+            helpdesk_vinduer_og_udv_doere: helpdeskLimitArray[8],
+            helpdesk_fundament_og_sokkel: helpdeskLimitArray[9]
         });
 
         resultsArray.push(result.dataValues);
@@ -753,3 +687,14 @@ exports.calculateScore = async function () {
 };
 
 // exports.calculateScore();
+
+
+
+// DB Tools export from ThresholdDbTools - Team Cyclone
+exports.createHelpdeskThreshold = (yellowThreshold, redThreshold, propertyId) => {htt.createHelpdeskThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};
+exports.readHelpdeskThreshold = (id) => {htt.readHelpdeskThreshold(id, sequelize, Sequelize)}; 
+
+
+
+
+

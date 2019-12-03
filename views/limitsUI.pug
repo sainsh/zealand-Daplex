@@ -1,0 +1,40 @@
+extends layout
+  
+
+block content
+  h1 limit page
+  button 
+    a(href="http://localhost:3000/") Home
+  p Welcome to limit page
+  p vælg kategori
+  select
+    option(value="indeklima") Indeklima
+    option(value="tekniske anlæg") Tekniske anlæg 
+    option(value="udv. belægning") Udv belægning
+    option(value="murværk og facade") Murværk og facade
+    option(value="tag") Tag
+    option(value="udhæng og gavle") Udhæng og gavle
+    option(value="tagdækning") Tagdækning
+    option(value="tagrender og nedløb") Tagrender og nedløb
+    option(value="vinduer og udv. døre") Vinduer og udv. Døre
+    option(value="fundament og sokkel") Fundament og sokkel
+  br
+  p vælg bygningstype
+  select
+    option(value="skole") skole
+    option(value="plejehjem") plejehjem
+  br 
+  p gul grænse
+  input(type="number" name="minimum value" id="minvalue")
+  |   per kvm. 
+  br 
+  p rød grænse
+  input#maxvalue(type="number" name="maximum value")
+  |   per kvm. 
+  br
+  br
+
+  button(type="button" onclick="submit()") Submit
+
+
+  script(src="/assets/javascripts/limits.js")
