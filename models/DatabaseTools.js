@@ -2,7 +2,7 @@ const mysql = require('mysql2/promise');
 const Sequelize = require('sequelize');
 const host = 'localhost';
 const user = 'root';
-const password = '';
+const password = 'password';
 const sequelize = new Sequelize('daplex', user, password, {
     host: host,
     dialect: 'mysql',
@@ -317,6 +317,8 @@ exports.setupTables = async function () {
     await stateWeightTable.sync({force: false});
     await helpdeskLimitsTable.sync({force: false});
     await maintenanceTable.sync({force: false});
+    await overallWeightTable.sync({force: false});
+
 };
 
 /**

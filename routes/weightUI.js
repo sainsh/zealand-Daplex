@@ -53,7 +53,7 @@ router.post('/state', (req, res, next) => {
   //res.redirect('/weightUI/');
 })
 
-router.post('/state', (req, res, next) => {
+router.post('/overall', (req, res, next) => {
 
   var select = req.body.select;
   var tilsSlider = req.body.tilsSlider;
