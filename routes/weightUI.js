@@ -12,6 +12,9 @@ router.get('/helpdesk', function (req, res, next) {
 router.get('/state', function (req, res, next) {
   res.render('weightUIstate');
 });
+router.get('/overall', function (req, res, next) {
+  res.render('weightUIoverall');
+});
 
 router.post('/helpdesk', (req, res, next) => {
 
@@ -47,6 +50,22 @@ router.post('/state', (req, res, next) => {
   db.createStateWeightTable(data);
   db.updateStateWeightTable(data);
   res.redirect("/weightUI/state/#top");
+  //res.redirect('/weightUI/');
+})
+
+router.post('/overall', (req, res, next) => {
+
+  var select = req.body.select;
+  var tilsSlider = req.body.tilsSlider;
+  var energiSlider = req.body.energiSlider;
+  var helpSlider = req.body.helpSlider;
+
+
+  var data = [select, tilsSlider, energiSlider, helpSlider];
+  console.log(`${select} ${tilsSlider} ${energiSlider} ${helpSlider}`);
+  db.createOverallWeightTable(data);
+  db.updateOverallWeightTable(data);
+  res.redirect("/weightUI/overall/#top");
   //res.redirect('/weightUI/');
 })
 

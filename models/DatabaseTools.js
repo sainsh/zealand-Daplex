@@ -6,7 +6,7 @@ exports.htt = htt;
 
 const host = 'localhost';
 const user = 'root';
-const password = '';
+const password = 'password';
 const sequelize = new Sequelize('daplex', user, password, {
     host: host,
     dialect: 'mysql',
@@ -133,6 +133,28 @@ function getStateWeightTable() {
     });
 }
 
+function getOverallWeightTable() {
+    return sequelize.define('overall_weight_data', {
+        property_type_id: {
+            type: Sequelize.INTEGER,
+            autoIncrement: false,
+            primaryKey: true
+        },
+        overall_tilstand: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        overall_energi: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        overall_helpdesk: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        }
+    });
+}
+
 //
 
 function getHelpdeskWeightTable() {
@@ -245,6 +267,7 @@ exports.setupTables = async function () {
     let helpdeskThresholdTable = htt.getHelpdeskThresholdsTable(sequelize, Sequelize);
     let maintenanceTable = getMaintenanceTable();
     let stateWeightTable = getStateWeightTable();
+    let overallWeightTable = getOverallWeightTable();
 
     helpdeskTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
     maintenanceTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
@@ -255,6 +278,8 @@ exports.setupTables = async function () {
     await helpdeskThresholdTable.sync({force: false});
     await stateWeightTable.sync({force: false});
     await maintenanceTable.sync({force: false});
+    await overallWeightTable.sync({force: false});
+
 };
 
 /**
@@ -426,6 +451,26 @@ exports.updateStateWeightTable = async function (stateWeightArray) {
             state_udvendige: stateWeightArray[2],
             state_osv: stateWeightArray[3],
         }, {returning: true, where: {property_type_id: stateWeightArray[0]}});
+
+
+        resultsArray.push(result.dataValues);
+        console.log(resultsArray[0]);
+
+        return resultsArray; // Return an array containing all inserted IDs
+    } catch (e) {
+        throw e;
+    }
+};
+
+exports.updateOverallWeightTable = async function (overallWeightArray) {
+    try {
+        let overallWeightTable = getOverallWeightTable();
+        let resultsArray = [];
+        let result = await overallWeightTable.update({
+            overall_tilstand: overallWeightArray[1],
+            overall_energi: overallWeightArray[2],
+            overall_helpdesk: overallWeightArray[3],
+        }, {returning: true, where: {property_type_id: overallWeightArray[0]}});
 
 
         resultsArray.push(result.dataValues);
@@ -645,7 +690,7 @@ exports.calculateScore = async function () {
 
 
 
-// DB Tools export from ThresholdDbTools
+// DB Tools export from ThresholdDbTools - Team Cyclone
 exports.createHelpdeskThreshold = (yellowThreshold, redThreshold, propertyId) => {htt.createHelpdeskThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};
 exports.readHelpdeskThreshold = (id) => {htt.readHelpdeskThreshold(id, sequelize, Sequelize)}; 
 

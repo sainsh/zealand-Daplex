@@ -4,18 +4,18 @@ extends layout
 
 block content
     link(rel="stylesheet", href="/assets/stylesheets/slider.css")
-    H1 Vægtning Tilstand
+    H1 Vægtning Overordnet
     button
         a(href="http://localhost:3000/") Home
-    form(action="/weightUI/state", method="post")
+    form(action="/weightUI/overall", method="post")
         select#select(name = `select`)
             option(value='420') Skole
             option(value='440') Dag Institutioner
-        +slider('Tekniske anlæg', 'tekBullet', "tekSlider", 0)
-        +slider('Udv. belægning', 'udvBullet', 'udvSlider', 1)
-        +slider('OSV....', 'osvBullet', 'osvSlider', 2)
+        +slider('Tilstand', 'tilsBullet', "tilsSlider", 0)
+        +slider('Energi', 'energiBullet', 'energiSlider', 1)
+        +slider('Helpdesk', 'helpBullet', 'helpSlider', 2)
         input(type="submit", value="Send data")
-    script(src="/assets/javascripts/stateslider.js")
+    script(src="/assets/javascripts/overallslider.js")
 
 
 
