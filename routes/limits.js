@@ -20,7 +20,7 @@ router.get('/helpdesk/create', function(req, res, next){
 router.get('/helpdesk/read', function(req, res, next){
 
   //Inserting data in Thresholds DB
-  dbTools.readHelpdeskThreshold(420);
+  dbTools.readHelpdeskThreshold(1000);
   res.send();
 
 });
@@ -28,7 +28,7 @@ router.get('/helpdesk/read', function(req, res, next){
 router.get('/helpdesk/update', function(req, res, next){
 
   //Inserting data in Thresholds DB
-  dbTools.updateHelpdeskThreshold(1,1000,25,500);
+  dbTools.updateHelpdeskThreshold(1,420,25,500);
   res.send();
 
 });
