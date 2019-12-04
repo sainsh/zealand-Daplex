@@ -36,7 +36,7 @@ createHelpdeskThreshold = async function(yellowThreshold, redThreshold, property
             threshold_red: redThreshold
         });
         
-        console.log(debugMessage + "ID's inserted = " + result.dataValues.id);
+        console.log(debugMessage + "ID inserted = " + result.dataValues.id);
         
     } catch(e){
         console.log(debugMessage + "\n"  + e);
@@ -76,7 +76,7 @@ readHelpdeskThreshold = async function(id, sequelize, Sequelize){
 
 
 
-updateHelpdeskThresholdTable = async function(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize){
+updateHelpdeskThreshold = async function(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize){
     
     let debugMessage = headerName + 'updateHelpdeskThresholdTable: '; 
 
@@ -105,6 +105,34 @@ updateHelpdeskThresholdTable = async function(id, propertyId, yellowThreshold, r
 
 }
 
+deleteHelpdeskThreshold = async function(id, sequelize, Sequelize){
+    
+    let debugMessage = headerName + 'deleteHelpdeskThresholdTable: '; 
+
+    console.log(debugMessage + 'Delete initialized...');
+
+    try {
+        console.log(debugMessage + 'Getting Threshodld Table...');
+        let thresholdTable = getHelpdeskThresholdsTable(sequelize, Sequelize);
+
+        console.log(debugMessage + 'deleting id from Table...');
+        let result = await thresholdTable.destroy({
+            where: {id: id}
+        }, {returning: true, where: {id: id}});
+    
+        console.log(debugMessage + "Deleted ID = " + result.id);
+
+        return result; // Return an array containing all inserted IDs
+    
+    
+    } catch (e) {
+        console.log(debugMessage + "database error occurred.");
+        throw e;
+    }
+
+}
+
+
 
 /** 
  * Method returning the threshold limits table (layout).
@@ -123,7 +151,8 @@ getHelpdeskThresholdsTable = (sequelize, Sequelize) => {
         property_type_id: {
             type: Sequelize.INTEGER,
             refrences: 'properties',
-            refrencesKey: 'property_id'
+            refrencesKey: 'property_id',
+            unique: true
         },
         threshold_yellow: {
             type: Sequelize.INTEGER,
@@ -140,6 +169,7 @@ getHelpdeskThresholdsTable = (sequelize, Sequelize) => {
 exports.getHelpdeskThresholdsTable = getHelpdeskThresholdsTable;
 exports.createHelpdeskThreshold = createHelpdeskThreshold;
 exports.readHelpdeskThreshold = readHelpdeskThreshold;
-exports.updateHelpdeskThresholdTable = updateHelpdeskThresholdTable;
+exports.updateHelpdeskThreshold = updateHelpdeskThreshold;
+exports.deleteHelpdeskThreshold = deleteHelpdeskThreshold;
 
 

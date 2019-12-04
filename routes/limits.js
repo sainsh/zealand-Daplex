@@ -12,25 +12,33 @@ router.get('/helpdesk', function(req, res, next){
 }); 
 
 router.get('/helpdesk/create', function(req, res, next){
-  //Inserting data in Thresholds DB
+  //Inserting data in Thresholds DB with data
   dbTools.createHelpdeskThreshold(2,2,1000);
+  dbTools.createHelpdeskThreshold(5,8,900);
+  dbTools.createHelpdeskThreshold(3,5,650);
+  dbTools.createHelpdeskThreshold(5,9,420);
+  dbTools.createHelpdeskThreshold(9,10,110);
+  dbTools.createHelpdeskThreshold(1,25,600);
+  dbTools.createHelpdeskThreshold(8,15,1000);
   res.send();
 });
 
 router.get('/helpdesk/read', function(req, res, next){
-
-  //Inserting data in Thresholds DB
+  //reading data in Thresholds DB by property id
   dbTools.readHelpdeskThreshold(1000);
   res.send();
-
 });
 
 router.get('/helpdesk/update', function(req, res, next){
-
-  //Inserting data in Thresholds DB
+  //update data in Thresholds DB 
   dbTools.updateHelpdeskThreshold(1,420,25,500);
   res.send();
+});
 
+router.get('/helpdesk/delete', function(req, res, next){
+  //delete data in Thresholds DB by id
+  dbTools.deleteHelpdeskThreshold(4);
+  res.send();
 });
 
 router.get('/power', function(req, res, next){
