@@ -8,11 +8,14 @@ router.get('/', function (req, res, next) {
 router.get('/helpdesk', async function (req, res, next) {
   var result = await db.readHelpdeskWeightData(420);
   var resultArray = [];
+  var leftArray = [];
   for (var value in result[0].dataValues){
     resultArray.push(result[0][value]);
+    leftArray.push(`left:` + (result[0][value] * 5.78) + `px`);
   }
   resultArray.shift();
-  res.render('weightUIhelpdesk', {values: resultArray});
+  leftArray.shift();
+  res.render('weightUIhelpdesk', {values: resultArray, left_array: leftArray});
 });
 router.get('/state', function (req, res, next) {
   res.render('weightUIstate');

@@ -1,14 +1,16 @@
 var select = document.getElementById("select");
+var sliders = [];
 
 function createSliderLogic(nameBullet, nameSlider){
-var bullet = document.getElementById(nameBullet);
-var slider = document.getElementById(nameSlider);
+//var bullet = document.getElementById(nameBullet);
+//var slider = document.getElementById(nameSlider);
+var fullSlider = {slider: document.getElementById(nameSlider), bullet: document.getElementById(nameBullet)};
 
-slider.addEventListener("input", ()=>{
-    bullet.innerHTML = slider.value;
-    var bulletPosition = (slider.value/slider.max);
+fullSlider.slider.addEventListener("input", ()=>{
+    fullSlider.bullet.innerHTML = fullSlider.slider.value;
+    var bulletPosition = (fullSlider.slider.value/fullSlider.slider.max);
 
-    bullet.style.left = (bulletPosition * 578) + "px";
+    fullSlider.bullet.style.left = (bulletPosition * 578) + "px";
 }, false);
 }
 
