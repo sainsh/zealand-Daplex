@@ -407,14 +407,12 @@ exports.createStateWeightTable = async function (stateWeightArray) {
     try {
         let stateWeightTable = getStateWeightTable();
         let resultsArray = [];
-        console.log(stateWeightArray[0]);
         let result = await stateWeightTable.create({
             property_type_id: stateWeightArray[0],
             state_tekniske: stateWeightArray[1],
             state_udvendige: stateWeightArray[2],
             state_osv: stateWeightArray[3]
         });
-
 
         resultsArray.push(result.dataValues.property_type_id);
         console.log(resultsArray[0]);
@@ -496,7 +494,8 @@ exports.updateOverallWeightTable = async function (overallWeightArray) {
 exports.readHelpdeskWeightData = async function (id) {
     try {
         let weightTable = getHelpdeskWeightTable();
-        let result = await weightTable.findAll((id ? {where: {property_type_id: id}} : {})); // Add the "where" option, if the ID is not undefined
+        let result = await weightTable.findAll((id ? {where: {property_type_id: id}} : {}));// Add the "where" option, if the ID is not undefined
+        console.log(result);
         return result.length === 0 ? await Promise.reject(new Error("No properties found")) : result; // Return an error, if 0 results are found, else return the result(s)
     } catch (e) {
         throw e;
