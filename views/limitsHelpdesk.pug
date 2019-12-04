@@ -9,21 +9,21 @@ block content
     a(href="http://localhost:3000/limits/") Tilbage  
   p Welcome to limit page
   p vælg bygningstype
-  select
-    option(value="skole") skole
-    option(value="plejehjem") plejehjem
-  br 
-  p gul grænse
-  input(type="number" name="minimum value" id="minvalue")
-  |   per kvm. 
-  br 
-  p rød grænse
-  input#maxvalue(type="number" name="maximum value")
-  |   per kvm. 
-  br
-  br
-
-  button(type="button" onclick="submit()") Submit
-
+  
+  form(action="/limits/helpdesk", method="post")
+    select#select(name="select")
+      option(value="skole") skole
+      option(value="plejehjem") plejehjem
+    br 
+    p gul grænse
+    input(type="number" name="minimumvalue" id="minvalue")
+    |   per kvm. 
+    br 
+    p rød grænse
+    input#maxvalue(type="number" name="maximumvalue")
+    |   per kvm. 
+    br
+    br
+    input(type="submit", value="Send data") 
 
   script(src="/assets/javascripts/limitsHelpdesk.js")
