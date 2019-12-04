@@ -1,5 +1,6 @@
 var express = require('express');
 var dbTools = require('../models/DatabaseTools');
+var thresholdDbTools = require('../models/ThresholdsDbTools')
 var router = express.Router();
 
 /* GET Limit-UI page. */
@@ -112,5 +113,18 @@ router.get('/power/delete', function(req, res, next){
   res.send();
 });
 
+// get input from ui and save to database
+router.post('/helpdesk', (req, res, next) => {
+
+  var yellowThreshold = req.body.yellowThreshold;
+  var redThreshold = req.body.redThreshold;
+  var select = req.body.select;
+  console.log(req.body);
+
+  thresholdDbTools.createHelpdeskThreshold(yellowThreshold, redThreshold, select);
+  thresholdDbTools.updateHelpdeskThreshold(yellowThreshold, redThreshold, select);
+  res.redirect("/limits/helpdesk");
+  
+})
 
 module.exports = router;

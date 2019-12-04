@@ -8,11 +8,14 @@ router.get('/', function (req, res, next) {
 router.get('/helpdesk', async function (req, res, next) {
   var result = await db.readHelpdeskWeightData(420);
   var resultArray = [];
+  var leftArray = [];
   for (var value in result[0].dataValues){
     resultArray.push(result[0][value]);
+    leftArray.push(`left:` + (result[0][value] * 5.78) + `px`);
   }
   resultArray.shift();
-  res.render('weightUIhelpdesk', {values: resultArray});
+  leftArray.shift();
+  res.render('weightUIhelpdesk', {values: resultArray, left_array: leftArray});
 });
 router.get('/state', function (req, res, next) {
   res.render('weightUIstate');
@@ -49,8 +52,7 @@ router.post('/helpdesk', (req, res, next) => {
   var data = [select, indeSlider, tekSlider, udvSlider, murSlider, tagSlider, udSlider, tagDækSlider, tagrenSlider, vinSlider, funSlider];
   db.createHelpdeskWeightTable(data);
   db.updateHelpdeskWeightTable(data);
-  res.redirect("/weightUI/helpdesk/#top");
-  //res.redirect('/weightUI/');
+  res.redirect("/weightUI");
 })
 
 router.post('/state', (req, res, next) => {
@@ -64,7 +66,7 @@ router.post('/state', (req, res, next) => {
   var data = [select, tekSlider, udvSlider, osvSlider];
   db.createStateWeightTable(data);
   db.updateStateWeightTable(data);
-  res.redirect("/weightUI/state/#top");
+  res.redirect("/weightUI/");
   //res.redirect('/weightUI/');
 })
 
@@ -80,13 +82,7 @@ router.post('/overall', (req, res, next) => {
   console.log(`${select} ${tilsSlider} ${energiSlider} ${helpSlider}`);
   db.createOverallWeightTable(data);
   db.updateOverallWeightTable(data);
-  res.redirect("/weightUI/overall/#top");
-  //res.redirect('/weightUI/');
+  res.redirect("/weightUI/");
 })
-
-
-
-
-
 
 module.exports = router;

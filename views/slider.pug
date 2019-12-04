@@ -1,8 +1,8 @@
-mixin slider(name, bullet, slider, value)
+mixin slider(name, bullet, slider, value, style)
     .container
         .range-slider
             p= name
-            span(id=`${bullet}` class=`rs-label` value="0" min="0" max="100") #{value}
+            span(id=`${bullet}` class=`rs-label` value=`${value}` min="0" max="100" style=`${style}`) #{value}
             input(id=`${slider}` class="rs-range" name=`${slider}` type='range' value=`${value}` min='0' max='100')
         .box-minmax
             span 0
