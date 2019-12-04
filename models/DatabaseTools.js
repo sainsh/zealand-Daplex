@@ -506,8 +506,8 @@ exports.readStateWeightData = async function (id) {
     try {
         let weightTable = getStateWeightTable();
         let result = await weightTable.findAll((id ? {where: {property_type_id: id}} : {}));// Add the "where" option, if the ID is not undefined
-        let defaultData = [id, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50]; // Default values for sliders
-        return result.length === 0 ? defaultData : result; // Return defaultData if 0 results are found, else return the result(s)
+        let defaultData = [id, 50, 50, 50]; // Default values for sliders
+        return result.length === 0 ? defaultData : result[0].dataValues; // Return defaultData if 0 results are found, else return the result(s)
     } catch (e) {
         throw e;
     }

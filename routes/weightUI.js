@@ -40,8 +40,8 @@ router.get('/overall', function (req, res, next) {
 router.post('/helpdesk/sliders', async function (req, res) {
   var result = await db.readHelpdeskWeightData(req.body.id);
   var resultArray = [];
-  for (var value in result[0].dataValues){
-    resultArray.push(result[0][value]);
+  for (var value in result){
+    resultArray.push(result[value]);
   }
   resultArray.shift();
   res.send(resultArray);
@@ -50,8 +50,8 @@ router.post('/helpdesk/sliders', async function (req, res) {
 router.post('/state/sliders', async function (req, res) {
   var result = await db.readStateWeightData(req.body.id);
   var resultArray = [];
-  for (var value in result[0].dataValues){
-    resultArray.push(result[0][value]);
+  for (var value in result){
+    resultArray.push(result[value]);
   }
   resultArray.shift();
   res.send(resultArray);
