@@ -20,6 +20,7 @@ const sequelize = new Sequelize('daplex', user, password, {
         timestamps: false
     }
 });
+sequelize.options.logging = false;
 
 function getPropertiesTable() {
     return sequelize.define('properties', {
@@ -252,6 +253,7 @@ exports.setupDatabase = async function (host, user, password) {
         let queryCreateDatabase = "CREATE DATABASE IF NOT EXISTS daplex";
         await connection.query(queryCreateDatabase); // Create the database
     } catch (e) {
+        console.log('throwing error in database')
         throw e;
     } finally {
         if (connection)
