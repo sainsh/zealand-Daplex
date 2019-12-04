@@ -26,8 +26,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Setup database
-      run: mysql -h localhost --port 3306 -u root -ppassword -e 'CREATE DATABASE IF NOT EXISTS daplex;' --protocol=tcp
+    - name: Verify MariaDB connection
+      env:
+        PORT: ${{ job.services.mariadb.ports[3306] }}
+      run: |
+        while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
+          sleep 1
+        done
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
