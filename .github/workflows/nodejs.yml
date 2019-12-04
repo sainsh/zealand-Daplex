@@ -27,7 +27,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Setup database
-      run: mysql -h localhost --port 3306 -u root -ppassword -e 'CREATE DATABASE IF NOT EXISTS daplex;'
+      run: mysql -h localhost --port 3306 -u root -ppassword -e 'CREATE DATABASE IF NOT EXISTS daplex;' --protocol=tcp
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
