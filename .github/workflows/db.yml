@@ -1,0 +1,31 @@
+name: DB
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # is Ubuntu environment
+
+    steps:
+    - name: Shutdown Ubuntu MySQL (SUDO)
+      run: sudo service mysql stop # Shutdown the Default MySQL, "sudo" is necessary, please not remove it
+    - name: Set up MySQL 5.7
+      uses: mirromutth/mysql-action@master
+      with:
+        mysql version: 5.7
+        mysql database: daplex
+        mysql root password: password
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: npm install, build, and test
+      run: |
+        npm install
+        npm ci
+        npm run build --if-present
+        npm test
+      env:
+        CI: true
+
