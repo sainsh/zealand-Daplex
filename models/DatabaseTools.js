@@ -711,7 +711,7 @@ exports.calculateScore = async function () {
 // DB Tools export from ThresholdDbTools - Team Cyclone
 exports.createHelpdeskThreshold = (yellowThreshold, redThreshold, propertyId) => {htt.createHelpdeskThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};
 exports.readHelpdeskThreshold = (id) => {htt.readHelpdeskThreshold(id, sequelize, Sequelize)}; 
-exports.updateHelpdeskThreshold = (id, propertyId, yellowThreshold, redThreshold) => htt.updateHelpdeskThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
+exports.updateHelpdeskThreshold = (id, propertyId, yellowThreshold, redThreshold) => htt.updateHelpdeskThresholdTable(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
 
 
 
