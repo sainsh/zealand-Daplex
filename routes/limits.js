@@ -81,13 +81,13 @@ router.get('/power/read', function(req, res, next){
 // get input from ui and save to database
 router.post('/helpdesk', (req, res, next) => {
 
-  var minimumvalue = req.body.minvalue;
-  var maximumvalue = req.body.maxvalue;
+  var yellowThreshold = req.body.yellowThreshold;
+  var redThreshold = req.body.redThreshold;
   var select = req.body.select;
   console.log(req.body);
 
-  thresholdDbTools.createHelpdeskThreshold(minimumvalue, maximumvalue, select);
-  thresholdDbTools.updateHelpdeskThreshold(minimumvalue, maximumvalue, select);
+  thresholdDbTools.createHelpdeskThreshold(yellowThreshold, redThreshold, select);
+  thresholdDbTools.updateHelpdeskThreshold(yellowThreshold, redThreshold, select);
   res.redirect("/limits/helpdesk");
   
 })

@@ -12,7 +12,7 @@ exports.ptt = ptt;
 
 const host = '127.0.0.1';
 const user = 'root';
-const password = 'password';
+const password = '';
 const sequelize = new Sequelize('daplex', user, password, {
     host: host,
     dialect: 'mysql',
