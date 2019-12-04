@@ -17,9 +17,19 @@ router.get('/helpdesk', async function (req, res, next) {
   leftArray.shift();
   res.render('weightUIhelpdesk', {values: resultArray, left_array: leftArray});
 });
-router.get('/state', function (req, res, next) {
-  res.render('weightUIstate');
+router.get('/state', async function (req, res, next) {
+  var result = await db.readStateWeightData(420);
+  var resultArray = [];
+  var leftArray = [];
+  for (var value in result[0].dataValues){
+    resultArray.push(result[0][value]);
+    leftArray.push(`left:` + (result[0][value] * 5.78) + `px`);
+  }
+  resultArray.shift();
+  leftArray.shift();
+  res.render('weightUIstate', {values: resultArray, left_array: leftArray});
 });
+
 router.get('/overall', function (req, res, next) {
   res.render('weightUIoverall');
 });

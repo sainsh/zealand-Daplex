@@ -9,9 +9,9 @@ block content
         select#select(name = `select`)
             option(value='420') Skole
             option(value='440') Dag Institutioner
-        +slider('Tekniske anlæg', 'tekBullet', "tekSlider")
-        +slider('Udv. belægning', 'udvBullet', 'udvSlider')
-        +slider('OSV....', 'osvBullet', 'osvSlider')
+        +slider('Tekniske anlæg', 'tekBullet', "tekSlider", `${values[0]}`, `${left_array[0]}`)
+        +slider('Udv. belægning', 'udvBullet', 'udvSlider', `${values[1]}`, `${left_array[1]}`)
+        +slider('OSV....', 'osvBullet', 'osvSlider', `${values[2]}`, `${left_array[2]}`)
         input(type="submit", value="Send data")
     script(src="/assets/javascripts/stateslider.js")
 
