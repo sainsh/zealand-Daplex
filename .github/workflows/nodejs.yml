@@ -25,7 +25,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Create DB
-      run: mysql -uroot -ppassword -e "CREATE DATABASE daplex;"
+      run: mysql -h localhost --port=33306 -uroot -ppassword -e "CREATE DATABASE daplex;"
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
