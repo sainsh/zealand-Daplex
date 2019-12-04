@@ -12,6 +12,18 @@ slider.addEventListener("input", ()=>{
 }, false);
 }
 
+select.addEventListener("change", () =>{
+
+    var req = new XMLHttpRequest();
+    req.open('POST', '/weightUI/helpdesk/sliders');
+    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    req.onload = () => {
+        var sliderValues = JSON.parse(req.response);
+        console.log(sliderValues[0]);
+ }
+ req.send(`id=${select.value}`);
+});
+
 createSliderLogic("indeBullet", "indeSlider");
 createSliderLogic("udvBullet", "udvSlider");
 createSliderLogic("murBullet", "murSlider");
@@ -22,12 +34,3 @@ createSliderLogic("tekBullet", "tekSlider");
 createSliderLogic("tagrenBullet", "tagrenSlider");
 createSliderLogic("funBullet", "funSlider");
 createSliderLogic("vinBullet", "vinSlider");
-
-/*var req = new XMLHttpRequest();
-req.open('POST', '/weightUI/helpdesk/sliders');
-req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-req.onload = () => {
-    var sliderValues = JSON.parse(req.response);
-    console.log(sliderValues[0]);
-}
-req.send(`id=${select.value}`);*/

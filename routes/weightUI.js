@@ -49,8 +49,7 @@ router.post('/helpdesk', (req, res, next) => {
   var data = [select, indeSlider, tekSlider, udvSlider, murSlider, tagSlider, udSlider, tagDækSlider, tagrenSlider, vinSlider, funSlider];
   db.createHelpdeskWeightTable(data);
   db.updateHelpdeskWeightTable(data);
-  res.redirect("/weightUI/helpdesk/#top");
-  //res.redirect('/weightUI/');
+  res.redirect("/weightUI");
 })
 
 router.post('/state', (req, res, next) => {
@@ -64,7 +63,7 @@ router.post('/state', (req, res, next) => {
   var data = [select, tekSlider, udvSlider, osvSlider];
   db.createStateWeightTable(data);
   db.updateStateWeightTable(data);
-  res.redirect("/weightUI/state/#top");
+  res.redirect("/weightUI/");
   //res.redirect('/weightUI/');
 })
 
@@ -80,13 +79,7 @@ router.post('/overall', (req, res, next) => {
   console.log(`${select} ${tilsSlider} ${energiSlider} ${helpSlider}`);
   db.createOverallWeightTable(data);
   db.updateOverallWeightTable(data);
-  res.redirect("/weightUI/overall/#top");
-  //res.redirect('/weightUI/');
+  res.redirect("/weightUI/");
 })
-
-
-
-
-
 
 module.exports = router;
