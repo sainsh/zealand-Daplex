@@ -10,6 +10,7 @@ test('adds 1 + 2 to equal 3', () => {
 });
 
 test('test create database',() => {
+    
     expect(databaseTools.setupDatabase('localhost', 'root', 'password')).toBeTruthy();
 });
 
@@ -19,6 +20,7 @@ test('test create database with wrong username',  () => {
 
  //test works but writes files which GIT does not like
 test('insert data from csv', async() =>{
+    databaseTools.setupTables();
     //let csv = await conversionTools.convertXlsxToCsv('./test/testfiles/helpdesk.xlsx', './test/testfiles/helpdesk.csv')
     let jsonResult = await conversionTools.convertCsvToJson('./test/testfiles/Helpdesk.csv');
     let result = await databaseTools.createHelpdeskData(jsonResult);
@@ -27,11 +29,13 @@ test('insert data from csv', async() =>{
 })
 
 test('try reading from properties where id is not a number', async()=>{
+    databaseTools.setupTables();
     expect(databaseTools.readProperty('to')).rejects.toThrow();
 
 })
 
 test('inserting data into maintenanceTable', async()=>{
+    databaseTools.setupTables()
    // let csv = await conversionTools.convertXlsxToCsv('./test/testfiles/Tilstand fra Dalux.xlsx', './test/testfiles/tilstand.csv')
     let jsonResult = await conversionTools.convertCsvToJson('./test/testfiles/tilstand.csv');
     let result = await databaseTools.createMaintenanceData(jsonResult);
