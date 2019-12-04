@@ -728,6 +728,8 @@ exports.deleteHelpdeskThreshold = (id) => htt.deleteHelpdeskThreshold(id, sequel
 // DB Tools export from WaterThresholdDbTools - Team Cyclone
 exports.createWaterThreshold = (yellowThreshold, redThreshold, propertyId) => {wtt.createWaterThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};
 exports.readWaterThreshold = (id) => {wtt.createWaterThreshold(id, sequelize, Sequelize)};
+exports.updateWaterThreshold = (id, propertyId, yellowThreshold, redThreshold) => wtt.updateWaterThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
+exports.deleteWaterThreshold = (id) => wtt.deleteWaterThreshold(id, sequelize, Sequelize);
 
 // DB Tools export from PowerThresholdDbTools - Team Cyclone
 exports.createPowerThreshold = (yellowThreshold, redThreshold, propertyId) => {ptt.createPowerThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};

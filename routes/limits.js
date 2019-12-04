@@ -41,9 +41,6 @@ router.get('/helpdesk/delete', function(req, res, next){
   res.send();
 });
 
-router.get('/power', function(req, res, next){
-  res.render('limitsPower');
-}); 
 
 router.get('/water', function(req, res, next){
   res.render('limitsWater');
@@ -52,6 +49,11 @@ router.get('/water', function(req, res, next){
 router.get('/water/create', function(req, res, next){
   //Inserting data in water Thresholds DB
   dbTools.createWaterThreshold(1,100,1000);
+  dbTools.createWaterThreshold(2,5,900);
+  dbTools.createWaterThreshold(3,14,450);
+  dbTools.createWaterThreshold(10,20,200);
+  dbTools.createWaterThreshold(7,19,150);
+  dbTools.createWaterThreshold(4,5,800);
   res.send();
 });
 
@@ -62,6 +64,22 @@ router.get('/water/read', function(req, res, next){
   res.send();
 
 });
+
+router.get('/water/update', function(req, res, next){
+  //update data in Thresholds DB 
+  dbTools.updateWaterThreshold(1,420,25,500);
+  res.send();
+});
+
+router.get('/water/delete', function(req, res, next){
+  //delete data in Thresholds DB by id
+  dbTools.deleteWaterThreshold(4);
+  res.send();
+});
+
+router.get('/power', function(req, res, next){
+  res.render('limitsPower');
+}); 
 
 router.get('/power/create', function(req, res, next){
   //Inserting data in power Thresholds DB
