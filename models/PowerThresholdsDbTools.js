@@ -61,6 +61,62 @@ readPowerThreshold = async function(id, sequelize, Sequelize){
     return result.length === 0 ? await Promise.reject(new Error("No power threshold data found")) : result;
 }
 
+updatePowerThreshold = async function(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize){
+    
+    let debugMessage = headerName + 'updatePowerThresholdTable: '; 
+
+    console.log(debugMessage + 'Update initialized...');
+
+    try {
+        console.log(debugMessage + 'Getting Table...');
+        let thresholdTable = getPowerThresholdsTable(sequelize, Sequelize);
+
+        console.log(debugMessage + 'Updating Table...');
+        let result = await thresholdTable.update({
+            property_type_id: propertyId,
+            threshold_yellow: yellowThreshold,
+            threshold_red: redThreshold
+        }, {returning: true, where: {id: id}});
+    
+        console.log(debugMessage + "Result = " + result);
+
+        return result[0]; // Return an array containing all inserted IDs
+    
+    
+    } catch (e) {
+        console.log(debugMessage + "database error occurred.")
+        throw e;
+    }
+
+}
+
+deletePowerThreshold = async function(id, sequelize, Sequelize){
+    
+    let debugMessage = headerName + 'deletePowerThresholdTable: '; 
+
+    console.log(debugMessage + 'Delete initialized...');
+
+    try {
+        console.log(debugMessage + 'Getting Threshodld Table...');
+        let thresholdTable = getPowerThresholdsTable(sequelize, Sequelize);
+
+        console.log(debugMessage + 'deleting id from Table...');
+        let result = await thresholdTable.destroy({
+            where: {id: id}
+        }, {returning: true, where: {id: id}});
+    
+        console.log(debugMessage + "Deleted ID = " + result.id);
+
+        return result; // Return an array containing all inserted IDs
+    
+    
+    } catch (e) {
+        console.log(debugMessage + "database error occurred.");
+        throw e;
+    }
+
+}
+
 
 /** 
  * Method returning the threshold limits table (layout).
@@ -79,7 +135,8 @@ getPowerThresholdsTable = (sequelize, Sequelize) => {
         property_id: {
             type: Sequelize.INTEGER,
             refrences: 'properties',
-            refrencesKey: 'property_id'
+            refrencesKey: 'property_id',
+            unique: true
         },
         threshold_yellow: {
             type: Sequelize.INTEGER,
@@ -95,4 +152,6 @@ getPowerThresholdsTable = (sequelize, Sequelize) => {
 exports.getPowerThresholdsTable = getPowerThresholdsTable;
 exports.createPowerThreshold = createPowerThreshold;
 exports.readPowerThreshold = readPowerThreshold;
+exports.updatePowerThreshold = updatePowerThreshold;
+exports.deletePowerThreshold = deletePowerThreshold;
     

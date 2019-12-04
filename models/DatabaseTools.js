@@ -20,6 +20,7 @@ const sequelize = new Sequelize('daplex', user, password, {
         timestamps: false
     }
 });
+sequelize.options.logging = false;
 
 function getPropertiesTable() {
     return sequelize.define('properties', {
@@ -252,6 +253,7 @@ exports.setupDatabase = async function (host, user, password) {
         let queryCreateDatabase = "CREATE DATABASE IF NOT EXISTS daplex";
         await connection.query(queryCreateDatabase); // Create the database
     } catch (e) {
+        console.log('throwing error in database')
         throw e;
     } finally {
         if (connection)
@@ -738,10 +740,14 @@ exports.deleteHelpdeskThreshold = (id) => htt.deleteHelpdeskThreshold(id, sequel
 // DB Tools export from WaterThresholdDbTools - Team Cyclone
 exports.createWaterThreshold = (yellowThreshold, redThreshold, propertyId) => {wtt.createWaterThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};
 exports.readWaterThreshold = (id) => {wtt.createWaterThreshold(id, sequelize, Sequelize)};
+exports.updateWaterThreshold = (id, propertyId, yellowThreshold, redThreshold) => wtt.updateWaterThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
+exports.deleteWaterThreshold = (id) => wtt.deleteWaterThreshold(id, sequelize, Sequelize);
 
 // DB Tools export from PowerThresholdDbTools - Team Cyclone
 exports.createPowerThreshold = (yellowThreshold, redThreshold, propertyId) => {ptt.createPowerThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};
 exports.readPowerThreshold = (id) => {ptt.createPowerThreshold(id, sequelize, Sequelize)};
+exports.updatePowerThreshold = (id, propertyId, yellowThreshold, redThreshold) => ptt.updatePowerThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
+exports.deletePowerThreshold = (id) => ptt.deletePowerThreshold(id, sequelize, Sequelize);
 
 
 

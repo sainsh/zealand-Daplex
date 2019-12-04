@@ -1,5 +1,6 @@
 var express = require('express');
 var dbTools = require('../models/DatabaseTools');
+var thresholdDbTools = require('../models/ThresholdsDbTools')
 var router = express.Router();
 
 /* GET Limit-UI page. */
@@ -41,9 +42,6 @@ router.get('/helpdesk/delete', function(req, res, next){
   res.send();
 });
 
-router.get('/power', function(req, res, next){
-  res.render('limitsPower');
-}); 
 
 router.get('/water', function(req, res, next){
   res.render('limitsWater');
@@ -52,6 +50,11 @@ router.get('/water', function(req, res, next){
 router.get('/water/create', function(req, res, next){
   //Inserting data in water Thresholds DB
   dbTools.createWaterThreshold(1,100,1000);
+  dbTools.createWaterThreshold(2,5,900);
+  dbTools.createWaterThreshold(3,14,450);
+  dbTools.createWaterThreshold(10,20,200);
+  dbTools.createWaterThreshold(7,19,150);
+  dbTools.createWaterThreshold(4,5,800);
   res.send();
 });
 
@@ -63,9 +66,30 @@ router.get('/water/read', function(req, res, next){
 
 });
 
+router.get('/water/update', function(req, res, next){
+  //update data in Thresholds DB 
+  dbTools.updateWaterThreshold(1,420,25,500);
+  res.send();
+});
+
+router.get('/water/delete', function(req, res, next){
+  //delete data in Thresholds DB by id
+  dbTools.deleteWaterThreshold(4);
+  res.send();
+});
+
+router.get('/power', function(req, res, next){
+  res.render('limitsPower');
+}); 
+
 router.get('/power/create', function(req, res, next){
   //Inserting data in power Thresholds DB
   dbTools.createPowerThreshold(2,500,1000);
+  dbTools.createPowerThreshold(3,5,900);
+  dbTools.createPowerThreshold(6,9,850);
+  dbTools.createPowerThreshold(7,15,700);
+  dbTools.createPowerThreshold(1,10,400);
+  dbTools.createPowerThreshold(9,20,140);
   res.send();
 });
 
@@ -77,5 +101,30 @@ router.get('/power/read', function(req, res, next){
 
 });
 
+router.get('/power/update', function(req, res, next){
+  //update data in Thresholds DB 
+  dbTools.updatePowerThreshold(1,420,25,500);
+  res.send();
+});
+
+router.get('/power/delete', function(req, res, next){
+  //delete data in Thresholds DB by id
+  dbTools.deletePowerThreshold(4);
+  res.send();
+});
+
+// get input from ui and save to database
+router.post('/helpdesk', (req, res, next) => {
+
+  var yellowThreshold = req.body.yellowThreshold;
+  var redThreshold = req.body.redThreshold;
+  var select = req.body.select;
+  console.log(req.body);
+
+  thresholdDbTools.createHelpdeskThreshold(yellowThreshold, redThreshold, select);
+  thresholdDbTools.updateHelpdeskThreshold(yellowThreshold, redThreshold, select);
+  res.redirect("/limits/helpdesk");
+  
+})
 
 module.exports = router;
