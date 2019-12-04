@@ -10,6 +10,19 @@ jobs:
     strategy:
       matrix:
         node-version: [8.x, 10.x, 12.x]
+        
+    services:
+      mariadb:
+        image: mariadb:latest
+        ports:
+          - 3306
+        env:
+          MYSQL_USER: 'root'
+          MYSQL_PASSWORD: 'password'
+          MYSQL_DATABASE: 'daplex'
+          MYSQL_ROOT_PASSWORD: 'password'
+        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+
 
     steps:
     - uses: actions/checkout@v1
