@@ -7,6 +7,9 @@ exports.htt = htt;
 const wtt = require('./WaterThresholdsDbTools');
 exports.wtt = wtt;
 
+const ptt = require('./PowerThresholdsDbTools');
+exports.ptt = ptt;
+
 const host = 'localhost';
 const user = 'root';
 const password = '';
@@ -269,6 +272,7 @@ exports.setupTables = async function () {
     let helpdeskWeightTable = getHelpdeskWeightTable();
     let helpdeskThresholdTable = htt.getHelpdeskThresholdsTable(sequelize, Sequelize);
     let waterThresholdTable = wtt.getWaterThresholdsTable(sequelize, Sequelize);
+    let powerThresholdTable = ptt.getPowerThresholdsTable(sequelize, Sequelize);
     let maintenanceTable = getMaintenanceTable();
     let stateWeightTable = getStateWeightTable();
     let overallWeightTable = getOverallWeightTable();
@@ -281,6 +285,7 @@ exports.setupTables = async function () {
     await helpdeskWeightTable.sync({force: false});
     await helpdeskThresholdTable.sync({force: false});
     await waterThresholdTable.sync({force: false});
+    await powerThresholdTable.sync({force: false});
     await stateWeightTable.sync({force: false});
     await maintenanceTable.sync({force: false});
     await overallWeightTable.sync({force: false});
@@ -723,6 +728,10 @@ exports.deleteHelpdeskThreshold = (id) => htt.deleteHelpdeskThreshold(id, sequel
 // DB Tools export from WaterThresholdDbTools - Team Cyclone
 exports.createWaterThreshold = (yellowThreshold, redThreshold, propertyId) => {wtt.createWaterThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};
 exports.readWaterThreshold = (id) => {wtt.createWaterThreshold(id, sequelize, Sequelize)};
+
+// DB Tools export from PowerThresholdDbTools - Team Cyclone
+exports.createPowerThreshold = (yellowThreshold, redThreshold, propertyId) => {ptt.createPowerThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};
+exports.readPowerThreshold = (id) => {ptt.createPowerThreshold(id, sequelize, Sequelize)};
 
 
 
