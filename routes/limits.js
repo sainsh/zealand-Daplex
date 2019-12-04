@@ -41,4 +41,18 @@ router.get('/water', function(req, res, next){
   res.render('limitsWater');
 }); 
 
+router.get('/water/create', function(req, res, next){
+  //Inserting data in water Thresholds DB
+  dbTools.createWaterThreshold(1,100,1000);
+  res.send();
+});
+
+router.get('/water/read', function(req, res, next){
+
+  //Inserting data in water Thresholds DB
+  dbTools.readWaterThreshold(420);
+  res.send();
+
+});
+
 module.exports = router;
