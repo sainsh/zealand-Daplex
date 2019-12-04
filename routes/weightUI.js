@@ -35,6 +35,16 @@ router.post('/helpdesk/sliders', async function (req, res) {
   res.send(resultArray);
 });
 
+router.post('/state/sliders', async function (req, res) {
+  var result = await db.readStateWeightData(req.body.id);
+  var resultArray = [];
+  for (var value in result[0].dataValues){
+    resultArray.push(result[0][value]);
+  }
+  resultArray.shift();
+  res.send(resultArray);
+});
+
 router.post('/helpdesk', (req, res, next) => {
 
   var select = req.body.select;

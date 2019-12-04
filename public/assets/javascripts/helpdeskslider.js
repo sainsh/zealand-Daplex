@@ -2,8 +2,6 @@ var select = document.getElementById("select");
 var sliders = [];
 
 function createSliderLogic(nameBullet, nameSlider){
-//var bullet = document.getElementById(nameBullet);
-//var slider = document.getElementById(nameSlider);
 var fullSlider = {slider: document.getElementById(nameSlider), bullet: document.getElementById(nameBullet)};
 sliders.push(fullSlider);
 
