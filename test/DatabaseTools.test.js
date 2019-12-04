@@ -20,7 +20,7 @@ test('test create database with wrong username',  () => {
  //test works but writes files which GIT does not like
 test('insert data from csv', async() =>{
     //let csv = await conversionTools.convertXlsxToCsv('./test/testfiles/helpdesk.xlsx', './test/testfiles/helpdesk.csv')
-    let jsonResult = await conversionTools.convertCsvToJson('./test/testfiles/Helpdesk.csv', 'Nr.');
+    let jsonResult = await conversionTools.convertCsvToJson('./test/testfiles/Helpdesk.csv');
     let result = await databaseTools.createHelpdeskData(jsonResult);
     let res = await databaseTools.readProperty(1);
     await expect(res[0].dataValues).toEqual({color: null, property_id:1, property_name: 'Kildemarksvej 114 + 118 - 128', property_size: 1000, property_type_id: 420 })
