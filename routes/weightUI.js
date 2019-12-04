@@ -23,9 +23,9 @@ router.get('/state', async function (req, res, next) {
   var resultArray = [];
   var leftArray = [];
   console.log(result);
-  for (var value in result[0].dataValues){
-    resultArray.push(result[0][value]);
-    leftArray.push(`left:` + (result[0][value] * 5.78) + `px`);
+  for (var value in result){
+    resultArray.push(result[value]);
+    leftArray.push(`left:` + (result[value] * 5.78) + `px`);
   }
   resultArray.shift();
   leftArray.shift();
@@ -50,6 +50,7 @@ router.post('/helpdesk/sliders', async function (req, res) {
 router.post('/state/sliders', async function (req, res) {
   var result = await db.readStateWeightData(req.body.id);
   var resultArray = [];
+  console.log(result);
   for (var value in result){
     resultArray.push(result[value]);
   }

@@ -19,10 +19,10 @@ select.addEventListener("change", () =>{
     req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     req.onload = () => {
         var sliderValues = JSON.parse(req.response);
+        console.log(sliderValues[0]);
         for (let i = 0; i < sliderValues.length; i++) {
             let value = sliderValues[i];
             var bulletPosition = (value/sliders[i].slider.max);
-            console.log("bullet position: " + bulletPosition);
             sliders[i].bullet.style.left = (bulletPosition * 578) + "px";
             sliders[i].slider.value = value;
             sliders[i].bullet.value = value;
@@ -32,10 +32,6 @@ select.addEventListener("change", () =>{
     req.send(`id=${select.value}`);
 });
 
-
-
-
-
-createSliderLogic("osvBullet","osvSlider");
-createSliderLogic("udvBullet","udvSlider");
 createSliderLogic("tekBullet","tekSlider");
+createSliderLogic("udvBullet","udvSlider");
+createSliderLogic("osvBullet","osvSlider");
