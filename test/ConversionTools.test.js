@@ -37,24 +37,24 @@ test('create CSV priority card from database data', async () => {
     expect(testFileContent).toEqual(newFileContent);
 });
 
-test('create csv from xlsx file cuting rows and columns', async()=>{
-    await conversionTools.convertXLSXToCSV('./test/testfiles/tilstand Fra Dalux.csv', './test/testfiles/tilstand.csv');
-    await conversionTools.trimExcessColumnsAndRows('./test/testfiles/tilstand.csv');
-    var records = parse('./test/testfiles/tilstand.csv', {columns: true});
-
-    var columnResults = {};
-
-    for(var row =0; row < records.length; row++){
-        for(var column in records[row]){
-            if(!columnResults[column]){
-                columnResults[column] = [];
-            }
-            columnResults[column].push(records[row][column]);
-        }
-    }
-    exprect(Object.keys(columnResults).length).toBe(3)
-})
-
+//test('create csv from xlsx file cuting rows and columns', async()=>{
+//    await conversionTools.convertXLSXToCSV('./test/testfiles/tilstand Fra Dalux.csv', './test/testfiles/tilstand.csv');
+//    await conversionTools.trimExcessColumnsAndRows('./test/testfiles/tilstand.csv');
+//    var records = parse('./test/testfiles/tilstand.csv', {columns: true});
+//
+//    var columnResults = {};
+//
+//    for(var row =0; row < records.length; row++){
+//        for(var column in records[row]){
+//            if(!columnResults[column]){
+//                columnResults[column] = [];
+//            }
+//            columnResults[column].push(records[row][column]);
+//        }
+//    }
+//    exprect(Object.keys(columnResults).length).toBe(3)
+//})
+//
 
 */
 

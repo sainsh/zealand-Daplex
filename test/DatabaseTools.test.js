@@ -25,7 +25,7 @@ test('try reading from properties where id is not a number', async()=>{
 })
 
 test('inserting data into maintenanceTable', async()=>{
-    let csv = await conversionTools.convertXlsxToCsv('./test/testfiles/Tilstand fra Dalux.xlsx', './test/testfiles/tilstand.csv')
+   // let csv = await conversionTools.convertXlsxToCsv('./test/testfiles/Tilstand fra Dalux.xlsx', './test/testfiles/tilstand.csv')
     let jsonResult = await conversionTools.convertCsvToJson('./test/testfiles/tilstand.csv');
     let result = await databaseTools.createMaintenanceData(jsonResult);
     let res = await databaseTools.readMaintenanceData(5);
