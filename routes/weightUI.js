@@ -9,9 +9,10 @@ router.get('/helpdesk', async function (req, res, next) {
   var result = await db.readHelpdeskWeightData(420);
   var resultArray = [];
   var leftArray = [];
-  for (var value in result[0].dataValues){
-    resultArray.push(result[0][value]);
-    leftArray.push(`left:` + (result[0][value] * 5.78) + `px`);
+  console.log(result);
+  for (var value in result){
+    resultArray.push(result[value]);
+    leftArray.push(`left:` + (result[value] * 5.78) + `px`);
   }
   resultArray.shift();
   leftArray.shift();
@@ -21,6 +22,7 @@ router.get('/state', async function (req, res, next) {
   var result = await db.readStateWeightData(420);
   var resultArray = [];
   var leftArray = [];
+  console.log(result);
   for (var value in result[0].dataValues){
     resultArray.push(result[0][value]);
     leftArray.push(`left:` + (result[0][value] * 5.78) + `px`);
