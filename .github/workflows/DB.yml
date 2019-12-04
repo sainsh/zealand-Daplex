@@ -14,23 +14,11 @@ jobs:
     - name: Setup MySQL
       uses: mirromutth/mysql-action@v1.1
       with:
-        # The port of host
         host port: '3307' # optional, default is 3306
-        # The port of container
         container port: '3307' # optional, default is 3306
-        # --character-set-server - The character set of MySQL server
-        #character set server: # optional, default is utf8mb4
-        # --collation-server - The character collation of MySQL server
-        #collation server: # optional, default is utf8mb4_general_ci
-        # Version of MySQL to use
-        #mysql version: # optional, default is latest
-        # MYSQL_ROOT_PASSWORD - root superuser password
         mysql root password: 'password' # optional, default is 
-        # MYSQL_DATABASE - name for the default database that is created
         mysql database: 'daplex' # optional, default is 
-        # MYSQL_USER - create the specified user with superuser power for created database
         mysql user: 'root' # optional, default is 
-        # MYSQL_PASSWORD - specified superuser password which user is power for created database
         mysql password: 'password' # optional, default is 
         
         
