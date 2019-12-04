@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [8.x, 10.x, 12.x]
+        node-version: [10.x, 12.x]
         
     services:
       mariadb:
@@ -27,7 +27,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Setup database
-      run: mysql -h 127.0.0.1 --port 3306 -u root -ppassword -e 'CREATE DATABASE IF NOT EXISTS daplex;'
+      run: mysql -h localhost --port 3306 -u root -ppassword -e 'CREATE DATABASE IF NOT EXISTS daplex;'
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
