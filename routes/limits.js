@@ -84,6 +84,11 @@ router.get('/power', function(req, res, next){
 router.get('/power/create', function(req, res, next){
   //Inserting data in power Thresholds DB
   dbTools.createPowerThreshold(2,500,1000);
+  dbTools.createPowerThreshold(3,5,900);
+  dbTools.createPowerThreshold(6,9,850);
+  dbTools.createPowerThreshold(7,15,700);
+  dbTools.createPowerThreshold(1,10,400);
+  dbTools.createPowerThreshold(9,20,140);
   res.send();
 });
 
@@ -93,6 +98,18 @@ router.get('/power/read', function(req, res, next){
   dbTools.readPowerThreshold(420);
   res.send();
 
+});
+
+router.get('/power/update', function(req, res, next){
+  //update data in Thresholds DB 
+  dbTools.updatePowerThreshold(1,420,25,500);
+  res.send();
+});
+
+router.get('/power/delete', function(req, res, next){
+  //delete data in Thresholds DB by id
+  dbTools.deletePowerThreshold(4);
+  res.send();
 });
 
 

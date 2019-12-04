@@ -12,7 +12,7 @@ exports.ptt = ptt;
 
 const host = '127.0.0.1';
 const user = 'root';
-const password = 'password';
+const password = '';
 const sequelize = new Sequelize('daplex', user, password, {
     host: host,
     dialect: 'mysql',
@@ -734,6 +734,8 @@ exports.deleteWaterThreshold = (id) => wtt.deleteWaterThreshold(id, sequelize, S
 // DB Tools export from PowerThresholdDbTools - Team Cyclone
 exports.createPowerThreshold = (yellowThreshold, redThreshold, propertyId) => {ptt.createPowerThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};
 exports.readPowerThreshold = (id) => {ptt.createPowerThreshold(id, sequelize, Sequelize)};
+exports.updatePowerThreshold = (id, propertyId, yellowThreshold, redThreshold) => ptt.updatePowerThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
+exports.deletePowerThreshold = (id) => ptt.deletePowerThreshold(id, sequelize, Sequelize);
 
 
 
