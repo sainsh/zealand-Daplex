@@ -1,24 +1,24 @@
 
 /* 
- *  Database functions for setting threshold for water pr. square meter for each building type
+ *  Database functions for setting threshold for power pr. square meter for each building type
  *  
  * 
  *  - Team Cyclone
  */
 
- const headerName = "WaterThresholdsDbTools.js";
+ const headerName = "PowerThresholdsDbTools.js";
 
  /**
  * CRUD for thresholds table 
  */
  
  /**
-  * Create method for water Thresholds
+  * Create method for power Thresholds
   */
 
- createWaterThreshold = async function(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize){
+ createPowerThreshold = async function(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize){
 
-    let debugMessage = headerName + "createWaterThreshold: ";
+    let debugMessage = headerName + "createPowerThreshold: ";
 
     console.log(debugMessage + "Starting... \n" + 
                                 "yellowThreshold = " + yellowThreshold + "\n" +
@@ -27,8 +27,8 @@
 
 
     try{
-        console.log(debugMessage + "Getting WaterThresholdsTable.")
-        let thresholdTable = getWaterThresholdsTable(sequelize, Sequelize);
+        console.log(debugMessage + "Getting PowerThresholdsTable.")
+        let thresholdTable = getPowerThresholdsTable(sequelize, Sequelize);
 
         let result = await thresholdTable.create({
             property_id: propertyId, 
@@ -41,25 +41,24 @@
     } catch(e){
         console.log(debugMessage + "\n"  + e);
     }
-    
 
-}
+ }
 
-/**
- * READ method water Thresholds
+ /**
+ * READ method power Thresholds
  */
-readWaterThreshold = async function(id, sequelize, Sequelize){
+readPowerThreshold = async function(id, sequelize, Sequelize){
 
-    let debugMessage = headerName + 'readWaterThresholdTable: '; 
+    let debugMessage = headerName + 'readPowerThresholdTable: '; 
 
     console.log(debugMessage + 'Read initialized...');
 
-    let waterThresholds = getWaterThresholdsTable(sequelize, Sequelize);
-    let result = await waterThresholds.findAll((id ? {where: {property_id: id}} : {}));
+    let powerThresholds = getPowerThresholdsTable(sequelize, Sequelize);
+    let result = await powerThresholds.findAll((id ? {where: {property_id: id}} : {}));
 
     console.log(debugMessage + result.length === 0 ? result : 'nothing was found with the specified id'); 
 
-    return result.length === 0 ? await Promise.reject(new Error("No water threshold data found")) : result;
+    return result.length === 0 ? await Promise.reject(new Error("No power threshold data found")) : result;
 }
 
 
@@ -69,8 +68,8 @@ readWaterThreshold = async function(id, sequelize, Sequelize){
  * @param Sequelize: from DB tools
  * @returns table setup for threshold in daplex db
  */
-getWaterThresholdsTable = (sequelize, Sequelize) => {
-    return sequelize.define('water_thresholds', {
+getPowerThresholdsTable = (sequelize, Sequelize) => {
+    return sequelize.define('power_thresholds', {
         id: {
             type: Sequelize.INTEGER,
             allowNull: false,
@@ -93,7 +92,7 @@ getWaterThresholdsTable = (sequelize, Sequelize) => {
     });
 }
 
-exports.getWaterThresholdsTable = getWaterThresholdsTable;
-exports.createWaterThreshold = createWaterThreshold;
-exports.readWaterThreshold = readWaterThreshold;
-
+exports.getPowerThresholdsTable = getPowerThresholdsTable;
+exports.createPowerThreshold = createPowerThreshold;
+exports.readPowerThreshold = readPowerThreshold;
+    

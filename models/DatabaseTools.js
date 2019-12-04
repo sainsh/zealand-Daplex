@@ -7,9 +7,12 @@ exports.htt = htt;
 const wtt = require('./WaterThresholdsDbTools');
 exports.wtt = wtt;
 
-const host = 'localhost';
+const ptt = require('./PowerThresholdsDbTools');
+exports.ptt = ptt;
+
+const host = '127.0.0.1';
 const user = 'root';
-const password = 'root';
+const password = 'password';
 const sequelize = new Sequelize('daplex', user, password, {
     host: host,
     dialect: 'mysql',
@@ -269,6 +272,7 @@ exports.setupTables = async function () {
     let helpdeskWeightTable = getHelpdeskWeightTable();
     let helpdeskThresholdTable = htt.getHelpdeskThresholdsTable(sequelize, Sequelize);
     let waterThresholdTable = wtt.getWaterThresholdsTable(sequelize, Sequelize);
+    let powerThresholdTable = ptt.getPowerThresholdsTable(sequelize, Sequelize);
     let maintenanceTable = getMaintenanceTable();
     let stateWeightTable = getStateWeightTable();
     let overallWeightTable = getOverallWeightTable();
@@ -281,6 +285,7 @@ exports.setupTables = async function () {
     await helpdeskWeightTable.sync({force: false});
     await helpdeskThresholdTable.sync({force: false});
     await waterThresholdTable.sync({force: false});
+    await powerThresholdTable.sync({force: false});
     await stateWeightTable.sync({force: false});
     await maintenanceTable.sync({force: false});
     await overallWeightTable.sync({force: false});
@@ -716,14 +721,18 @@ exports.calculateScore = async function () {
 // DB Tools export from ThresholdDbTools - Team Cyclone
 exports.createHelpdeskThreshold = (yellowThreshold, redThreshold, propertyId) => {htt.createHelpdeskThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};
 exports.readHelpdeskThreshold = (id) => {htt.readHelpdeskThreshold(id, sequelize, Sequelize)}; 
+exports.updateHelpdeskThreshold = (id, propertyId, yellowThreshold, redThreshold) => htt.updateHelpdeskThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
+exports.deleteHelpdeskThreshold = (id) => htt.deleteHelpdeskThreshold(id, sequelize, Sequelize);
+
 
 // DB Tools export from WaterThresholdDbTools - Team Cyclone
 exports.createWaterThreshold = (yellowThreshold, redThreshold, propertyId) => {wtt.createWaterThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};
 exports.readWaterThreshold = (id) => {wtt.createWaterThreshold(id, sequelize, Sequelize)};
 
+// DB Tools export from PowerThresholdDbTools - Team Cyclone
+exports.createPowerThreshold = (yellowThreshold, redThreshold, propertyId) => {ptt.createPowerThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};
+exports.readPowerThreshold = (id) => {ptt.createPowerThreshold(id, sequelize, Sequelize)};
 
-exports.updateHelpdeskThreshold = (id, propertyId, yellowThreshold, redThreshold) => htt.updateHelpdeskThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
 
- 
 
 
