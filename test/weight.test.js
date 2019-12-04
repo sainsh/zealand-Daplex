@@ -1,5 +1,5 @@
 const weight = require('./weight');
-var db = require('../models/DatabaseTools')
+//var db = require('../models/DatabaseTools')
 
 test('Returns string', () => {
     expect(weight("text")).toBe("text");

@@ -1,6 +1,6 @@
-const databaseTools = require('../models/DatabaseTools');
-const conversionTools = require('../models/ConversionTools')
-require('mysql2/node_modules/iconv-lite').encodingExists('foo');
+//const databaseTools = require('../models/DatabaseTools');
+//const conversionTools = require('../models/ConversionTools')
+//require('mysql2/node_modules/iconv-lite').encodingExists('foo');
 const sum = require('./sum');
 
 test('adds 1 + 2 to equal 3', () => {
