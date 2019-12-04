@@ -55,4 +55,19 @@ router.get('/water/read', function(req, res, next){
 
 });
 
+router.get('/power/create', function(req, res, next){
+  //Inserting data in power Thresholds DB
+  dbTools.createPowerThreshold(2,500,1000);
+  res.send();
+});
+
+router.get('/power/read', function(req, res, next){
+
+  //Inserting data in power Thresholds DB
+  dbTools.readPowerThreshold(420);
+  res.send();
+
+});
+
+
 module.exports = router;
