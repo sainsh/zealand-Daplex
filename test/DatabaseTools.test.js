@@ -23,11 +23,11 @@ test('try reading from properties where id is not a number', async()=>{
     expect(databaseTools.readProperty('to')).rejects.toThrow();
 
 })
-
+/*
 test('inserting data into maintenanceTable', async()=>{
     let csv = await conversionTools.convertXlsxToCsv('./test/testfiles/Tilstand fra Dalux.xlsx', './test/testfiles/tilstand.csv')
     let jsonResult = await conversionTools.convertCsvToJson('./test/testfiles/tilstand.csv');
     let result = await databaseTools.createMaintenanceData(jsonResult);
     let res = await databaseTools.readMaintenanceData(5);
     await expect(res[0].dataValues).toEqual({maintenance_id: 1, property_id: 5, cost: 3250})
-})
+})*/
