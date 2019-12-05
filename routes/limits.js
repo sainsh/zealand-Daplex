@@ -124,6 +124,6 @@ router.post('/helpdesk', (req, res, next) => {
   dbTools.updateHelpdeskThreshold(yellowThreshold, redThreshold, select);
   res.redirect("/limits/helpdesk");
   
-})
+});
 
 module.exports = router;
