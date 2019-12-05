@@ -14,13 +14,13 @@ router.get('/helpdesk', function(req, res, next){
 
 router.get('/helpdesk/create', function(req, res, next){
   //Inserting data in Thresholds DB with data
-  dbTools.createHelpdeskThreshold(2,2,1000);
-  dbTools.createHelpdeskThreshold(5,8,900);
-  dbTools.createHelpdeskThreshold(3,5,650);
-  dbTools.createHelpdeskThreshold(5,9,420);
-  dbTools.createHelpdeskThreshold(9,10,110);
-  dbTools.createHelpdeskThreshold(1,25,600);
-  dbTools.createHelpdeskThreshold(8,15,1000);
+  dbTools.createHelpdeskThreshold(2, 2, 2, 1000);
+  dbTools.createHelpdeskThreshold(5, 8, 2, 900);
+  dbTools.createHelpdeskThreshold(3, 5, 2, 650);
+  dbTools.createHelpdeskThreshold(5, 9, 5, 420);
+  dbTools.createHelpdeskThreshold(9, 10, 8, 110);
+  dbTools.createHelpdeskThreshold(1, 8, 25, 600);
+  dbTools.createHelpdeskThreshold(8, 15, 5, 1000);
   res.send();
 });
 
@@ -32,7 +32,7 @@ router.get('/helpdesk/read', function(req, res, next){
 
 router.get('/helpdesk/update', function(req, res, next){
   //update data in Thresholds DB 
-  dbTools.updateHelpdeskThreshold(1,420,25,500);
+  dbTools.updateHelpdeskThreshold(1,420,25, 5, 500);
   res.send();
 });
 

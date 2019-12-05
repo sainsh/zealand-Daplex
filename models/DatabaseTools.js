@@ -1,10 +1,11 @@
 const mysql = require('mysql2/promise');
 const Sequelize = require('sequelize');
 
+const HelpdeskCategories = require('./helpdeskCategoriesTable');
+
 const htt = require('./ThresholdsDbTools');
 const wtt = require('./WaterThresholdsDbTools');
 const ptt = require('./PowerThresholdsDbTools');
-const hct = require('./helpdeskCategoriesTable');
 exports.htt = htt;
 exports.wtt = wtt;
 exports.ptt = ptt;
@@ -269,7 +270,7 @@ exports.setupDatabase(host, user, password);
  */
 exports.setupTables = async function () {
     let propertiesTable = getPropertiesTable();
-    let helpdeskCategoriesTable = hct.getHelpdeskCategoriesTable(sequelize, Sequelize);
+    let helpdeskCategoriesTable = helpdeskCategories.getHelpdeskCategoriesTable(sequelize, Sequelize);
     let helpdeskTable = getHelpdeskTable();
     let helpdeskWeightTable = getHelpdeskWeightTable();
     let helpdeskThresholdTable = htt.getHelpdeskThresholdsTable(sequelize, Sequelize);
@@ -754,7 +755,18 @@ exports.calculateScore = async function () {
 
 // exports.calculateScore();
 
+var hct = {};
+hct.create = (categoryName) => helpdeskCategories.createHelpdeskCategory(categoryName, sequelize, Sequelize);
+hct.read = (id) => helpdeskCategories.readHelpdeskCategory(id, sequelize, Sequelize);
+hct.update = (id, categoryName) => helpdeskCategories.updateHelpdeskCategory(id, categoryName, sequelize, Sequelize);
+hct.delete = (id) => helpdeskCategories.deleteHelpdeskCategory(id, sequelize, Sequelize); 
+exports.hct;
 
+//Helpdesk categories DB tools - Team Cyclone
+exports.createHelpdeskCategory = (categoryName) => helpdeskCategories.createHelpdeskCategory(categoryName, sequelize, Sequelize);
+exports.updateHelpdeskCategory = (id, categoryName) => helpdeskCategories.updateHelpdeskCategory(id, categoryName, sequelize, Sequelize);
+exports.readHelpdeskCategory = (id) => helpdeskCategories.readHelpdeskCategory(id, sequelize, Sequelize);
+exports.deleteHelpdeskCategory = (id) => helpdeskCategories.deleteHelpdeskCategory(id, sequelize, Sequelize); 
 
 // DB Tools export from ThresholdDbTools - Team Cyclone
 exports.createHelpdeskThreshold = (yellowThreshold, redThreshold, propertyId) => {htt.createHelpdeskThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};

@@ -20,12 +20,12 @@ exports.getHelpdeskCategoriesTable = (sequelize, Sequelize) => {
     });
 }
 
-exports.createHelpdeskThreshold = async function(categoryName, sequelize, Sequelize){
+exports.createHelpdeskCategory = async function(categoryName, sequelize, Sequelize){
 
     try{
-        let thresholdTable = getHelpdeskCategoriesTable(sequelize, Sequelize);
+        let helpdeskCategoryTable = getHelpdeskCategoriesTable(sequelize, Sequelize);
 
-        let result = await thresholdTable.create({
+        let result = await helpdeskCategoryTable.create({
             name: categoryName,
         });
 
@@ -35,4 +35,67 @@ exports.createHelpdeskThreshold = async function(categoryName, sequelize, Sequel
         throw e;
     }
     
+}
+
+exports.updateHelpdeskCategory = async function(id, name, sequelize, Sequelize){
+
+    try{
+        let helpdeskCategoryTable = getHelpdeskCategoriesTable(sequelize, Sequelize);
+
+        let result = helpdeskCategoryTable.update({
+            name: name
+        }, {returning: true, where: {id: id}});
+
+        console.log(result[0]);
+
+        return result[0];
+
+    } catch(e){
+        throw e; 
+    }
+
+}
+
+exports.readHelpdeskCategory = async function(id, sequelize, Sequelize){
+
+    try{
+        let helpdeskCategoryTable = getHelpdeskCategoriesTable(sequelize, Sequelize);
+
+        let result = helpdeskCategoryTable.findAll((id ? {where: {id: id}} : {}));
+
+        console.log("Elements found in databse with id = " + id);
+        result.forEach(element => {
+            console.log("id: " + element.id + " name: " + 
+            element.name);
+        }); 
+
+        return result.length === 0 ? await Promise.reject(new Error("No helpdesk threshold data found")) : result;
+    } catch(e){
+        throw e;
+    }
+
+}
+
+exports.deleteHelpdeskCategory = async function(id, sequelize, Sequelize){
+
+    try{
+
+        let helpdeskCategoryTable = getHelpdeskCategoriesTable(sequelize, Sequelize);
+
+        helpdeskCategoryTable.destroy({
+            where: {id: id}
+        }, {returning: true, where: {id: id}});
+    
+        console.log("Deleted ID = " + result.id);
+
+        return result; // Return object of removed database row
+    
+    
+    } catch (e) {
+        console.log("database error occurred.");
+        throw e;
+    }
+
+    }
+
 }
