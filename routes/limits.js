@@ -21,24 +21,44 @@ router.get('/helpdesk/create', function(req, res, next){
   dbTools.createHelpdeskThreshold(9, 10, 8, 110);
   dbTools.createHelpdeskThreshold(1, 8, 25, 600);
   dbTools.createHelpdeskThreshold(8, 15, 5, 1000);
+  
+  dbTools.hct.create("Indeklima");
+  dbTools.hct.create("Tekniske Anlæg");
+  dbTools.hct.create("Udvendig Belægning");
+  dbTools.hct.create("Murværk og Facade");
+  dbTools.hct.create("Tag");
+  dbTools.hct.create("Udhæng og Gavle");
+  dbTools.hct.create("Tagdækning");
+  dbTools.hct.create("Tagrender og Nedløb");
+  dbTools.hct.create("Vinduer og Udvendige Døre");
+  dbTools.hct.create("Fundament og Sokkel");
+  
   res.send();
 });
 
 router.get('/helpdesk/read', function(req, res, next){
   //reading data in Thresholds DB by property id
-  dbTools.readHelpdeskThreshold(1000);
+  dbTools.readHelpdeskThreshold(3);
+
+  dbTools.hct.read(2);
+
   res.send();
 });
 
 router.get('/helpdesk/update', function(req, res, next){
   //update data in Thresholds DB 
   dbTools.updateHelpdeskThreshold(1,420,25, 5, 500);
+
+  dbTools.hct.update(4, "Ny værdi wow");
   res.send();
 });
 
 router.get('/helpdesk/delete', function(req, res, next){
   //delete data in Thresholds DB by id
   dbTools.deleteHelpdeskThreshold(4);
+
+  dbTools.hct.delete(3);
+
   res.send();
 });
 

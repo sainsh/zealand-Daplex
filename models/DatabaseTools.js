@@ -1,14 +1,11 @@
 const mysql = require('mysql2/promise');
 const Sequelize = require('sequelize');
 
-const HelpdeskCategories = require('./helpdeskCategoriesTable');
+const helpdeskCategories = require('./helpdeskCategoriesTable');
 
 const htt = require('./ThresholdsDbTools');
 const wtt = require('./WaterThresholdsDbTools');
 const ptt = require('./PowerThresholdsDbTools');
-exports.htt = htt;
-exports.wtt = wtt;
-exports.ptt = ptt;
 
 const host = '127.0.0.1';
 const user = 'root';
@@ -755,23 +752,24 @@ exports.calculateScore = async function () {
 
 // exports.calculateScore();
 
-var hct = {};
+var hct = {} 
 hct.create = (categoryName) => helpdeskCategories.createHelpdeskCategory(categoryName, sequelize, Sequelize);
 hct.read = (id) => helpdeskCategories.readHelpdeskCategory(id, sequelize, Sequelize);
 hct.update = (id, categoryName) => helpdeskCategories.updateHelpdeskCategory(id, categoryName, sequelize, Sequelize);
 hct.delete = (id) => helpdeskCategories.deleteHelpdeskCategory(id, sequelize, Sequelize); 
-exports.hct;
+
+exports.hct = hct;
 
 //Helpdesk categories DB tools - Team Cyclone
-exports.createHelpdeskCategory = (categoryName) => helpdeskCategories.createHelpdeskCategory(categoryName, sequelize, Sequelize);
-exports.updateHelpdeskCategory = (id, categoryName) => helpdeskCategories.updateHelpdeskCategory(id, categoryName, sequelize, Sequelize);
-exports.readHelpdeskCategory = (id) => helpdeskCategories.readHelpdeskCategory(id, sequelize, Sequelize);
-exports.deleteHelpdeskCategory = (id) => helpdeskCategories.deleteHelpdeskCategory(id, sequelize, Sequelize); 
+//exports.createHelpdeskCategory = (categoryName) => helpdeskCategories.createHelpdeskCategory(categoryName, sequelize, Sequelize);
+//exports.updateHelpdeskCategory = (id, categoryName) => helpdeskCategories.updateHelpdeskCategory(id, categoryName, sequelize, Sequelize);
+//exports.readHelpdeskCategory = (id) => helpdeskCategories.readHelpdeskCategory(id, sequelize, Sequelize);
+//exports.deleteHelpdeskCategory = (id) => helpdeskCategories.deleteHelpdeskCategory(id, sequelize, Sequelize); 
 
 // DB Tools export from ThresholdDbTools - Team Cyclone
-exports.createHelpdeskThreshold = (yellowThreshold, redThreshold, propertyId) => {htt.createHelpdeskThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};
+exports.createHelpdeskThreshold = (yellowThreshold, redThreshold, categoryId, propertyId) => {htt.createHelpdeskThreshold(yellowThreshold, redThreshold, categoryId, propertyId, sequelize, Sequelize)};
 exports.readHelpdeskThreshold = (id) => {htt.readHelpdeskThreshold(id, sequelize, Sequelize)}; 
-exports.updateHelpdeskThreshold = (id, propertyId, yellowThreshold, redThreshold) => htt.updateHelpdeskThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
+exports.updateHelpdeskThreshold = (id, propertyId, categoryId, yellowThreshold, redThreshold) => htt.updateHelpdeskThreshold(id, propertyId,  categoryId, yellowThreshold, redThreshold, sequelize, Sequelize);
 exports.deleteHelpdeskThreshold = (id) => htt.deleteHelpdeskThreshold(id, sequelize, Sequelize);
 
 

@@ -5,7 +5,7 @@
  * @param Sequelize: from DB tools
  * @returns table setup for threshold in daplex db
  */
-exports.getHelpdeskCategoriesTable = (sequelize, Sequelize) => {
+getHelpdeskCategoriesTable = (sequelize, Sequelize) => {
     return sequelize.define('helpdesk_categories', {
         id: {
             type: Sequelize.INTEGER,
@@ -29,7 +29,7 @@ exports.createHelpdeskCategory = async function(categoryName, sequelize, Sequeli
             name: categoryName,
         });
 
-        console.log("create helpdesk categori: " + result[0]);
+        console.log("create helpdesk categori: " + result.dataValues.id);
         
     } catch(e){
         throw e;
@@ -61,14 +61,10 @@ exports.readHelpdeskCategory = async function(id, sequelize, Sequelize){
     try{
         let helpdeskCategoryTable = getHelpdeskCategoriesTable(sequelize, Sequelize);
 
-        let result = helpdeskCategoryTable.findAll((id ? {where: {id: id}} : {}));
+        let result = await helpdeskCategoryTable.findAll((id ? {where: {id: id}} : {}));
 
-        console.log("Elements found in databse with id = " + id);
-        result.forEach(element => {
-            console.log("id: " + element.id + " name: " + 
-            element.name);
-        }); 
-
+        console.log("result name: " + result[0].name);
+        
         return result.length === 0 ? await Promise.reject(new Error("No helpdesk threshold data found")) : result;
     } catch(e){
         throw e;
@@ -82,7 +78,7 @@ exports.deleteHelpdeskCategory = async function(id, sequelize, Sequelize){
 
         let helpdeskCategoryTable = getHelpdeskCategoriesTable(sequelize, Sequelize);
 
-        helpdeskCategoryTable.destroy({
+        let result = helpdeskCategoryTable.destroy({
             where: {id: id}
         }, {returning: true, where: {id: id}});
     
@@ -96,6 +92,6 @@ exports.deleteHelpdeskCategory = async function(id, sequelize, Sequelize){
         throw e;
     }
 
-    }
-
 }
+
+exports.getHelpdeskCategoriesTable = getHelpdeskCategoriesTable;
