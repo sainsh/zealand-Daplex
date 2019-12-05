@@ -16,13 +16,14 @@
  /**
   * Create method for helpdesk Thresholds
   */
-createHelpdeskThreshold = async function(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize){
+createHelpdeskThreshold = async function(yellowThreshold, redThreshold, categoryId, propertyId, sequelize, Sequelize){
 
     let debugMessage = headerName + "createHelpdeskThreshold: ";
 
     console.log(debugMessage + "Starting... \n" + 
                                 "yellowThreshold = " + yellowThreshold + "\n" +
                                 "redThreshold = " + redThreshold + "\n" +
+                                "CategoryId = " + categoryId + "\n" +
                                 "propertyId = " + propertyId);
 
 
@@ -31,7 +32,8 @@ createHelpdeskThreshold = async function(yellowThreshold, redThreshold, property
         let thresholdTable = getHelpdeskThresholdsTable(sequelize, Sequelize);
 
         let result = await thresholdTable.create({
-            property_type_id: propertyId, 
+            property_id: propertyId, 
+            helpdesk_category_id: categoryId,
             threshold_yellow: yellowThreshold,
             threshold_red: redThreshold
         });
@@ -42,7 +44,6 @@ createHelpdeskThreshold = async function(yellowThreshold, redThreshold, property
         console.log(debugMessage + "\n"  + e);
     }
     
-
 }
 
 /**
@@ -56,14 +57,14 @@ readHelpdeskThreshold = async function(id, sequelize, Sequelize){
     
     try {
         let helpdeskThresholds = getHelpdeskThresholdsTable(sequelize, Sequelize);
-        let result = await helpdeskThresholds.findAll((id ? {where: {property_type_id: id}} : {}));
+        let result = await helpdeskThresholds.findAll((id ? {where: {id: id}} : {}));
 
         let answer = result.length === 0 ? result : 'nothing was found with the specified id';
 
         result.forEach(element => {
             console.log(debugMessage + "id: " + element.id + " threshold yellow: " + 
             element.threshold_yellow + " threshold red " + element.threshold_red + 
-            " property type id: " +  element.property_type_id);
+            " property type id: " +  element.property_id + " helpdesk category id = " + element.helpdesk_category_id);
         }); 
 
         return result.length === 0 ? await Promise.reject(new Error("No helpdesk threshold data found")) : result;
@@ -76,7 +77,7 @@ readHelpdeskThreshold = async function(id, sequelize, Sequelize){
 
 
 
-updateHelpdeskThreshold = async function(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize){
+updateHelpdeskThreshold = async function(id, propertyId, categoryId, yellowThreshold, redThreshold, sequelize, Sequelize){
     
     let debugMessage = headerName + 'updateHelpdeskThresholdTable: '; 
 
@@ -88,7 +89,8 @@ updateHelpdeskThreshold = async function(id, propertyId, yellowThreshold, redThr
 
         console.log(debugMessage + 'Updating Table...');
         let result = await thresholdTable.update({
-            property_type_id: propertyId,
+            property_id: propertyId,
+            helpdesk_category_id: categoryId,
             threshold_yellow: yellowThreshold,
             threshold_red: redThreshold
         }, {returning: true, where: {id: id}});
@@ -99,7 +101,7 @@ updateHelpdeskThreshold = async function(id, propertyId, yellowThreshold, redThr
     
     
     } catch (e) {
-        console.log(debugMessage + "database error occurred.")
+        console.log(debugMessage + "database error occurred.");
         throw e;
     }
 
@@ -146,13 +148,17 @@ getHelpdeskThresholdsTable = (sequelize, Sequelize) => {
             type: Sequelize.INTEGER,
             allowNull: false,
             autoIncrement: true, 
-            primaryKey: true,
+            primaryKey: true
         },
-        property_type_id: {
+        property_id: {
             type: Sequelize.INTEGER,
             refrences: 'properties',
-            refrencesKey: 'property_id',
-            unique: true
+            refrencesKey: 'property_id'
+        },
+        helpdesk_category_id: {
+            type: Sequelize.INTEGER, 
+            refrences: 'helpdesk_categories',
+            refrencesKey: 'id'
         },
         threshold_yellow: {
             type: Sequelize.INTEGER,
