@@ -8,9 +8,14 @@ block content
   button
     a(href="http://localhost:3000/limits/") Tilbage  
   p Welcome to limit page
-  p vælg bygningstype
+  p vælg katagori
   
   form(action="/limits/helpdesk", method="post")
+    select#catagory(name="catagory")
+      option(value="indeklima") indeklima
+      option(value="væg") væg
+    br
+    p vælg bygningstype
     select#select(name="select")
       option(value="skole") skole
       option(value="plejehjem") plejehjem

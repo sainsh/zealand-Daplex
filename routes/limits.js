@@ -137,11 +137,12 @@ router.post('/helpdesk', (req, res, next) => {
 
   var yellowThreshold = req.body.yellowThreshold;
   var redThreshold = req.body.redThreshold;
-  var select = req.body.select;
+  var catagory = req.body.catagory;
+  var property = req.body.select;
   console.log(req.body);
 
-  dbTools.createHelpdeskThreshold(yellowThreshold, redThreshold, select);
-  dbTools.updateHelpdeskThreshold(yellowThreshold, redThreshold, select);
+  dbTools.createHelpdeskThreshold(yellowThreshold, redThreshold, catagory, property);
+  dbTools.updateHelpdeskThreshold(yellowThreshold, redThreshold, catagory, property);
   res.redirect("/limits/helpdesk");
   
 });
