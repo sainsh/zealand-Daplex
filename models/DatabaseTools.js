@@ -2,12 +2,11 @@ const mysql = require('mysql2/promise');
 const Sequelize = require('sequelize');
 
 const htt = require('./ThresholdsDbTools');
-exports.htt = htt;
-
 const wtt = require('./WaterThresholdsDbTools');
-exports.wtt = wtt;
-
 const ptt = require('./PowerThresholdsDbTools');
+const hct = require('./helpdeskCategoriesTable');
+exports.htt = htt;
+exports.wtt = wtt;
 exports.ptt = ptt;
 
 const host = 'localhost';
@@ -268,6 +267,7 @@ exports.setupDatabase(host, user, password);
  */
 exports.setupTables = async function () {
     let propertiesTable = getPropertiesTable();
+    let helpdeskCategoriesTable = hct.getHelpdeskCategoriesTable(sequelize, Sequelize);
     let helpdeskTable = getHelpdeskTable();
     let helpdeskWeightTable = getHelpdeskWeightTable();
     let helpdeskThresholdTable = htt.getHelpdeskThresholdsTable(sequelize, Sequelize);
@@ -281,6 +281,7 @@ exports.setupTables = async function () {
     maintenanceTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
 
     await propertiesTable.sync({force: false});
+    await helpdeskCategoriesTable.sync({force: false});
     await helpdeskTable.sync({force: false});
     await helpdeskWeightTable.sync({force: false});
     await helpdeskThresholdTable.sync({force: false});
@@ -289,6 +290,7 @@ exports.setupTables = async function () {
     await stateWeightTable.sync({force: false});
     await maintenanceTable.sync({force: false});
     await overallWeightTable.sync({force: false});
+
 };
 
 /**
