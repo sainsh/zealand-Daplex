@@ -5,7 +5,7 @@
  * @param Sequelize: from DB tools
  * @returns table setup for threshold in daplex db
  */
-exports.getHelpdeskCategoriesTable = (sequelize, Sequelize) => {
+getHelpdeskCategoriesTable = (sequelize, Sequelize) => {
     return sequelize.define('helpdesk_categories', {
         id: {
             type: Sequelize.INTEGER,
@@ -20,19 +20,78 @@ exports.getHelpdeskCategoriesTable = (sequelize, Sequelize) => {
     });
 }
 
-exports.createHelpdeskThreshold = async function(categoryName, sequelize, Sequelize){
+exports.createHelpdeskCategory = async function(categoryName, sequelize, Sequelize){
 
     try{
-        let thresholdTable = getHelpdeskCategoriesTable(sequelize, Sequelize);
+        let helpdeskCategoryTable = getHelpdeskCategoriesTable(sequelize, Sequelize);
 
-        let result = await thresholdTable.create({
+        let result = await helpdeskCategoryTable.create({
             name: categoryName,
         });
 
-        console.log("create helpdesk categori: " + result[0]);
+        console.log("create helpdesk categori: " + result.dataValues.id);
         
     } catch(e){
         throw e;
     }
     
 }
+
+exports.updateHelpdeskCategory = async function(id, name, sequelize, Sequelize){
+
+    try{
+        let helpdeskCategoryTable = getHelpdeskCategoriesTable(sequelize, Sequelize);
+
+        let result = helpdeskCategoryTable.update({
+            name: name
+        }, {returning: true, where: {id: id}});
+
+        console.log(result[0]);
+
+        return result[0];
+
+    } catch(e){
+        throw e; 
+    }
+
+}
+
+exports.readHelpdeskCategory = async function(id, sequelize, Sequelize){
+
+    try{
+        let helpdeskCategoryTable = getHelpdeskCategoriesTable(sequelize, Sequelize);
+
+        let result = await helpdeskCategoryTable.findAll((id ? {where: {id: id}} : {}));
+
+        console.log("result name: " + result[0].name);
+        
+        return result.length === 0 ? await Promise.reject(new Error("No helpdesk threshold data found")) : result;
+    } catch(e){
+        throw e;
+    }
+
+}
+
+exports.deleteHelpdeskCategory = async function(id, sequelize, Sequelize){
+
+    try{
+
+        let helpdeskCategoryTable = getHelpdeskCategoriesTable(sequelize, Sequelize);
+
+        let result = helpdeskCategoryTable.destroy({
+            where: {id: id}
+        }, {returning: true, where: {id: id}});
+    
+        console.log("Deleted ID = " + result.id);
+
+        return result; // Return object of removed database row
+    
+    
+    } catch (e) {
+        console.log("database error occurred.");
+        throw e;
+    }
+
+}
+
+exports.getHelpdeskCategoriesTable = getHelpdeskCategoriesTable;

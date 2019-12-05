@@ -37,7 +37,7 @@ body {
 	width: 20px;
 	height: 20px;
 	border-radius: 50%;
-	background: #2c3e50;
+	background: #024260;
 	cursor: pointer;
 	transition: background .15s ease-in-out;
 }
@@ -55,21 +55,21 @@ body {
 	height: 20px;
 	border: 0;
 	border-radius: 50%;
-	background: #2c3e50;
+	background: #024260;
 	cursor: pointer;
 	transition: background .15s ease-in-out;
 }
 
 .range-slider__range::-moz-range-thumb:hover {
-	background: #1abc9c;
+	background: #024260;
 }
 
 .range-slider__range:active::-moz-range-thumb {
-	background: #1abc9c;
+	background: #024260;
 }
 
 .range-slider__range:focus::-webkit-slider-thumb {
-	box-shadow: 0 0 0 3px #fff, 0 0 0 6px #1abc9c;
+	box-shadow: 0 0 0 3px #fff, 0 0 0 6px #024260;
 }
 
 .range-slider__value {
@@ -81,7 +81,7 @@ body {
 	line-height: 20px;
 	text-align: center;
 	border-radius: 3px;
-	background: #2c3e50;
+	background: #024260;
 	padding: 5px 10px;
 	margin-left: 8px;
 }
@@ -93,7 +93,7 @@ body {
 	width: 0;
 	height: 0;
 	border-top: 7px solid transparent;
-	border-right: 7px solid #2c3e50;
+	border-right: 7px solid #024260;
 	border-bottom: 7px solid transparent;
 	content: '';
 }
