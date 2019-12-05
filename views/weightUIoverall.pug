@@ -11,9 +11,9 @@ block content
         select#select(name = `select`)
             option(value='420') Skole
             option(value='440') Dag Institutioner
-        +slider('Tilstand', 'tilsBullet', "tilsSlider")
-        +slider('Energi', 'energiBullet', 'energiSlider')
-        +slider('Helpdesk', 'helpBullet', 'helpSlider')
+        +slider('Tilstand', 'tilsBullet', "tilsSlider", `${values[0]}`, `${left_array[0]}`)
+        +slider('Energi', 'energiBullet', 'energiSlider', `${values[1]}`, `${left_array[1]}`)
+        +slider('Helpdesk', 'helpBullet', 'helpSlider', `${values[2]}`, `${left_array[2]}`)
         input(type="submit", value="Send data")
     script(src="/assets/javascripts/overallslider.js")
 

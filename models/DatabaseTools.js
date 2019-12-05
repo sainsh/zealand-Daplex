@@ -9,9 +9,9 @@ exports.htt = htt;
 exports.wtt = wtt;
 exports.ptt = ptt;
 
-const host = 'localhost';
+const host = '127.0.0.1';
 const user = 'root';
-const password = '';
+const password = 'password';
 const sequelize = new Sequelize('daplex', user, password, {
     host: host,
     dialect: 'mysql',
@@ -19,6 +19,7 @@ const sequelize = new Sequelize('daplex', user, password, {
         timestamps: false
     }
 });
+sequelize.options.logging = false;
 
 function getPropertiesTable() {
     return sequelize.define('properties', {
@@ -251,6 +252,7 @@ exports.setupDatabase = async function (host, user, password) {
         let queryCreateDatabase = "CREATE DATABASE IF NOT EXISTS daplex";
         await connection.query(queryCreateDatabase); // Create the database
     } catch (e) {
+        console.log('throwing error in database')
         throw e;
     } finally {
         if (connection)
@@ -390,11 +392,24 @@ exports.createHelpdeskWeightTable = async function (helpdeskWeightArray) {
             helpdesk_vinduer: helpdeskWeightArray[9],
             helpdesk_fundament: helpdeskWeightArray[10]
         });
-
-
         resultsArray.push(result.dataValues.property_type_id);
+        return resultsArray; // Return an array containing all inserted IDs
+    } catch (e) {
+        throw e;
+    }
+};
 
-
+exports.createOverallWeightTable = async function (helpdeskWeightArray) {
+    try {
+        let overallWeightTable = getOverallWeightTable();
+        let resultsArray = [];
+        let result = await overallWeightTable.create({
+            property_type_id: helpdeskWeightArray[0],
+            overall_tilstand: helpdeskWeightArray[1],
+            overall_energi: helpdeskWeightArray[2],
+            overall_helpdesk: helpdeskWeightArray[3]
+        });
+        resultsArray.push(result.dataValues.property_type_id);
         return resultsArray; // Return an array containing all inserted IDs
     } catch (e) {
         throw e;
@@ -409,14 +424,12 @@ exports.createStateWeightTable = async function (stateWeightArray) {
     try {
         let stateWeightTable = getStateWeightTable();
         let resultsArray = [];
-        console.log(stateWeightArray[0]);
         let result = await stateWeightTable.create({
             property_type_id: stateWeightArray[0],
             state_tekniske: stateWeightArray[1],
             state_udvendige: stateWeightArray[2],
             state_osv: stateWeightArray[3]
         });
-
 
         resultsArray.push(result.dataValues.property_type_id);
         console.log(resultsArray[0]);
@@ -498,8 +511,31 @@ exports.updateOverallWeightTable = async function (overallWeightArray) {
 exports.readHelpdeskWeightData = async function (id) {
     try {
         let weightTable = getHelpdeskWeightTable();
-        let result = await weightTable.findAll((id ? {where: {property_type_id: id}} : {})); // Add the "where" option, if the ID is not undefined
-        return result.length === 0 ? await Promise.reject(new Error("No properties found")) : result; // Return an error, if 0 results are found, else return the result(s)
+        let result = await weightTable.findAll((id ? {where: {property_type_id: id}} : {}));// Add the "where" option, if the ID is not undefined
+        let defaultData = [id, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50]; // Deafault values for sliders
+        return result.length === 0 ? defaultData : result[0].dataValues; // Return deafaultData if 0 results are found, else return the result(s)
+    } catch (e) {
+        throw e;
+    }
+};
+
+exports.readStateWeightData = async function (id) {
+    try {
+        let weightTable = getStateWeightTable();
+        let result = await weightTable.findAll((id ? {where: {property_type_id: id}} : {}));// Add the "where" option, if the ID is not undefined
+        let defaultData = [id, 50, 50, 50]; // Default values for sliders
+        return result.length === 0 ? defaultData : result[0].dataValues; // Return defaultData if 0 results are found, else return the result(s)
+    } catch (e) {
+        throw e;
+    }
+};
+
+exports.readOverallWeightData = async function (id) {
+    try {
+        let weightTable = getOverallWeightTable();
+        let result = await weightTable.findAll((id ? {where: {property_type_id: id}} : {}));// Add the "where" option, if the ID is not undefined
+        let defaultData = [id, 50, 50, 50]; // Default values for sliders
+        return result.length === 0 ? defaultData : result[0].dataValues; // Return defaultData if 0 results are found, else return the result(s)
     } catch (e) {
         throw e;
     }
@@ -730,10 +766,14 @@ exports.deleteHelpdeskThreshold = (id) => htt.deleteHelpdeskThreshold(id, sequel
 // DB Tools export from WaterThresholdDbTools - Team Cyclone
 exports.createWaterThreshold = (yellowThreshold, redThreshold, propertyId) => {wtt.createWaterThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};
 exports.readWaterThreshold = (id) => {wtt.createWaterThreshold(id, sequelize, Sequelize)};
+exports.updateWaterThreshold = (id, propertyId, yellowThreshold, redThreshold) => wtt.updateWaterThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
+exports.deleteWaterThreshold = (id) => wtt.deleteWaterThreshold(id, sequelize, Sequelize);
 
 // DB Tools export from PowerThresholdDbTools - Team Cyclone
 exports.createPowerThreshold = (yellowThreshold, redThreshold, propertyId) => {ptt.createPowerThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};
 exports.readPowerThreshold = (id) => {ptt.createPowerThreshold(id, sequelize, Sequelize)};
+exports.updatePowerThreshold = (id, propertyId, yellowThreshold, redThreshold) => ptt.updatePowerThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
+exports.deletePowerThreshold = (id) => ptt.deletePowerThreshold(id, sequelize, Sequelize);
 
 
 

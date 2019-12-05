@@ -16,6 +16,14 @@ Kør server
 npm start
 ```
 
+### Database i test
+|   |   |
+|---|---|
+|  **Host** |  127.0.0.1 |
+|  **User** |  root |
+|  **Password** |  password |
+|  **Database** |  daplex |
+
 ## Testing
 Vi benytter jester. Du kan læse deres dokumentation [her](https://jestjs.io/docs/en/getting-started.html).
 
