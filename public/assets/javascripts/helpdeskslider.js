@@ -8,7 +8,7 @@ function createSliderLogic(nameBullet, nameSlider){
     fullSlider.slider.addEventListener("input", ()=>{
         fullSlider.bullet.innerHTML = fullSlider.slider.value;
         var bulletPosition = (fullSlider.slider.value/fullSlider.slider.max);
-        fullSlider.bullet.style.left = (bulletPosition * 578) + "px";
+        //fullSlider.bullet.style.left = (bulletPosition * 578) + "px";
     }, false);
 }
 
@@ -22,7 +22,7 @@ select.addEventListener("change", () =>{
         for (let i = 0; i < sliderValues.length; i++) {
             let value = sliderValues[i];
             var bulletPosition = (value/sliders[i].slider.max);
-            sliders[i].bullet.style.left = (bulletPosition * 578) + "px";
+           // sliders[i].bullet.style.left = (bulletPosition * 578) + "px";
             sliders[i].slider.value = value;
             sliders[i].bullet.value = value;
             sliders[i].bullet.innerHTML = value;
