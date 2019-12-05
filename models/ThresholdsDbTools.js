@@ -77,7 +77,7 @@ readHelpdeskThreshold = async function(id, sequelize, Sequelize){
 
 
 
-updateHelpdeskThreshold = async function(id, propertyId, categoryId yellowThreshold, redThreshold, sequelize, Sequelize){
+updateHelpdeskThreshold = async function(id, propertyId, categoryId, yellowThreshold, redThreshold, sequelize, Sequelize){
     
     let debugMessage = headerName + 'updateHelpdeskThresholdTable: '; 
 
