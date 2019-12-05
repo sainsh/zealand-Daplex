@@ -18,6 +18,7 @@ router.get('/helpdesk', async function (req, res, next) {
   leftArray.shift();
   res.render('weightUIhelpdesk', {values: resultArray, left_array: leftArray});
 });
+
 router.get('/state', async function (req, res, next) {
   var result = await db.readStateWeightData(420);
   var resultArray = [];
@@ -32,8 +33,18 @@ router.get('/state', async function (req, res, next) {
   res.render('weightUIstate', {values: resultArray, left_array: leftArray});
 });
 
-router.get('/overall', function (req, res, next) {
-  res.render('weightUIoverall');
+router.get('/overall', async function (req, res, next) {
+  var result = await db.readOverallWeightData(420);
+  var resultArray = [];
+  var leftArray = [];
+  console.log(result);
+  for (var value in result){
+    resultArray.push(result[value]);
+    leftArray.push(`left:` + (result[value] * 5.78) + `px`);
+  }
+  resultArray.shift();
+  leftArray.shift();
+  res.render('weightUIoverall', {values: resultArray, left_array: leftArray});
 });
 
 //function to set sliders to current value from database
@@ -49,6 +60,17 @@ router.post('/helpdesk/sliders', async function (req, res) {
 
 router.post('/state/sliders', async function (req, res) {
   var result = await db.readStateWeightData(req.body.id);
+  var resultArray = [];
+  console.log(result);
+  for (var value in result){
+    resultArray.push(result[value]);
+  }
+  resultArray.shift();
+  res.send(resultArray);
+});
+
+router.post('/overall/sliders', async function (req, res) {
+  var result = await db.readOverallWeightData(req.body.id);
   var resultArray = [];
   console.log(result);
   for (var value in result){

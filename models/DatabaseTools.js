@@ -390,11 +390,24 @@ exports.createHelpdeskWeightTable = async function (helpdeskWeightArray) {
             helpdesk_vinduer: helpdeskWeightArray[9],
             helpdesk_fundament: helpdeskWeightArray[10]
         });
-
-
         resultsArray.push(result.dataValues.property_type_id);
+        return resultsArray; // Return an array containing all inserted IDs
+    } catch (e) {
+        throw e;
+    }
+};
 
-
+exports.createOverallWeightTable = async function (helpdeskWeightArray) {
+    try {
+        let overallWeightTable = getOverallWeightTable();
+        let resultsArray = [];
+        let result = await overallWeightTable.create({
+            property_type_id: helpdeskWeightArray[0],
+            overall_tilstand: helpdeskWeightArray[1],
+            overall_energi: helpdeskWeightArray[2],
+            overall_helpdesk: helpdeskWeightArray[3]
+        });
+        resultsArray.push(result.dataValues.property_type_id);
         return resultsArray; // Return an array containing all inserted IDs
     } catch (e) {
         throw e;
@@ -507,6 +520,17 @@ exports.readHelpdeskWeightData = async function (id) {
 exports.readStateWeightData = async function (id) {
     try {
         let weightTable = getStateWeightTable();
+        let result = await weightTable.findAll((id ? {where: {property_type_id: id}} : {}));// Add the "where" option, if the ID is not undefined
+        let defaultData = [id, 50, 50, 50]; // Default values for sliders
+        return result.length === 0 ? defaultData : result[0].dataValues; // Return defaultData if 0 results are found, else return the result(s)
+    } catch (e) {
+        throw e;
+    }
+};
+
+exports.readOverallWeightData = async function (id) {
+    try {
+        let weightTable = getOverallWeightTable();
         let result = await weightTable.findAll((id ? {where: {property_type_id: id}} : {}));// Add the "where" option, if the ID is not undefined
         let defaultData = [id, 50, 50, 50]; // Default values for sliders
         return result.length === 0 ? defaultData : result[0].dataValues; // Return defaultData if 0 results are found, else return the result(s)
