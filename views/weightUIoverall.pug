@@ -14,7 +14,7 @@ block content
         +slider('Tilstand', 'tilsBullet', "tilsSlider", `${values[0]}`, `${left_array[0]}`)
         +slider('Energi', 'energiBullet', 'energiSlider', `${values[1]}`, `${left_array[1]}`)
         +slider('Helpdesk', 'helpBullet', 'helpSlider', `${values[2]}`, `${left_array[2]}`)
-        input(type="submit", value="Send data")
+        input.btn(type="submit", value="Send data")
     script(src="/assets/javascripts/overallslider.js")
 
 include slider

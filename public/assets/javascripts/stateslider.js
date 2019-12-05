@@ -22,8 +22,6 @@ select.addEventListener("change", () =>{
         console.log(sliderValues[0]);
         for (let i = 0; i < sliderValues.length; i++) {
             let value = sliderValues[i];
-            var bulletPosition = (value/sliders[i].slider.max);
-            //sliders[i].bullet.style.left = (bulletPosition * 578) + "px";
             sliders[i].slider.value = value;
             sliders[i].bullet.value = value;
             sliders[i].bullet.innerHTML = value;

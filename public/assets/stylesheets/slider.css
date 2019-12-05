@@ -72,9 +72,19 @@ body {
 	box-shadow: 0 0 0 3px #fff, 0 0 0 6px #cc400900;
 }
 
+input[type="range"]::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	height: 16px;
+	width: 16px;
+	border-radius: 50%;
+	background: #024260;
+	margin-top: 0px;
+	box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+	cursor: pointer;
+}
+
 .range-slider__value {
     display: inline-block;
-
 	position: relative;
 	width: 60px;
 	color: #fff;

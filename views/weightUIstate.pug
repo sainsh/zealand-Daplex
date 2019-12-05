@@ -12,7 +12,7 @@ block content
         +slider('Tekniske anlæg', 'tekBullet', "tekSlider", `${values[0]}`, `${left_array[0]}`)
         +slider('Udv. belægning', 'udvBullet', 'udvSlider', `${values[1]}`, `${left_array[1]}`)
         +slider('OSV....', 'osvBullet', 'osvSlider', `${values[2]}`, `${left_array[2]}`)
-        input(type="submit", value="Send data")
+        input.btn(type="submit", value="Send data")
     script(src="/assets/javascripts/stateslider.js")
 
 include slider
