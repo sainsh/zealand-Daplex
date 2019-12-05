@@ -12,7 +12,7 @@ router.get('/helpdesk', async function (req, res, next) {
   console.log(result);
   for (var value in result){
     resultArray.push(result[value]);
-    leftArray.push(`left:` + (result[value] * 5.78) + `px`);
+    leftArray.push(`left:` + (0) + `px`);
   }
   resultArray.shift();
   leftArray.shift();
@@ -26,7 +26,7 @@ router.get('/state', async function (req, res, next) {
   console.log(result);
   for (var value in result){
     resultArray.push(result[value]);
-    leftArray.push(`left:` + (result[value] * 5.78) + `px`);
+    leftArray.push(`left:` + (0) + `px`);
   }
   resultArray.shift();
   leftArray.shift();
@@ -40,7 +40,7 @@ router.get('/overall', async function (req, res, next) {
   console.log(result);
   for (var value in result){
     resultArray.push(result[value]);
-    leftArray.push(`left:` + (result[value] * 5.78) + `px`);
+    leftArray.push(`left:` + (0) + `px`);
   }
   resultArray.shift();
   leftArray.shift();
