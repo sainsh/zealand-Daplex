@@ -32,12 +32,12 @@ select.addEventListener("change", () =>{
 });
 
 createSliderLogic("indeBullet", "indeSlider");
+createSliderLogic("tekBullet", "tekSlider");
 createSliderLogic("udvBullet", "udvSlider");
 createSliderLogic("murBullet", "murSlider");
 createSliderLogic("tagBullet", "tagSlider");
 createSliderLogic("udBullet", "udSlider");
 createSliderLogic("tagDækBullet", "tagDækSlider");
-createSliderLogic("tekBullet", "tekSlider");
 createSliderLogic("tagrenBullet", "tagrenSlider");
-createSliderLogic("funBullet", "funSlider");
 createSliderLogic("vinBullet", "vinSlider");
+createSliderLogic("funBullet", "funSlider");
