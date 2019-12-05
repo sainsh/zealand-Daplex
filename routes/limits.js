@@ -1,6 +1,5 @@
 var express = require('express');
 var dbTools = require('../models/DatabaseTools');
-var thresholdDbTools = require('../models/ThresholdsDbTools')
 var router = express.Router();
 
 /* GET Limit-UI page. */
@@ -121,8 +120,8 @@ router.post('/helpdesk', (req, res, next) => {
   var select = req.body.select;
   console.log(req.body);
 
-  thresholdDbTools.createHelpdeskThreshold(yellowThreshold, redThreshold, select);
-  thresholdDbTools.updateHelpdeskThreshold(yellowThreshold, redThreshold, select);
+  dbTools.createHelpdeskThreshold(yellowThreshold, redThreshold, select);
+  dbTools.updateHelpdeskThreshold(yellowThreshold, redThreshold, select);
   res.redirect("/limits/helpdesk");
   
 })
