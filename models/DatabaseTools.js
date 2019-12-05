@@ -12,7 +12,8 @@ exports.ptt = ptt;
 const host = '127.0.0.1';
 const user = 'root';
 const password = 'password';
-const sequelize = new Sequelize('daplex', user, password, {
+const database = 'daplex';
+const sequelize = new Sequelize(database, user, password, {
     host: host,
     dialect: 'mysql',
     define: {
@@ -20,6 +21,7 @@ const sequelize = new Sequelize('daplex', user, password, {
     }
 });
 sequelize.options.logging = false;
+sequelize.options.timezone = "+01:00";
 
 function getPropertiesTable() {
     return sequelize.define('properties', {
@@ -67,11 +69,11 @@ function getHelpdeskTable() {
             allowNull: true
         },
         submission_date: {
-            type: Sequelize.STRING,
+            type: Sequelize.DATE,
             allowNull: true
         },
         expected_execution_date: {
-            type: Sequelize.STRING,
+            type: Sequelize.DATE,
             allowNull: true
         },
         submitter_name: {
@@ -91,7 +93,7 @@ function getHelpdeskTable() {
             allowNull: true
         },
         updated: {
-            type: Sequelize.STRING,
+            type: Sequelize.DATE,
             allowNull: true
         },
         building: {
@@ -161,8 +163,6 @@ function getOverallWeightTable() {
     });
 }
 
-//
-
 function getHelpdeskWeightTable() {
     return sequelize.define('helpdesk_weight_data', {
         property_type_id: {
@@ -213,8 +213,6 @@ function getHelpdeskWeightTable() {
     });
 }
 
-
-
 function getMaintenanceTable() {
     return sequelize.define('maintenance_data', {
         maintenance_id: {
@@ -223,6 +221,10 @@ function getMaintenanceTable() {
             primaryKey: true
         },
         property_id: {
+            type: Sequelize.INTEGER,
+            allowNull: true
+        },
+        year: {
             type: Sequelize.INTEGER,
             allowNull: true
         },
@@ -575,6 +577,9 @@ exports.createMaintenanceData = async function (maintenanceDataArray) {
 
         for (let maintenanceObject of maintenanceDataArray) { // Loop through all the data
             let propertyNameTrimmed = maintenanceObject['Ejendom'].replace(/\(\d+\)/, "").trim();
+
+            let year = Object.keys(maintenanceObject)[0];
+
             let propertyId = await propertiesTable.findAll(({where: {property_name: propertyNameTrimmed}})); // Check whether the property exists
 
             if (propertyId.length === 0) // If the results array have a length of 0, the property doesn't exist
@@ -582,11 +587,12 @@ exports.createMaintenanceData = async function (maintenanceDataArray) {
             else
                 propertyId = propertyId[0].dataValues.property_id;
 
-            let propertyExistsInMaintenanceTable = await maintenanceTable.findAll(({where: {property_id: propertyId}})); // Check whether the property exists in the maintenance table
+            let propertyExistsInMaintenanceTable = await maintenanceTable.findAll(({where: {property_id: propertyId, year: year}})); // Check whether the property exists in the maintenance table
 
             if (propertyExistsInMaintenanceTable.length === 0) { // Only create maintenance data if the property doesn't already exist in the maintenance table
                 let result = await maintenanceTable.create({
                     property_id: propertyId,
+                    year: year,
                     cost: maintenanceObject['2019']
                 });
 
@@ -620,6 +626,27 @@ exports.readHelpdeskData = async function (id) {
     }
 };
 
+exports.readHelpdeskDataOneYearBack = async function () {
+    let connection;
+    try {
+        connection = await mysql.createConnection({
+            host: host,
+            user: user,
+            password: password,
+            database: database
+        });
+
+        let query = "SELECT * FROM `helpdesk_data` WHERE `submission_date` > DATE_SUB(CURDATE(), INTERVAL 1 YEAR)";
+        let result = await connection.query(query);
+        return result.length === 0 ? await Promise.reject(new Error("No helpdesk data found")) : result;
+    } catch (e) {
+        throw e;
+    } finally {
+        if (connection)
+            connection.end();
+    }
+};
+
 exports.readHelpdeskWeight = async function (id) {
     try {
         let helpdeskWeightTable = getHelpdeskWeightTable();
@@ -642,12 +669,23 @@ exports.readMaintenanceData = async function (id) {
 
 //exports.readMaintenanceData().then(res => console.log(res[0].dataValues));
 
-exports.processHelpdeskData = async function (resultPerProperty) {
-    let helpdeskData = await exports.readHelpdeskData();
+exports.readMaintenanceDataOneYearBack = async function () {
+    try {
+        let currentYear = new Date().getFullYear();
+        let maintenanceTable = getMaintenanceTable();
+        let result = await maintenanceTable.findAll({where: {year: currentYear}});
+        return result.length === 0 ? await Promise.reject(new Error("No maintenance data found for this year")) : result; // Return an error, if 0 results are found, else return the result(s)
+    } catch (e) {
+        throw e;
+    }
+};
 
-    for (let data of helpdeskData) { // Count helpdesk reports for each property
-        let helpdeskSubject = data.dataValues.subject;
-        let propertyId = data.dataValues.property_id;
+exports.processHelpdeskData = async function (resultPerProperty) {
+    let helpdeskData = await exports.readHelpdeskDataOneYearBack();
+
+    for (let data of helpdeskData[0]) { // Count helpdesk reports for each property
+        let helpdeskSubject = data.subject;
+        let propertyId = data.property_id;
 
         if (!resultPerProperty[propertyId])
             resultPerProperty[propertyId] = {};
@@ -704,7 +742,7 @@ exports.processHelpdeskData = async function (resultPerProperty) {
 // exports.processHelpdeskData();
 
 exports.processMaintenanceData = async function (resultPerProperty) {
-    let maintenanceData = await exports.readMaintenanceData();
+    let maintenanceData = await exports.readMaintenanceDataOneYearBack();
     let propertiesTable = getPropertiesTable();
 
     for (let data of maintenanceData) {
@@ -753,8 +791,6 @@ exports.calculateScore = async function () {
 };
 
 // exports.calculateScore();
-
-
 
 // DB Tools export from ThresholdDbTools - Team Cyclone
 exports.createHelpdeskThreshold = (yellowThreshold, redThreshold, propertyId) => {htt.createHelpdeskThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};
