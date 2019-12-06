@@ -29,7 +29,7 @@ exports.createHelpdeskCategory = async function(categoryName, sequelize, Sequeli
             name: categoryName,
         });
 
-        console.log("create helpdesk categori: " + result.dataValues.id);
+        console.log("create helpdesk categori: " + result.dataValues.id + " " + result.dataValues.name);
         
     } catch(e){
         throw e;
@@ -62,10 +62,8 @@ exports.readHelpdeskCategory = async function(id, sequelize, Sequelize){
         let helpdeskCategoryTable = getHelpdeskCategoriesTable(sequelize, Sequelize);
 
         let result = await helpdeskCategoryTable.findAll((id ? {where: {id: id}} : {}));
-
-        console.log("result name: " + result[0].name);
         
-        return result.length === 0 ? await Promise.reject(new Error("No helpdesk threshold data found")) : result;
+        return result.length === 0 ? await Promise.reject(new Error("No helpdesk categories data found")) : result;
     } catch(e){
         throw e;
     }

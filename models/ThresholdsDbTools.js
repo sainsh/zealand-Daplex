@@ -152,13 +152,13 @@ getHelpdeskThresholdsTable = (sequelize, Sequelize) => {
         },
         property_id: {
             type: Sequelize.INTEGER,
-            refrences: 'properties',
-            refrencesKey: 'property_id'
+            refrences: {model: 'properties', key: 'property_id'}
+            // refrencesKey: 'property_id'
         },
         helpdesk_category_id: {
             type: Sequelize.INTEGER, 
-            refrences: 'helpdesk_categories',
-            refrencesKey: 'id'
+            refrences: {model: 'helpdesk_categories', key: 'id'}
+            //refrencesKey: 'id'
         },
         threshold_yellow: {
             type: Sequelize.INTEGER,
