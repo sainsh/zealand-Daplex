@@ -2,8 +2,8 @@ const PromiseFtp = require('promise-ftp');
 const fs = require('fs');
 
 let host = "localhost";
-let user = "kfsainsh@gmail.com";
-let password = "Eepahwai1-";
+let user = "ftpUser";
+let password = "ftppw";
 
 async function listDir() {
     
