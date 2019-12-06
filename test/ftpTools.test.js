@@ -1,7 +1,7 @@
-
 const databaseTools = require('../models/DatabaseTools');
 const conversionTools = require('../models/ConversionTools');
 const ftpTools = require('../models/FtpTools');
+require('mysql2/node_modules/iconv-lite').encodingExists('foo');
 
 
 const sum = require('./sum');
