@@ -1,11 +1,15 @@
 extends layout
 
 block content
+    link(rel="stylesheet", href="/assets/stylesheets/ftp.css")
     h1 Export af XLSX og CSV filer
 
-    button
-        a(href="http://localhost:3000/") Home
+    button(class="btn")
+        a(href="http://localhost:3000/" class="homeLink") Home
+    br
+    hr
+    br
     form(action='/export/getCard', method='get')
         h2 Download csv:
         br
-        input(type='submit', value='Download')
+        input(type='submit', value='Download' class="btn")

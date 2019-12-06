@@ -1,22 +1,27 @@
 extends layout
 
 block content
+    link(rel="stylesheet", href="/assets/stylesheets/ftp.css")
     h1 Import af XLSX og CSV filer
 
-    button
-        a(href="http://localhost:3000/") Home
+    button(class="btn")
+        a(href="http://localhost:3000/" class="homeLink") Home
+
+    br
+    hr
+    br
     form(action='/import/csv', method='post', enctype="multipart/form-data")
         h2 Upload csv:
         br
-        select(name="kategori")
+        select(name="kategori" class="categorySelect")
             option(value="Helpdesk") Helpdesk
             option(value="Tilstand") Tilstand
         br
         br
-        input(type='file', name='csv-file', accept=".csv")
+        input(type='file', name='csv-file', accept=".csv" class="btn")
         br
         br
-        input(type='submit', value='Upload')
+        input(type='submit', value='Upload' class="btn")
 
     br
     hr
@@ -25,15 +30,15 @@ block content
     form(action='/import/xlsx', method='post', enctype="multipart/form-data")
         h2 Upload xlsx:
         br
-        select(name="kategori")
+        select(name="kategori" class="categorySelect")
             option(value="Helpdesk") Helpdesk
             option(value="Tilstand") Tilstand
         br
         br
-        input(type='file', name='xlsx-file', accept=".xlsx")
+        input(type='file', name='xlsx-file', accept=".xlsx" class="btn")
         br
         br
-        input(type='submit', value='Upload')
+        input(type='submit', value='Upload' class="btn")
         br
         if (xlsxFileUploaded)
             p File successfully uploaded

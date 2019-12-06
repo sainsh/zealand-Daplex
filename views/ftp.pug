@@ -1,16 +1,20 @@
 extends layout
 
 block content
+    link(rel="stylesheet", href="/assets/stylesheets/ftp.css")
     h1 FTP
 
-    button
-        a(href="http://localhost:3000/") Home
+    button(class="btn")
+        a(href="http://localhost:3000/" class="homeLink") Home
+    br
+    hr
+    br
     ul
         each item in dir
             form(action=`/ftp/${item.name.split('.')[1]}`, method="post")
                 input(type="hidden", name='file' value=item.name)
-                select(name="kategori")
+                select(name="kategori" class="categorySelect")
                     option(value="Helpdesk") Helpdesk
                     option(value="Tilstand") Tilstand
                     option(value="energy") Energy
-                input(type="submit", value=item.name)
+                input(type="submit", value=item.name class="btn")
