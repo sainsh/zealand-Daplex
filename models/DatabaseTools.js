@@ -1,8 +1,10 @@
 const mysql = require('mysql2/promise');
 const Sequelize = require('sequelize');
 
+// Tools regarding Helpdesk Catogories Table -Team Cyclone
 const helpdeskCategories = require('./helpdeskCategoriesTable');
 
+// database tools import for thresholds - Team Cyclone
 const htt = require('./ThresholdsDbTools');
 const wtt = require('./WaterThresholdsDbTools');
 const ptt = require('./PowerThresholdsDbTools');
@@ -293,7 +295,9 @@ exports.setupTables = async function () {
     await maintenanceTable.sync({force: false});
     await overallWeightTable.sync({force: false});
 
+    // Generation of start data for the database
     await generateStartData();
+
 
 };
 
@@ -302,21 +306,40 @@ exports.setupTables = async function () {
  * Generates data for the database that should be present at 
  * the start of system. - Team Cyclone
  */
-generateStartData = () => {
+generateStartData = async() => {
 
-    //Helpdesk Categories
-    hct.create("Indeklima");
-    hct.create("Tekniske Anlæg");
-    hct.create("Udvendig Belægning");
-    hct.create("Murværk og Facade");
-    hct.create("Tag");
-    hct.create("Udhæng og Gavle");
-    hct.create("Tagdækning");
-    hct.create("Tagrender og Nedløb");
-    hct.create("Vinduer og Udvendige Døre");
-    hct.create("Fundament og Sokkel");
+    console.log("Trying to generate helpdesk category data");
+
+    let read;
+
+    try{
+        read = await hct.read();
+        console.log("Read data: " + read);
+    } catch(e){
+        console.log("No data detected in helpdesk categories table")
+    }
+
+    if(read == undefined){
+        //Helpdesk Categories
+        console.log("Inserting helpdesk category data");
+
+        hct.create("Indeklima");
+        hct.create("Tekniske Anlæg");
+        hct.create("Udvendig Belægning");
+        hct.create("Murværk og Facade");
+        hct.create("Tag");
+        hct.create("Udhæng og Gavle");
+        hct.create("Tagdækning");
+        hct.create("Tagrender og Nedløb");
+        hct.create("Vinduer og Udvendige Døre");
+        hct.create("Fundament og Sokkel");
+
+        console.log("Data inserted Success")
+    } else {
+        console.log("There is already data in the helpdesk categories database");
+    }
+    
 }
-
 
 /**
  * Function for creating a new property (ejendom).
@@ -813,6 +836,7 @@ exports.calculateScore = async function () {
 
 // exports.calculateScore();
 
+// CRUD for helpdesk categories stored in an Object that's being exportet. - Team Cyclone
 var hct = {}
 hct.create = (categoryName) => helpdeskCategories.createHelpdeskCategory(categoryName, sequelize, Sequelize);
 hct.read = (id) => helpdeskCategories.readHelpdeskCategory(id, sequelize, Sequelize);
@@ -820,12 +844,6 @@ hct.update = (id, categoryName) => helpdeskCategories.updateHelpdeskCategory(id,
 hct.delete = (id) => helpdeskCategories.deleteHelpdeskCategory(id, sequelize, Sequelize);
 
 exports.hct = hct;
-
-//Helpdesk categories DB tools - Team Cyclone
-//exports.createHelpdeskCategory = (categoryName) => helpdeskCategories.createHelpdeskCategory(categoryName, sequelize, Sequelize);
-//exports.updateHelpdeskCategory = (id, categoryName) => helpdeskCategories.updateHelpdeskCategory(id, categoryName, sequelize, Sequelize);
-//exports.readHelpdeskCategory = (id) => helpdeskCategories.readHelpdeskCategory(id, sequelize, Sequelize);
-//exports.deleteHelpdeskCategory = (id) => helpdeskCategories.deleteHelpdeskCategory(id, sequelize, Sequelize);
 
 // DB Tools export from ThresholdDbTools - Team Cyclone
 exports.createHelpdeskThreshold = (yellowThreshold, redThreshold, categoryId, propertyId) => {htt.createHelpdeskThreshold(yellowThreshold, redThreshold, categoryId, propertyId, sequelize, Sequelize)};
