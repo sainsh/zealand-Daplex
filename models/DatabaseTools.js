@@ -293,7 +293,30 @@ exports.setupTables = async function () {
     await maintenanceTable.sync({force: false});
     await overallWeightTable.sync({force: false});
 
+    await generateStartData();
+
 };
+
+
+/**
+ * Generates data for the database that should be present at 
+ * the start of system. - Team Cyclone
+ */
+generateStartData = () => {
+
+    //Helpdesk Categories
+    hct.create("Indeklima");
+    hct.create("Tekniske Anlæg");
+    hct.create("Udvendig Belægning");
+    hct.create("Murværk og Facade");
+    hct.create("Tag");
+    hct.create("Udhæng og Gavle");
+    hct.create("Tagdækning");
+    hct.create("Tagrender og Nedløb");
+    hct.create("Vinduer og Udvendige Døre");
+    hct.create("Fundament og Sokkel");
+}
+
 
 /**
  * Function for creating a new property (ejendom).
