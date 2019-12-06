@@ -139,10 +139,27 @@ router.post('/helpdesk', (req, res, next) => {
   var redThreshold = req.body.redThreshold;
   var catagory = req.body.catagory;
   var property = req.body.select;
+
+  if(catagory == "indeklima"){
+    catagory = 1;
+  } else if(catagory == "væg"){
+    catagory = 2;
+  } else {
+    catagory = 404;
+  }
+
+  if(property == "skole"){
+    property = 420;
+  } else if(property == "plejehjem"){
+    property = 410;
+  } else {
+    property = 404; 
+  }
+
   console.log(req.body);
 
   dbTools.createHelpdeskThreshold(yellowThreshold, redThreshold, catagory, property);
-  dbTools.updateHelpdeskThreshold(yellowThreshold, redThreshold, catagory, property);
+  // dbTools.updateHelpdeskThreshold(yellowThreshold, redThreshold, catagory, property);
   res.redirect("/limits/helpdesk");
   
 });
