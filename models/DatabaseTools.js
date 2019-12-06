@@ -353,7 +353,7 @@ exports.createHelpdeskData = async function (helpdeskArray) {
                 subject: helpdeskObject['Emne'],
                 description: helpdeskObject['Beskrivelse'],
                 submission_date: helpdeskObject['Indmeldelsesdato'],
-                expected_execution_date: helpdeskObject['Forventet udførelsesdato'],
+                expected_execution_date: helpdeskObject['Forventet udførelsesdato'] == '' ? null: helpdeskObject['Forventet udførelsesdato'],
                 submitter_name: helpdeskObject['Indmelders navn'],
                 submitter_email: helpdeskObject['Indmelders e-mail'],
                 submitter_phone: helpdeskObject['Indmelders tlfnr.'],
