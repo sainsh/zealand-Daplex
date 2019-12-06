@@ -4,11 +4,13 @@ block content
     link(rel="stylesheet", href="/assets/stylesheets/ftp.css")
     h1 FTP
 
-    button(class="btn")
-        a(href="http://localhost:3000/" class="homeLink") Home
+    
+    a(href="http://localhost:3000/" class="btn") Home
     br
     hr
     br
+    p vælg kategori ud for den fil du vil uploade.
+    p tryk på fil for at uploade indhold til database.
     ul
         each item in dir
             form(action=`/ftp/${item.name.split('.')[1]}`, method="post")
