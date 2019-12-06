@@ -1,0 +1,39 @@
+
+
+.headerbox {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    background-color:rgb(2,66,96); 
+    border-radius: 25px 25px 0px 0px; 
+    color:white;
+    padding: 20px;
+    width: 75vw;
+}
+
+.selectbox{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgb(189,90,28);
+    border-radius: 0px 0px 25px 25px; 
+    padding: 20px; 
+    width: 75vw; 
+}
+
+.button{
+    border-radius: 8px;
+    background-color: white; 
+    color: black; 
+    border: 2px solid #024260;
+    padding: 15px 32px;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    
+} 
+
+.button:hover {
+    background-color: #024260;
+    color: white;
+}
