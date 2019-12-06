@@ -1,12 +1,14 @@
 extends layout
 
 block content
+    link(rel="stylesheet", href="/assets/stylesheets/common.css")
 
     H1 Vægtningssiden
 
-    button
-        a(href="http://localhost:3000/") Home
+    a(href="http://localhost:3000/" class='btn') Home
 
-    button(onclick="location.href = '/weightUI/helpdesk'") Helpdesk
-    button(onclick="location.href = '/weightUI/state'") Tilstand
-    button(onclick="location.href = '/weightUI/overall'") Overordnet
+    br
+
+    button(class='btn' onclick="location.href = '/weightUI/helpdesk'") Helpdesk
+    button(class='btn' onclick="location.href = '/weightUI/state'") Tilstand
+    button(class='btn' onclick="location.href = '/weightUI/overall'") Overordnet
