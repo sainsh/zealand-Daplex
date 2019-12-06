@@ -42,7 +42,7 @@ router.get('/overall', async function (req, res, next) {
     resultArray.push(result[value]);
     leftArray.push(`left:` + (0) + `px`);
   }
-  resultArray.shift();
+  resultArray.shift(); 
   leftArray.shift();
   res.render('weightUIoverall', {values: resultArray, left_array: leftArray});
 });
