@@ -1,12 +1,12 @@
 extends layout
 
 block content
+    link(rel="stylesheet", href="/assets/stylesheets/common.css")
     link(rel="stylesheet", href="/assets/stylesheets/slider.css")
     H1 Vægtning Tilstand
-    button
-        a(href="http://localhost:3000/") Home
+    a(href="http://localhost:3000/" class='btn') Home
     form(action="/weightUI/state", method="post")
-        select#select(name = `select`)
+        select#select(name = `select` class='categorySelect')
             option(value='420') Skole
             option(value='440') Dag Institutioner
         +slider('Tekniske anlæg', 'tekBullet', "tekSlider", `${values[0]}`, `${left_array[0]}`)
