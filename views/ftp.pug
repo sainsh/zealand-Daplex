@@ -1,0 +1,16 @@
+extends layout
+
+block content
+    h1 FTP
+
+    button
+        a(href="http://localhost:3000/") Home
+    ul
+        each item in dir
+            form(action=`/ftp/${item.name.split('.')[1]}`, method="post")
+                input(type="hidden", name='file' value=item.name)
+                select(name="kategori")
+                    option(value="Helpdesk") Helpdesk
+                    option(value="Tilstand") Tilstand
+                    option(value="energy") Energy
+                input(type="submit", value=item.name)

@@ -32,7 +32,7 @@ router.post('/csv', upload.single('csv-file'), async function (req, res, next) {
             var idResults = databaseTools.createHelpdeskData(jsonResult);
             break;
         case 'Tilstand':
-            //var idResults=databaseTools.createVedligeholdelseData(jsonResult);
+            idResults=databaseTools.createMaintenanceData(jsonResult);
             break;
     }
     console.log(`${req.body.kategori}:  ${new Date()}`);
