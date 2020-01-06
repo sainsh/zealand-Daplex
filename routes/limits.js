@@ -132,6 +132,10 @@ router.get('/power/delete', function(req, res, next){
   res.send();
 });
 
+router.get('/heat', function(req, res, next){
+  res.render('limitsHeat');
+}); 
+
 // get input from ui and save to database
 router.post('/helpdesk', (req, res, next) => {
 

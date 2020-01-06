@@ -1,0 +1,30 @@
+extends layout
+
+block content
+  h1 Grænser for varme
+  button 
+    a(href="http://localhost:3000/") Home
+  button
+    a(href="http://localhost:3000/limits/") Tilbage
+
+  p vælg bygningstype
+
+  select
+    option(value="skole") skole
+    option(value="plejehjem") plejehjem
+  br 
+  p sæt grænse for antallet af M^3 varme pr. kvm
+  p gul grænse
+  input(type="number" name="minimum value" id="minvalue")
+  |   per kvm. 
+  br 
+  p rød grænse
+  input#maxvalue(type="number" name="maximum value")
+  |   per kvm. 
+  br
+  br
+
+  button(type="button" onclick="submit()") Submit
+
+
+  script(src="/assets/javascripts/limitsWater.js")
