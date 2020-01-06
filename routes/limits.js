@@ -136,6 +136,37 @@ router.get('/heat', function(req, res, next){
   res.render('limitsHeat');
 }); 
 
+router.get('/heat/create', function(req, res, next){
+  //Inserting data in power Thresholds DB
+  dbTools.createHeatThreshold(2,500,1000);
+  dbTools.createHeatThreshold(3,5,900);
+  dbTools.createHeatThreshold(6,9,850);
+  dbTools.createHeatThreshold(7,15,700);
+  dbTools.createHeatThreshold(1,10,400);
+  dbTools.createHeatThreshold(9,20,140);
+  res.send();
+});
+
+router.get('/heat/read', function(req, res, next){
+
+  //Inserting data in power Thresholds DB
+  dbTools.readHeatThreshold(420);
+  res.send();
+
+});
+
+router.get('/heat/update', function(req, res, next){
+  //update data in Thresholds DB 
+  dbTools.updateHeatThreshold(1,420,25,500);
+  res.send();
+});
+
+router.get('/heat/delete', function(req, res, next){
+  //delete data in Thresholds DB by id
+  dbTools.deleteHeatThreshold(4);
+  res.send();
+});
+
 // get input from ui and save to database
 router.post('/helpdesk', (req, res, next) => {
 
