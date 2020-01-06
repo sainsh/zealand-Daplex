@@ -11,9 +11,11 @@ router.get('/', async(req, res, next) => {
 });
 
 router.post('/xlsx', async(req,res,next) =>{
-    console.log(req.body)
+    console.log(req.body);
+
     let outputFilePath = `./models/temp/${req.body.file}-converted`;
-    ct.convertXlsxToCsv(`./models/ftp/${req.body.file}`, outputFilePath);
+    let inputFilePath = await ftp.downloadFile(req.body.file);
+    ct.convertXlsxToCsv(inputFilePath, outputFilePath);
     let jsonResult;
     let idResults;
     switch (req.body.kategori) {
@@ -28,8 +30,7 @@ router.post('/xlsx', async(req,res,next) =>{
     }
     console.log(`${req.body.kategori}: ${new Date()}`);
     res.redirect("/ftp/");
-
-})
+});
 
 router.post('/csv', async(req,res,next) =>{
     let test = req.body.file;
@@ -44,7 +45,6 @@ router.post('/csv', async(req,res,next) =>{
     }
     console.log(`${req.body.kategori}:  ${new Date()}`);
     res.redirect("/ftp/");
-
-})
+});
 
 module.exports = router;

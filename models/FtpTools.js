@@ -2,10 +2,10 @@ const PromiseFtp = require('promise-ftp');
 const fs = require('fs');
 
 let host = "localhost";
-let user = "ftpUser";
-let password = "ftppw";
+let user = "testuser";
+let password = "testpw";
 
-async function listDir() {
+async function listDir2() {
     
     var res = ["intet at sende tilbage","desværre"];
     var ftp = new PromiseFtp();
@@ -21,23 +21,14 @@ async function listDir() {
     return res;
 }
 
-// listDir('/');
-// listDir('/lower');
-
-// setInterval(listDir.bind(null, '/'), 3600000); // Check once an hour
-// setInterval(listDir.bind(null, '/'), 2000);
-
-async function downloadFile() {
+async function listDir(path) {
     let ftp;
     try {
         ftp = new PromiseFtp();
         await ftp.connect({host: host, user: user, password: password});
-        let stream = await ftp.get('foo.txt');
-        await new Promise(function (resolve, reject) {
-            stream.once('close', resolve);
-            stream.once('error', reject);
-            stream.pipe(fs.createWriteStream('./temp/foo.local-copy.txt'));
-        });
+        let res = await ftp.list(path);
+        console.log(res);
+        ftp.end();
     } catch (e) {
         throw e;
     } finally {
@@ -46,7 +37,37 @@ async function downloadFile() {
     }
 }
 
-// downloadFile();
+// listDir('/');
+// listDir('/lower');
+
+// setInterval(listDir.bind(null, '/'), 3600000); // Check once an hour
+// setInterval(listDir.bind(null, '/'), 2000);
+
+async function downloadFile(pathToFile) {
+    let fileName = pathToFile.split("/").pop();
+    let pathToSavedFile = `./models/ftp/${fileName}`;
+
+    let ftp;
+    try {
+        ftp = new PromiseFtp();
+        await ftp.connect({host: host, user: user, password: password});
+        let stream = await ftp.get(pathToFile);
+        await new Promise(function (resolve, reject) {
+            stream.once('close', resolve);
+            stream.once('error', reject);
+            stream.pipe(fs.createWriteStream(pathToSavedFile));
+        });
+        return pathToSavedFile;
+    } catch (e) {
+        throw e;
+    } finally {
+        if (ftp)
+            ftp.end();
+    }
+}
+
+// downloadFile('lower/bar.txt');
+// downloadFile('foo.txt');
 
 async function uploadFile() {
     let ftp;
@@ -64,6 +85,6 @@ async function uploadFile() {
 
 // uploadFile();
 
-exports.listDir = listDir;
+exports.listDir = listDir2;
 exports.downloadFile = downloadFile;
 exports.uploadFile = uploadFile;
