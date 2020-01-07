@@ -25,14 +25,21 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/csv', upload.single('csv-file'), async function (req, res, next) {
-    let test = req.file.path;
-    let jsonResult = await conversionTools.convertCsvToJson(test);
+    let filePath = req.file.path;
+    let jsonResult;
+    let idResults;
     switch (req.body.kategori) {
         case 'Helpdesk':
-            var idResults = databaseTools.createHelpdeskData(jsonResult);
+            jsonResult = await conversionTools.convertCsvToJson(filePath, "Nr.;");
+            idResults = databaseTools.createHelpdeskData(jsonResult);
             break;
         case 'Tilstand':
-            idResults=databaseTools.createMaintenanceData(jsonResult);
+            jsonResult = await conversionTools.convertCsvToJson(filePath, "Status;");
+            idResults = databaseTools.createMaintenanceData(jsonResult);
+            break;
+        case 'Vanddata':
+            jsonResult = await conversionTools.convertCsvToJson(filePath, "Dato;");
+            idResults = databaseTools.createWaterData(jsonResult, req.file.originalname);
             break;
     }
     console.log(`${req.body.kategori}:  ${new Date()}`);
