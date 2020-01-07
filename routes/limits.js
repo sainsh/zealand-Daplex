@@ -166,6 +166,41 @@ router.get('/heat/delete', function(req, res, next){
   dbTools.deleteHeatThreshold(4);
   res.send();
 });
+/** 
+router.get('/damage', function(req, res, next){
+  res.render('limitsHeat');
+}); 
+*/
+router.get('/damage/create', function(req, res, next){
+  //Inserting data in damage Thresholds DB
+  dbTools.createDamageThreshold(2,500,1000);
+  dbTools.createDamageThreshold(3,5,900);
+  dbTools.createDamageThreshold(6,9,850);
+  dbTools.createDamageThreshold(7,15,700);
+  dbTools.createDamageThreshold(1,10,400);
+  dbTools.createDamageThreshold(9,20,140);
+  res.send();
+});
+
+router.get('/damage/read', function(req, res, next){
+
+  //Inserting data in damage Thresholds DB
+  dbTools.readDamageThreshold(420);
+  res.send();
+
+});
+
+router.get('/damage/update', function(req, res, next){
+  //update data in damage Thresholds DB 
+  dbTools.updateDamageThreshold(1,420,25,500);
+  res.send();
+});
+
+router.get('/damage/delete', function(req, res, next){
+  //delete data in damage Thresholds DB by id
+  dbTools.deleteDamageThreshold(4);
+  res.send();
+});
 
 // get input from ui and save to database
 router.post('/helpdesk', (req, res, next) => {
