@@ -13,7 +13,7 @@ block content
     p tryk på fil for at uploade indhold til database.
     ul
         each item in dir
-            form(action=`/ftp/${item.name.split('.')[1]}`, method="post")
+            form(action=`/ftp/${item.name.split('.').pop()}`, method="post")
                 input(type="hidden", name='file' value=item.name)
                 select(name="kategori" class="categorySelect")
                     option(value="Helpdesk") Helpdesk

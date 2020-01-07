@@ -20,10 +20,15 @@ const sequelize = new Sequelize(database, user, password, {
     dialect: 'mysql',
     define: {
         timestamps: false
-    }
+    },
+    logging: false,
+    dialectOptions: {
+        useUTC: false,
+        dateStrings: true,
+        typeCast: true
+    },
+    timezone: '+01:00'
 });
-sequelize.options.logging = false;
-sequelize.options.timezone = "+01:00";
 
 function getPropertiesTable() {
     return sequelize.define('properties', {
@@ -237,6 +242,28 @@ function getMaintenanceTable() {
     });
 }
 
+function getWaterTable() {
+    return sequelize.define('water_data', {
+        water_id: {
+            type: Sequelize.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
+        property_id: {
+            type: Sequelize.INTEGER,
+            allowNull: true
+        },
+        date: {
+            type: Sequelize.DATE,
+            allowNull: true
+        },
+        volume: {
+            type: Sequelize.DOUBLE,
+            allowNull: true
+        }
+    });
+}
+
 /**
  * Function for creating the database itself. Sequelize can't do that.
  * @param host
@@ -284,6 +311,7 @@ exports.setupTables = async function () {
     let maintenanceTable = getMaintenanceTable();
     let stateWeightTable = getStateWeightTable();
     let overallWeightTable = getOverallWeightTable();
+    let waterTable = getWaterTable();
 
     helpdeskTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
     maintenanceTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
@@ -300,16 +328,15 @@ exports.setupTables = async function () {
     await stateWeightTable.sync({force: false});
     await maintenanceTable.sync({force: false});
     await overallWeightTable.sync({force: false});
+    await waterTable.sync({force: false});
 
     // Generation of start data for the database
     await generateStartData();
-
-
 };
 
 
 /**
- * Generates data for the database that should be present at 
+ * Generates data for the database that should be present at
  * the start of system. - Team Cyclone
  */
 generateStartData = async() => {
@@ -344,7 +371,7 @@ generateStartData = async() => {
     } else {
         console.log("There is already data in the helpdesk categories database");
     }
-    
+
 }
 
 /**
@@ -656,6 +683,37 @@ exports.createMaintenanceData = async function (maintenanceDataArray) {
     }
 };
 
+exports.createWaterData = async function (waterDataArray, propertyName) {
+    try {
+        let waterTable = getWaterTable();
+        let resultsArray = [];
+
+        let trimmedPropertyName = propertyName.slice(13, propertyName.lastIndexOf("-") - 1); // Trim property name
+        let propertiesTable = getPropertiesTable();
+        let propertyId = await propertiesTable.findAll(({where: {property_name: trimmedPropertyName}})); // Check whether the property exists
+        if (propertyId.length === 0) // If the results array have a length of 0, the property doesn't exist
+            propertyId = await exports.createProperty(trimmedPropertyName); // Create a new property
+        else
+            propertyId = propertyId[0].dataValues.property_id;
+
+        for (let waterObject of waterDataArray) { // Loop through all the data
+            if (waterObject.Dato.search("23:") >= 0) { // Only save 1 water data per day (the one from 23:05)
+                let result = await waterTable.create({
+                    property_id: propertyId,
+                    date: waterObject.Dato.replace("23:", "00:"), // For some when it's saved, it's 1 hour off
+                    volume: waterObject['Volumen (m�)']
+                });
+
+                resultsArray.push(result.dataValues.maintenance_id)
+            }
+        }
+
+        return resultsArray; // Return an array containing all inserted IDs
+    } catch (e) {
+        throw e;
+    }
+};
+
 exports.readProperty = async function (id) {
     try {
         let propertiesTable = getPropertiesTable();
@@ -725,6 +783,16 @@ exports.readMaintenanceDataOneYearBack = async function () {
         let maintenanceTable = getMaintenanceTable();
         let result = await maintenanceTable.findAll({where: {year: currentYear}});
         return result.length === 0 ? await Promise.reject(new Error("No maintenance data found for this year")) : result; // Return an error, if 0 results are found, else return the result(s)
+    } catch (e) {
+        throw e;
+    }
+};
+
+exports.readWaterData = async function (id) {
+    try {
+        let waterTable = getWaterTable();
+        let result = await waterTable.findAll((id ? {where: {property_id: id}} : {})); // Add the "where" option, if the ID is not undefined
+        return result.length === 0 ? await Promise.reject(new Error("No water data found")) : result; // Return an error, if 0 results are found, else return the result(s)
     } catch (e) {
         throw e;
     }
@@ -853,7 +921,7 @@ exports.hct = hct;
 
 // DB Tools export from ThresholdDbTools - Team Cyclone
 exports.createHelpdeskThreshold = (yellowThreshold, redThreshold, categoryId, propertyId) => {htt.createHelpdeskThreshold(yellowThreshold, redThreshold, categoryId, propertyId, sequelize, Sequelize)};
-exports.readHelpdeskThreshold = (id) => {htt.readHelpdeskThreshold(id, sequelize, Sequelize)}; 
+exports.readHelpdeskThreshold = (id) => {htt.readHelpdeskThreshold(id, sequelize, Sequelize)};
 exports.updateHelpdeskThreshold = (id, propertyId, categoryId, yellowThreshold, redThreshold) => htt.updateHelpdeskThreshold(id, propertyId,  categoryId, yellowThreshold, redThreshold, sequelize, Sequelize);
 exports.deleteHelpdeskThreshold = (id) => htt.deleteHelpdeskThreshold(id, sequelize, Sequelize);
 
