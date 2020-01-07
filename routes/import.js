@@ -41,6 +41,10 @@ router.post('/csv', upload.single('csv-file'), async function (req, res, next) {
             jsonResult = await conversionTools.convertCsvToJson(filePath, "Dato;");
             idResults = databaseTools.createWaterData(jsonResult, req.file.originalname);
             break;
+        case 'Varmedata':
+            jsonResult = await conversionTools.convertCsvToJson(filePath, "#Energi;", false);
+            idResults = databaseTools.createHeatData(jsonResult);
+            break;
     }
     console.log(`${req.body.kategori}:  ${new Date()}`);
     res.redirect("/import/");

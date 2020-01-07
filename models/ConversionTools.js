@@ -12,15 +12,16 @@ exports.convertXlsxToCsv = function (inputFilePath, outputFilePath) {
     return true;
 };
 
-exports.convertCsvToJson = async function (path, trimUntil) {
+exports.convertCsvToJson = async function (path, trimUntil, headers = true) {
     if (trimUntil)
         await trimLines(path, trimUntil);
 
     let results = [];
+    let csvOptions = headers ? {separator: ';'} : {separator: ';', headers: false};
 
     return new Promise((resolve, reject) => {
         fs.createReadStream(path)
-            .pipe(csv({separator: ';'}))
+            .pipe(csv(csvOptions))
             .on('data', (chunk) => {
                 let rowAllEmpty = true;
 
