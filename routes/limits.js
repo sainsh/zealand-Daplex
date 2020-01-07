@@ -137,7 +137,7 @@ router.get('/heat', function(req, res, next){
 }); 
 
 router.get('/heat/create', function(req, res, next){
-  //Inserting data in power Thresholds DB
+  //Inserting data in heat Thresholds DB
   dbTools.createHeatThreshold(2,500,1000);
   dbTools.createHeatThreshold(3,5,900);
   dbTools.createHeatThreshold(6,9,850);
@@ -149,20 +149,20 @@ router.get('/heat/create', function(req, res, next){
 
 router.get('/heat/read', function(req, res, next){
 
-  //Inserting data in power Thresholds DB
+  //Inserting data in heat Thresholds DB
   dbTools.readHeatThreshold(420);
   res.send();
 
 });
 
 router.get('/heat/update', function(req, res, next){
-  //update data in Thresholds DB 
+  //update data in heat Thresholds DB 
   dbTools.updateHeatThreshold(1,420,25,500);
   res.send();
 });
 
 router.get('/heat/delete', function(req, res, next){
-  //delete data in Thresholds DB by id
+  //delete data in heat Thresholds DB by id
   dbTools.deleteHeatThreshold(4);
   res.send();
 });
@@ -197,6 +197,66 @@ router.post('/helpdesk', (req, res, next) => {
   // dbTools.updateHelpdeskThreshold(yellowThreshold, redThreshold, catagory, property);
   res.redirect("/limits/helpdesk");
   
+});
+
+router.post('/water', (req, res, next) => {
+
+  var yellowThreshold = req.body.yellowThreshold;
+  var redThreshold = req.body.redThreshold;
+  var property = req.body.select;
+
+  if(property == "skole"){
+    property = 420;
+  } else if(property == "plejehjem"){
+    property = 410;
+  } else {
+    property = 404; 
+  }
+
+  console.log(req.body);
+
+  dbTools.createWaterThreshold(yellowThreshold, redThreshold, property);
+  res.redirect("/limits/water");
+});
+
+router.post('/power', (req, res, next) => {
+
+  var yellowThreshold = req.body.yellowThreshold;
+  var redThreshold = req.body.redThreshold;
+  var property = req.body.select;
+
+  if(property == "skole"){
+    property = 420;
+  } else if(property == "plejehjem"){
+    property = 410;
+  } else {
+    property = 404; 
+  }
+
+  console.log(req.body);
+
+  dbTools.createPowerThreshold(yellowThreshold, redThreshold, property);
+  res.redirect("/limits/power");
+});
+
+router.post('/heat', (req, res, next) => {
+
+  var yellowThreshold = req.body.yellowThreshold;
+  var redThreshold = req.body.redThreshold;
+  var property = req.body.select;
+
+  if(property == "skole"){
+    property = 420;
+  } else if(property == "plejehjem"){
+    property = 410;
+  } else {
+    property = 404; 
+  }
+
+  console.log(req.body);
+
+  dbTools.createHeatThreshold(yellowThreshold, redThreshold, property);
+  res.redirect("/limits/heat");
 });
 
 module.exports = router;

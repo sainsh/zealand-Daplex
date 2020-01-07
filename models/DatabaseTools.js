@@ -9,6 +9,7 @@ const htt = require('./ThresholdsDbTools');
 const wtt = require('./WaterThresholdsDbTools');
 const ptt = require('./PowerThresholdsDbTools');
 const hett = require('./HeatThresholdsDbTools');
+const dtt = require('./DamageThresholdDbTools');
 
 const host = '127.0.0.1';
 const user = 'root';
@@ -306,6 +307,7 @@ exports.setupTables = async function () {
     let waterThresholdTable = wtt.getWaterThresholdsTable(sequelize, Sequelize);
     let powerThresholdTable = ptt.getPowerThresholdsTable(sequelize, Sequelize);
     let heatThresholdTable = hett.getHeatThresholdsTable(sequelize, Sequelize);
+    let damageThresholdtable = dtt.getDamageThresholdsTable(sequelize, Sequelize);
     let maintenanceTable = getMaintenanceTable();
     let stateWeightTable = getStateWeightTable();
     let overallWeightTable = getOverallWeightTable();
@@ -322,6 +324,7 @@ exports.setupTables = async function () {
     await waterThresholdTable.sync({force: false});
     await powerThresholdTable.sync({force: false});
     await heatThresholdTable.sync({force: false});
+    await damageThresholdtable.sync({force: false});
     await stateWeightTable.sync({force: false});
     await maintenanceTable.sync({force: false});
     await overallWeightTable.sync({force: false});
@@ -941,3 +944,8 @@ exports.readHeatThreshold = (id) => {hett.createHeatThreshold(id, sequelize, Seq
 exports.updateHeatThreshold = (id, propertyId, yellowThreshold, redThreshold) => hett.updateHeatThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
 exports.deleteHeatThreshold = (id) => hett.deleteHeatThreshold(id, sequelize, Sequelize);
 
+// DB Tools export from DamageThresholdDbTools - Team Cyclone
+exports.createDamageThreshold = (yellowThreshold, redThreshold, propertyId) => {hett.createHeatThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};
+exports.readDamageThreshold = (id) => {hett.createHeatThreshold(id, sequelize, Sequelize)};
+exports.updateDamageThreshold = (id, propertyId, yellowThreshold, redThreshold) => hett.updateHeatThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
+exports.deleteDamageThreshold = (id) => hett.deleteHeatThreshold(id, sequelize, Sequelize);
