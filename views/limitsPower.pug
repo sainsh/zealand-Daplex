@@ -1,29 +1,30 @@
-extends layout
-  
+extends layout 
 
-block content
-  h1 El grænseside
-  button 
-    a(href="http://localhost:3000/") Home
-  button
-    a(href="http://localhost:3000/limits/") Tilbage
-  p velkommen til grænsesiden for KWh el per kvm
-  p vælg bygningstype
-  select
-    option(value="skole") skole
-    option(value="plejehjem") plejehjem
+block content 
 
-  p gul grænse
-  input(type="number" name="minimum value" id="minvalue")
-  |   per kvm. 
-  br 
-  p rød grænse
-  input#maxvalue(type="number" name="maximum value")
-  |   per kvm. 
-  br
-  br
+  button(class='button') 
+    a(href="http://localhost:3000/" ) Home
+  button(class='button')
+    a(href="http://localhost:3000/limits/" ) Tilbage 
 
-  button(type="button" onclick="submit()") Submit
-
+  div(class='headerbox')  
+    h1 Sæt grænser for el 
+  form(action="/limits/power", method="post", class='selectbox')
+    p vælg bygningstype
+    select#select(name="select")
+      option(value="skole") skole
+      option(value="plejehjem") plejehjem
+    br 
+    p gul grænse
+    input(type="number" name="yellowThreshold" id="minvalue")
+    |   per kvm. 
+    br 
+    p rød grænse
+    input#maxvalue(type="number" name="redThreshold")
+    |   per kvm. 
+    br
+    br
+    input(type="submit", value="Send data") 
 
   script(src="/assets/javascripts/limitsPower.js")
+  
