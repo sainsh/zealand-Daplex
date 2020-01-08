@@ -64,6 +64,78 @@ window.onhashchange = function () {
 
 }
 
+/* handle save button click and submit form to the right method and url */
+saveInputData = () => {
+
+    console.log('function called');
+
+    // getting url including # and after fx. www.example.com/dashboard#energy returns #energy
+    let urlhash = window.location.hash;
+
+    // getting the data from the form, only used for debugging
+    let data = [document.getElementById('thresholdYellow').value, document.getElementById('thresholdRed').value, document.getElementById('myRange').value];
+
+    // getting form document
+    let submitForm = document.getElementById('submitForm');
+
+    // loggin data for debugging
+    console.log(data);
+
+    // handle form submit (save button)
+    // if hash is helpdesk
+    if (urlhash == "#helpdesk") {
+
+        console.log('helpdesk');
+
+        // adding the category value to the data array
+        data[3] = document.getElementById('helpdesk-category').value;
+
+        // adding category value to the hidden form element
+        document.getElementById('formCategory').value = data[3];
+
+        console.log(data);
+
+        // adding form attributes acording to url hash
+        submitForm.setAttribute('method', "post");
+        submitForm.setAttribute('action', "/dashboard/helpdesk");
+
+        // returning true to continue the submitting of the form
+        return true;
+
+    } else if (urlhash == "#condition") {
+        console.log('condition');
+
+        // adding the category value to the data array
+        data[3] = document.getElementById('condition-category').value;
+
+        // adding category value to the hidden form element
+        document.getElementById('formCategory').value = data[3];
+
+        submitForm.setAttribute('method', "post");
+        submitForm.setAttribute('action', "/dashboard/condition");
+
+        return true;
+
+    } else if (urlhash == "#energy") {
+        console.log('energy');
+
+        // adding the category value to the data array
+        data[3] = document.getElementById('energy-category').value;
+
+        // adding category value to the hidden form element
+        document.getElementById('formCategory').value = data[3];
+
+        submitForm.setAttribute('method', "post");
+        submitForm.setAttribute('action', "/dashboard/energy");
+
+        return true;
+
+    }
+
+    return false;
+
+}
+
 
 // calling method on page load and page reload
 window.onhashchange();

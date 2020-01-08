@@ -13,15 +13,52 @@ router.get('/', async function(req, res, next) {
 });
 
 /* POST save data when save button is pressed */
-router.post('/saveinputdata', async function(req, res, next) {
+router.post('/helpdesk', async function(req, res, next) {
+
+  console.log('helpdesk post route');
 
   //take and handle form data!!!
 
   console.log("Yellow = " + req.body.yellowThreshold);
   console.log("Red = " + req.body.redThreshold);
   console.log("Weight = " + req.body.weightslider);
+  console.log("category = " + req.body.category);
 
-  res.redirect('/dashboard');
+  res.redirect('/dashboard#helpdesk');
+  
+
+});
+
+/* POST save data when save button is pressed */
+router.post('/condition', async function(req, res, next) {
+
+  console.log('condition post route');
+
+  //take and handle form data!!!
+
+  console.log("Yellow = " + req.body.yellowThreshold);
+  console.log("Red = " + req.body.redThreshold);
+  console.log("Weight = " + req.body.weightslider);
+  console.log("category = " + req.body.category);
+
+  res.redirect('/dashboard#condition');
+  
+
+});
+
+/* POST save data when save button is pressed */
+router.post('/energy', async function(req, res, next) {
+
+  console.log('energy post route');
+
+  //take and handle form data!!!
+
+  console.log("Yellow = " + req.body.yellowThreshold);
+  console.log("Red = " + req.body.redThreshold);
+  console.log("Weight = " + req.body.weightslider);
+  console.log("category = " + req.body.category);
+
+  res.redirect('/dashboard#energy');
   
 
 });

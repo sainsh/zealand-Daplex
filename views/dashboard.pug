@@ -22,26 +22,27 @@ block content
         p.pop-out-header(id='pop-out-header') Header 
 
         select(id='helpdesk-category') 
-            option(value=1 id='category-helpdesk-global') Global Helpdesk
+            option(value=0 id='category-helpdesk-global') Global Helpdesk
                 each helpdeskCategory in helpdeskCategories
                     option(value=helpdeskCategory.id) #{helpdeskCategory.name}
 
         select(id='condition-category') 
-            option(value=1 id='category-condition-global') Global Tilstand
+            option(value=0 id='category-condition-global') Global Tilstand
                 each conditionCategory in conditionCategories
                     option(value=conditionCategory.id) #{conditionCategory.name}            
 
         select(id='energy-category') 
-            option(value=1 id='category-energy-global') Global Energi
-            option(value=2 id='category-electricity') El
-            option(value=3 id='category-water') Vand
-            option(value=4 id='category-heat') Varme
+            option(value=0 id='category-energy-global') Global Energi
+            option(value=1 id='category-electricity') El
+            option(value=2 id='category-water') Vand
+            option(value=3 id='category-heat') Varme
 
-        form.input-container(name="inputForm" action="/dashboard/saveinputdata" method="POST")
+        form.input-container(id='submitForm' name="inputForm" onSubmit='return saveInputData()')
             label Gul grænseværdi
             input(type="number" id="thresholdYellow" name='yellowThreshold')
             label Rød grænseværdi
             input(type="number" id="thresholdRed" name='redThreshold')
+            input(type="hidden" name='category' id='formCategory')
 
             div.slide-container
                 label(for="weightslider" id='weightslider') Vægtning
