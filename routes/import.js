@@ -19,6 +19,8 @@ const upload = multer({
 // const upload = multer({ storage: storage });
 const databaseTools = require('../models/DatabaseTools');
 const conversionTools = require('../models/ConversionTools');
+let unknownProperties;
+let savedJsonResult;
 
 router.get('/', function (req, res, next) {
     res.render('import', (req.query.xlsxFileUploaded ? {xlsxFileUploaded: true} : {}));
@@ -43,8 +45,10 @@ router.post('/csv', upload.single('csv-file'), async function (req, res, next) {
             break;
         case 'Varmedata':
             jsonResult = await conversionTools.convertCsvToJson(filePath, "#Energi;", false);
-            idResults = databaseTools.createHeatData(jsonResult);
-            break;
+            savedJsonResult = jsonResult;
+            unknownProperties = await databaseTools.checkProperties(jsonResult);
+            res.render('inputProperties', {unknownProperties: unknownProperties});
+            return;
     }
     console.log(`${req.body.kategori}:  ${new Date()}`);
     res.redirect("/import/");
@@ -68,6 +72,13 @@ router.post('/xlsx', upload.single('xlsx-file'), async function (req, res, next)
     console.log(`${req.body.kategori}: ${new Date()}`);
     // res.redirect("/import/");
     res.redirect("/import?xlsxFileUploaded=true");
+});
+
+router.post('/heatData', function (req, res, next) {
+    let idResults = databaseTools.createHeatData(savedJsonResult, req.body);
+    unknownProperties = null;
+    savedJsonResult = null;
+    res.redirect("/import/");
 });
 
 module.exports = router;
