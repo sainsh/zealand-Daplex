@@ -58,15 +58,30 @@ exports.updateHelpdeskCategory = async function(id, name, sequelize, Sequelize){
 
 exports.readHelpdeskCategory = async function(id, sequelize, Sequelize){
 
-    try{
-        let helpdeskCategoryTable = getHelpdeskCategoriesTable(sequelize, Sequelize);
+    if(id){
+        try{
+            let helpdeskCategoryTable = getHelpdeskCategoriesTable(sequelize, Sequelize);
+    
+            let result = await helpdeskCategoryTable.findAll((id ? {where: {id: id}} : {}));
+            
+            return result.length === 0 ? await Promise.reject(new Error("No helpdesk categories data found")) : result;
+        } catch(e){
+            throw e;
+        }
+    } else {
 
-        let result = await helpdeskCategoryTable.findAll((id ? {where: {id: id}} : {}));
-        
-        return result.length === 0 ? await Promise.reject(new Error("No helpdesk categories data found")) : result;
-    } catch(e){
-        throw e;
+        try{
+            let helpdeskCategoryTable = getHelpdeskCategoriesTable(sequelize, Sequelize);
+    
+            let result = await helpdeskCategoryTable.findAll();
+            
+            return result.length === 0 ? await Promise.reject(new Error("No helpdesk categories data found")) : result;
+        } catch(e){
+            throw e;
+        }
+
     }
+    
 
 }
 
