@@ -1,0 +1,57 @@
+
+extends layout
+
+block content
+
+    link(rel="stylesheet", href="/assets/stylesheets/dashboard.css")
+
+
+    .sidenav
+
+        p.top-nav-text Daplex
+
+        button.dropdown-btn
+            a(href='#helpdesk') Helpdesk
+            i.dropdown-icon
+        .dropdown-container
+            a(href='#cat1') Category 1
+            a(href='#cat2') Category 2
+            a(href='#cat3') Category 3
+
+        button.dropdown-btn
+            a(href='#condition') Tilstand
+            i.dropdown-icon
+        .dropdown-container
+            a(href='#cat11') Tilstand 1
+            a(href='#cat21') Tilstand 2
+            a(href='#cat31') Tilstand 3
+
+        button.dropdown-btn
+            a(href='#energy') Energi
+            i.dropdown-icon
+        .dropdown-container
+            a(href='#cat12') Energi 1
+            a(href='#cat22') Energi 2
+            a(href='#cat32') Energi 3   
+
+    div.pop-out
+        p.pop-out-header Header 
+
+        form.input-container
+            label Gul grænseværdi
+            input(type="number" id="thresholdYellow")
+            label Rød grænseværdi
+            input(type="number" id="thresholdRed")
+
+            div.slide-container    
+                input(type="range" min="1" max="100" value="50" class="slider" id="myRange")
+
+            button(type="submit") Gem
+            
+     
+    script(src="/assets/javascripts/dashboard.js") 
+
+    
+              
+        
+

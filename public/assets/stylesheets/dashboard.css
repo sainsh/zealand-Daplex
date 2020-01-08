@@ -1,0 +1,184 @@
+
+
+html { 
+    background: url(/assets/images/background.jpeg) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.top-nav-text {
+    font-size: 25px;
+    color: #0175cc;
+    text-align: center;
+}
+
+
+/* Fixed sidenav, full height */
+.sidenav {
+    height: 100%;
+    width: 350px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    padding-top: 15px;
+    opacity: 0.96;
+}
+
+/* Style the sidenav links and the dropdown button */
+.dropdown-btn, .dropdown-container a {
+    padding: 10px 8px 10px 22px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #818181;
+    display: block;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    outline: none;
+}
+
+.dropdown-container a {
+    font-size: 15px;
+}
+
+.dropdown-btn a {
+    text-decoration: none;
+    font-size: 20px;
+    color: #818181;
+    display: block;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    outline: none;
+}
+
+/* On mouse-over */
+.sidenav a:hover, .dropdown-btn:hover {
+    color: #f1f1f1;
+}
+
+/* Add an active class to the active dropdown button */
+.active, .active a {
+    background-color: rgb(0, 83, 0);
+    color: white;
+}
+
+/* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
+.dropdown-container {
+    display: none;
+    background-color: #262626;
+    opacity: 0.96;
+    padding-left: 8px;
+}
+
+/* Optional: Style the caret down icon */
+.dropdown-icon {
+    float: right;
+    padding-right: 8px;
+}
+
+
+/* popout bar style */
+
+.pop-out {
+    width: 350px;
+    height: 100%;
+    background-color: rgb(0, 0, 0);
+    opacity: 0.96;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 350px;
+    padding-top: 15px;
+}
+
+.pop-out-header {
+    font-size: 25px;
+    color: #0175cc;
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.input-container label {
+    display: block;
+    color: #f0f0f0;
+    font-size: 15px;
+    text-align: center;
+    padding: 2px;
+}
+
+#thresholdYellow, #thresholdRed {
+    background-color: #f0f0f0;
+    margin: auto;
+    display: block;
+    margin-bottom: 20px;
+    width: 80%;
+    height: 25px;
+    border-radius: 4px;
+    font-size: 19px;
+}
+
+#thresholdRed {
+    margin-bottom: 40px;
+}
+
+.input-container button {
+    display: block;
+    color: #0175cc;
+    font-size: 13px;
+    background-color: #f0f0f0;
+    height: 35px;
+    width: 100px;
+    border: none;
+    border-radius: 8px;
+    margin: auto;
+}
+
+.slide-container {
+    width: 80%;
+    margin: auto;
+}
+  
+.slider {
+-webkit-appearance: none;
+width: 100%;
+height: 15px;
+border-radius: 5px;
+background: #d3d3d3;
+outline: none;
+opacity: 0.7;
+-webkit-transition: .2s;
+transition: opacity .2s;
+margin-bottom: 50px;
+}
+
+.slider:hover {
+opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+-webkit-appearance: none;
+appearance: none;
+width: 25px;
+height: 25px;
+border-radius: 50%;
+background: #0175cc;
+cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+width: 25px;
+height: 25px;
+border-radius: 50%;
+background: #0175cc;
+cursor: pointer;
+}

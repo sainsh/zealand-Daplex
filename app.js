@@ -11,6 +11,7 @@ var exportRouter = require('./routes/export');
 var LimitsRouter = require('./routes/limits');
 var weightUIRouter = require('./routes/weightUI');
 var ftpRouter = require('./routes/ftp');
+var dashboardRouter = require('./routes/dashboard');
 
 
 var app = express();
@@ -32,6 +33,7 @@ app.use('/export', exportRouter);
 app.use('/limits', LimitsRouter);
 app.use('/weightUI', weightUIRouter);
 app.use('/ftp', ftpRouter);
+app.use('/dashboard', dashboardRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
