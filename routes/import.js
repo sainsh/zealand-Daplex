@@ -45,10 +45,14 @@ router.post('/csv', upload.single('csv-file'), async function (req, res, next) {
             break;
         case 'Varmedata':
             jsonResult = await conversionTools.convertCsvToJson(filePath, "#Energi;", false);
-            savedJsonResult = jsonResult;
             unknownProperties = await databaseTools.checkProperties(jsonResult);
-            res.render('inputProperties', {unknownProperties: unknownProperties});
-            return;
+            if (Object.keys(unknownProperties).length > 0) {
+                savedJsonResult = jsonResult;
+                res.render('inputProperties', {unknownProperties: unknownProperties});
+                return;
+            } else
+                idResults = databaseTools.createHeatData(jsonResult);
+            break;
     }
     console.log(`${req.body.kategori}:  ${new Date()}`);
     res.redirect("/import/");
