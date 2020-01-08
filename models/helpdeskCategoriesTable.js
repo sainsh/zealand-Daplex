@@ -29,7 +29,6 @@ exports.createHelpdeskCategory = async function(categoryName, sequelize, Sequeli
             name: categoryName,
         });
 
-        console.log("create helpdesk categori: " + result.dataValues.id + " " + result.dataValues.name);
         
     } catch(e){
         throw e;
@@ -46,7 +45,6 @@ exports.updateHelpdeskCategory = async function(id, name, sequelize, Sequelize){
             name: name
         }, {returning: true, where: {id: id}});
 
-        console.log(result[0]);
 
         return result[0];
 
@@ -95,13 +93,11 @@ exports.deleteHelpdeskCategory = async function(id, sequelize, Sequelize){
             where: {id: id}
         }, {returning: true, where: {id: id}});
     
-        console.log("Deleted ID = " + result.id);
 
         return result; // Return object of removed database row
     
     
     } catch (e) {
-        console.log("database error occurred.");
         throw e;
     }
 
