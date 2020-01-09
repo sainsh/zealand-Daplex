@@ -98,8 +98,8 @@ router.post('/helpdesk', (req, res, next) => {
   //De er sat i data så det passer med de relevante helpdesk catogorier så data[1] = indeklima værdi, samt catogory id 1. 
   var data = [select, indeSlider, udvSlider, tekSlider, tagSlider, murSlider, udSlider, tagDækSlider, tagrenSlider, vinSlider, funSlider];
   db.deleteHelpdeskWeight(data[0]);
-  console.log("Clearing database.....")
-  console.log("inserting new data in database.....")
+  console.log("Clearing database.....");
+  console.log("inserting new data in database.....");
   db.createHelpdeskWeightTable(1, data[0], data[1]); // så Catogori id, bygningstype, weight.
   db.createHelpdeskWeightTable(2, data[0], data[2]);
   db.createHelpdeskWeightTable(3, data[0], data[3]);
@@ -122,8 +122,8 @@ router.post('/state', (req, res, next) => {
 
   var data = [select, tekSlider, udvSlider, osvSlider];
   db.deleteStateWeight(data[0]);
-  console.log("Clearing database.....")
-  console.log("inserting new data in database.....")
+  console.log("Clearing database.....");
+  console.log("inserting new data in database....."); //
   db.createStateWeightTable(3, data[0], data[1]);
   db.createStateWeightTable(2, data[0], data[2]);
   db.createStateWeightTable(1, data[0], data[3]);
