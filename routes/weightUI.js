@@ -23,11 +23,13 @@ router.get('/state', async function (req, res, next) {
   var result = await db.readStateWeight(420);
   var resultArray = [];
   var leftArray = [];
-  console.log(result);
   for (var value in result){
-    resultArray.push(result[value]);
+    resultArray.push(result[0][1]);
+    console.log(value + "Value");
+    
     leftArray.push(`left:` + (0) + `px`);
-  }
+  };
+  console.log(resultArray + "hERERERERERE");
   resultArray.shift();
   leftArray.shift();
   res.render('weightUIstate', {values: resultArray, left_array: leftArray});
@@ -99,7 +101,7 @@ router.post('/helpdesk', (req, res, next) => {
   var data = [select, indeSlider, udvSlider, tekSlider, tagSlider, murSlider, udSlider, tagDækSlider, tagrenSlider, vinSlider, funSlider];
   db.deleteHelpdeskWeight(data[0]);
   console.log("Clearing database.....");
-  console.log("inserting new data in database.....");
+  console.log("inserting new data in database....."); //These console logs slows the process enough to make this work
   db.createHelpdeskWeightTable(1, data[0], data[1]); // så Catogori id, bygningstype, weight.
   db.createHelpdeskWeightTable(2, data[0], data[2]);
   db.createHelpdeskWeightTable(3, data[0], data[3]);
@@ -123,7 +125,8 @@ router.post('/state', (req, res, next) => {
   var data = [select, tekSlider, udvSlider, osvSlider];
   db.deleteStateWeight(data[0]);
   console.log("Clearing database.....");
-  console.log("inserting new data in database....."); //
+  console.log("inserting new data in database.....");
+  db.readStateWeight(data[0]); //Added read to avoid nothing in database. cant read propperly
   db.createStateWeightTable(3, data[0], data[1]);
   db.createStateWeightTable(2, data[0], data[2]);
   db.createStateWeightTable(1, data[0], data[3]);

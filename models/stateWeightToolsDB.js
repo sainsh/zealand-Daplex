@@ -106,10 +106,8 @@ deleteStateWeight = async function(propertyid, sequelize, Sequelize){
     
     let debugMessage = headerName + 'deleteStateWeightTable: '; 
 
-    console.log(debugMessage + 'Delete initialized...');
 
     try {
-        console.log(debugMessage + 'Getting Weight Table...');
         let weightTable = getStateWeightTable(sequelize, Sequelize);
 
         console.log(debugMessage + 'deleting id from Table...');

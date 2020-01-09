@@ -825,7 +825,7 @@ exports.readHelpdeskDataOneYearBack = async function () {
     }
 };
 
-exports.readHelpdeskWeight = async function (id) {
+/*exports.readHelpdeskWeights = async function (id) {
     try {
         let helpdeskWeightTable = getHelpdeskWeightTable();
         let result = await helpdeskWeightTable.findAll((id ? {where: {property_type_id: id}} : {})); // Add the "where" option, if the ID is not undefined
@@ -833,7 +833,7 @@ exports.readHelpdeskWeight = async function (id) {
     } catch (e) {
         throw e;
     }
-};
+};*/
 
 exports.readMaintenanceData = async function (id) {
     try {
