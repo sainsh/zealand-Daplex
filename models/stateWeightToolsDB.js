@@ -16,7 +16,7 @@ const headerName = "stateWeightToolsDB.js: ";
  /**
   * Create method for State Weight
   */
-createStateWeight = async function(categoryId, propertyId, weight, sequelize, Sequelize){
+createStateWeight = async function(propertyId, categoryId, weight, sequelize, Sequelize){
 
     let debugMessage = headerName + "createWeightState: ";
 
@@ -28,7 +28,7 @@ createStateWeight = async function(categoryId, propertyId, weight, sequelize, Se
 
     try{
         console.log(debugMessage + "Getting weightStateTabel.")
-        let weightTable = getWeightStateTable(sequelize, Sequelize);
+        let weightTable = getStateWeightTable(sequelize, Sequelize);
 
         let result = await weightTable.create({
             property_id: propertyId, 
@@ -47,7 +47,7 @@ createStateWeight = async function(categoryId, propertyId, weight, sequelize, Se
 /**
  * READ method State Weight
  */
-readStateWeight = async function(id, sequelize, Sequelize){
+readStateWeight = async function(property_id, sequelize, Sequelize){
 
     let debugMessage = headerName + 'readStateWeightTable: '; 
 
@@ -55,12 +55,12 @@ readStateWeight = async function(id, sequelize, Sequelize){
     
     try {
         let StateWeights = getStateWeightTable(sequelize, Sequelize);
-        let result = await StateWeights.findAll((id ? {where: {id: id}} : {}));
+        let result = await StateWeights.findAll((property_id ? {where: {property_id: property_id}} : {}));
 
         let answer = result.length === 0 ? result : 'nothing was found with the specified id';
 
         result.forEach(element => {
-            console.log(debugMessage + "id: " + element.id + " Weight " + element.weight + 
+            console.log(debugMessage + " Weight " + element.weight + 
             " property type id: " +  element.property_id + " State category id = " + element.state_category_id);
         }); 
 
@@ -74,7 +74,7 @@ readStateWeight = async function(id, sequelize, Sequelize){
 
 
 
-updateStateWeight = async function(id, propertyId, categoryId, weight , sequelize, Sequelize){
+updateStateWeight = async function(propertyId, categoryId, weight, sequelize, Sequelize){
     
     let debugMessage = headerName + 'updateStateWeightTable: '; 
 
@@ -89,8 +89,7 @@ updateStateWeight = async function(id, propertyId, categoryId, weight , sequeliz
             property_id: propertyId,
             state_category_id: categoryId,
             weight: weight
-        }, {returning: true, where: {id: id}});
-    
+        }, {returning: true, where: {property_id: propertyId, helpdesk_category_id: categoryId}});
         console.log(debugMessage + "Result = " + result);
 
         return result[0]; // Return an array containing all inserted IDs
@@ -103,7 +102,7 @@ updateStateWeight = async function(id, propertyId, categoryId, weight , sequeliz
 
 }
 
-deleteStateWeight = async function(id, sequelize, Sequelize){
+deleteStateWeight = async function(propertyid, sequelize, Sequelize){
     
     let debugMessage = headerName + 'deleteStateWeightTable: '; 
 
@@ -114,11 +113,11 @@ deleteStateWeight = async function(id, sequelize, Sequelize){
         let weightTable = getStateWeightTable(sequelize, Sequelize);
 
         console.log(debugMessage + 'deleting id from Table...');
-        let result = await weightTable.destroy({
-            where: {id: id}
-        }, {returning: true, where: {id: id}});
+        let result = weightTable.destroy({ //removed await
+            where: {property_id: propertyid}
+        }, {returning: true, where: {property_id: propertyid}});
     
-        console.log(debugMessage + "Deleted ID = " + result.id);
+        console.log(debugMessage + "Deleted ID = " + result.propertyid);
 
         return result; // Return an array containing all inserted IDs
     
@@ -140,12 +139,6 @@ deleteStateWeight = async function(id, sequelize, Sequelize){
  */
 getStateWeightTable = (sequelize, Sequelize) => {
     return sequelize.define('state_weight', {
-        id: {
-            type: Sequelize.INTEGER,
-            allowNull: false,
-            autoIncrement: true, 
-            primaryKey: true
-        },
         property_id: {
             type: Sequelize.INTEGER,
             refrences: {model: 'properties', key: 'property_id'}

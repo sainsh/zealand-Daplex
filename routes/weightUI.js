@@ -20,7 +20,7 @@ router.get('/helpdesk', async function (req, res, next) {
 });
 
 router.get('/state', async function (req, res, next) {
-  var result = await db.readStateWeightData(420);
+  var result = await db.readStateWeight(420);
   var resultArray = [];
   var leftArray = [];
   console.log(result);
@@ -59,7 +59,7 @@ router.post('/helpdesk/sliders', async function (req, res) {
 });
 
 router.post('/state/sliders', async function (req, res) {
-  var result = await db.readStateWeightData(req.body.id);
+  var result = await db.readStateWeight(req.body.id);
   var resultArray = [];
   console.log(result);
   for (var value in result){
@@ -114,7 +114,6 @@ router.post('/helpdesk', (req, res, next) => {
 })
 
 router.post('/state', (req, res, next) => {
-
   var select = req.body.select;
   var tekSlider = req.body.tekSlider;
   var udvSlider = req.body.udvSlider;
@@ -122,11 +121,13 @@ router.post('/state', (req, res, next) => {
 
 
   var data = [select, tekSlider, udvSlider, osvSlider];
-  
-  db.createStateWeightTable(data);
-  db.updateStateWeightTable(data);
+  db.deleteStateWeight(data[0]);
+  console.log("Clearing database.....")
+  console.log("inserting new data in database.....")
+  db.createStateWeightTable(3, data[0], data[1]);
+  db.createStateWeightTable(2, data[0], data[2]);
+  db.createStateWeightTable(1, data[0], data[3]);
   res.redirect("/weightUI/");
-  //res.redirect('/weightUI/');
 })
 
 router.post('/overall', (req, res, next) => {

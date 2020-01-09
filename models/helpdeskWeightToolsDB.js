@@ -16,7 +16,7 @@ const headerName = "helpdeskWeightToolsDB.js: ";
  /**
   * Create method for helpdesk Weight
   */
-createHelpdeskWeight = async function(categoryId, propertyId, weight, sequelize, Sequelize){
+createHelpdeskWeight = async function(propertyId, categoryId, weight, sequelize, Sequelize){
 
     let debugMessage = headerName + "createWeightHelpdesk: ";
 
@@ -112,7 +112,7 @@ deleteHelpdeskWeight = async function(propertyId, sequelize, Sequelize){
         let weightTable = getHelpdeskWeightTable(sequelize, Sequelize);
 
         console.log(debugMessage + 'deleting id from Table...');
-        let result = weightTable.destroy({
+        let result = weightTable.destroy({ //removed await
             where: {property_id: propertyId}
         }, {returning: true, where: {property_id: propertyId}});
     
