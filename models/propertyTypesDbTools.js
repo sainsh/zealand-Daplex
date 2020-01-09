@@ -39,7 +39,7 @@ exports.createPropertyType = async function(typeId, name, sequelize, Sequelize){
     
 }
 
-exports.updatePropertyTypes = async function(typeId, name, sequelize, Sequelize){
+exports.updatePropertyType = async function(typeId, name, sequelize, Sequelize){
 
     try{
     
@@ -58,7 +58,7 @@ exports.updatePropertyTypes = async function(typeId, name, sequelize, Sequelize)
 }
 
 // returns specific id if id is provided, else it returns all elements
-exports.readPropertyTypes = async function(id, sequelize, Sequelize){
+exports.readPropertyType = async function(id, sequelize, Sequelize){
 
     if(id){
         try{

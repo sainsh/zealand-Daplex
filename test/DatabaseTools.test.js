@@ -33,7 +33,7 @@ test('insert data from csv', async(done) =>{
         property_id: 1,
         property_name: 'Kildemarksvej 114 + 118 - 128',
         property_size: 1000,
-        property_type_id: 420
+        property_type_id: 1
     })
     done()
 })
