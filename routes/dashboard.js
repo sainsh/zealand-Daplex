@@ -8,7 +8,7 @@ router.get('/', async function(req, res, next) {
 
   var helpdeskCategories = await db.hct.read();
 
-  res.render('dashboard', {helpdeskCategories: helpdeskCategories, conditionCategories: helpdeskCategories});
+  res.render('dashboard', { helpdeskCategories: helpdeskCategories, conditionCategories: helpdeskCategories});
 
 });
 

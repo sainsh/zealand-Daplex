@@ -3,6 +3,7 @@ const Sequelize = require('sequelize');
 
 // Tools regarding Helpdesk Catogories Table -Team Cyclone
 const helpdeskCategories = require('./helpdeskCategoriesTable');
+const propertyTypes = require('./propertyTypesDbTools');
 
 // database tools import for thresholds - Team Cyclone
 const htt = require('./ThresholdsDbTools');
@@ -325,6 +326,7 @@ exports.setupDatabase(host, user, password);
  */
 exports.setupTables = async function () {
     let propertiesTable = getPropertiesTable();
+    let propertyTypeTable = propertyTypes.getPropertyTypesTable(sequelize, Sequelize);
     let helpdeskCategoriesTable = helpdeskCategories.getHelpdeskCategoriesTable(sequelize, Sequelize);
     let helpdeskTable = getHelpdeskTable();
     let helpdeskWeightTable = getHelpdeskWeightTable();
@@ -341,8 +343,10 @@ exports.setupTables = async function () {
 
     helpdeskTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
     maintenanceTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
+    propertiesTable.belongsTo(propertyTypeTable, {foreignKey: 'id'});
 
     await propertiesTable.sync({force: false});
+    await propertyTypeTable.sync({force: false});
     await helpdeskCategoriesTable.sync({force: false});
     await helpdeskTable.sync({force: false});
     await helpdeskWeightTable.sync({force: false});
@@ -369,7 +373,7 @@ exports.setupTables = async function () {
 generateStartData = async() => {
 
     try{
-        await hct.read()
+        await hct.read();
     } catch (e){
         hct.create("Indeklima");
         hct.create("Tekniske Anlæg");
@@ -381,6 +385,13 @@ generateStartData = async() => {
         hct.create("Tagrender og Nedløb");
         hct.create("Vinduer og Udvendige Døre");
         hct.create("Fundament og Sokkel");
+    }
+
+    try{
+        await prtt.read();
+    } catch (e){
+        prtt.create(420, "Skole");
+        prtt.create(440, "daginstitution");
     }
 
 }
@@ -983,13 +994,21 @@ exports.calculateScore = async function () {
 // exports.calculateScore();
 
 // CRUD for helpdesk categories stored in an Object that's being exportet. - Team Cyclone
-var hct = {}
+var hct = {};
 hct.create = (categoryName) => helpdeskCategories.createHelpdeskCategory(categoryName, sequelize, Sequelize);
 hct.read = (id) => helpdeskCategories.readHelpdeskCategory(id, sequelize, Sequelize);
 hct.update = (id, categoryName) => helpdeskCategories.updateHelpdeskCategory(id, categoryName, sequelize, Sequelize);
 hct.delete = (id) => helpdeskCategories.deleteHelpdeskCategory(id, sequelize, Sequelize);
 
 exports.hct = hct;
+
+var prtt = {};
+prtt.create = (typeId, name) => propertyTypes.createPropertyType(typeId, name, sequelize, Sequelize);
+prtt.read = (id) => propertyTypes.readPropertyType(id, sequelize, Sequelize);
+prtt.update = (typeId, name) => propertyTypes.updatePropertyType(typeId, name, sequelize, Sequelize);
+prtt.delete = (id) => propertyTypes.deletePropertyType(id, sequelize, Sequelize);
+
+exports.prtt = prtt;
 
 // DB Tools export from ThresholdDbTools - Team Cyclone
 exports.createHelpdeskThreshold = (yellowThreshold, redThreshold, categoryId, propertyId) => {htt.createHelpdeskThreshold(yellowThreshold, redThreshold, categoryId, propertyId, sequelize, Sequelize)};
