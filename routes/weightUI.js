@@ -24,12 +24,11 @@ router.get('/state', async function (req, res, next) {
   var resultArray = [];
   var leftArray = [];
   for (var value in result){
-    resultArray.push(result[0][1]);
+    resultArray.push(value.weight);
     console.log(value + "Value");
-    
     leftArray.push(`left:` + (0) + `px`);
-  };
-  console.log(resultArray + "hERERERERERE");
+  }
+  console.log(resultArray);
   resultArray.shift();
   leftArray.shift();
   res.render('weightUIstate', {values: resultArray, left_array: leftArray});

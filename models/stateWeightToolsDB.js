@@ -58,7 +58,7 @@ readStateWeight = async function(property_id, sequelize, Sequelize){
         let result = await StateWeights.findAll((property_id ? {where: {property_id: property_id}} : {}));
 
         let answer = result.length === 0 ? result : 'nothing was found with the specified id';
-
+        
         result.forEach(element => {
             console.log(debugMessage + " Weight " + element.weight + 
             " property type id: " +  element.property_id + " State category id = " + element.state_category_id);
