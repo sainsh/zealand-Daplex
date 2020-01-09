@@ -3,6 +3,7 @@ const Sequelize = require('sequelize');
 
 // Tools regarding Helpdesk Catogories Table -Team Cyclone
 const helpdeskCategories = require('./helpdeskCategoriesTable');
+const propertyTypes = require('./propertyTypesDbTools');
 
 // database tools import for thresholds - Team Cyclone
 const htt = require('./ThresholdsDbTools');
@@ -16,6 +17,8 @@ const ewt = require('./energiWeightToolsDB');
 const hwt = require('./helpdeskWeightToolsDB');
 const swt = require('./stateWeightToolsDB');
 
+// database tools import for power data
+const pt = require('./PowerDBTools');
 
 const host = '127.0.0.1';
 const user = 'root';
@@ -331,6 +334,7 @@ exports.setupDatabase(host, user, password);
  */
 exports.setupTables = async function () {
     let propertiesTable = getPropertiesTable();
+    let propertyTypeTable = propertyTypes.getPropertyTypesTable(sequelize, Sequelize);
     let helpdeskCategoriesTable = helpdeskCategories.getHelpdeskCategoriesTable(sequelize, Sequelize);
     let helpdeskTable = getHelpdeskTable();
     let helpdeskWeightTable = hwt.getHelpdeskWeightTable(sequelize, Sequelize);
@@ -345,10 +349,13 @@ exports.setupTables = async function () {
     let overallWeightTable = getOverallWeightTable();
     let waterTable = getWaterTable();
     let heatTable = getHeatTable();
+    let powerTable = pt.getPowerTable(sequelize, Sequelize);
 
     helpdeskTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
     maintenanceTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
+    propertiesTable.belongsTo(propertyTypeTable, {foreignKey: 'property_type_id'});
 
+    await propertyTypeTable.sync({force: false});
     await propertiesTable.sync({force: false});
     await helpdeskCategoriesTable.sync({force: false});
     await helpdeskTable.sync({force: false});
@@ -364,6 +371,7 @@ exports.setupTables = async function () {
     await waterTable.sync({force: false});
     await heatTable.sync({force: false});
     await energiWeightTable.sync({force: false});
+    await powerTable.sync({force: false});
 
     // Generation of start data for the database
     await generateStartData();
@@ -377,7 +385,7 @@ exports.setupTables = async function () {
 generateStartData = async() => {
 
     try{
-        await hct.read()
+        await hct.read();
     } catch (e){
         hct.create("Indeklima");
         hct.create("Tekniske Anlæg");
@@ -391,12 +399,19 @@ generateStartData = async() => {
         hct.create("Fundament og Sokkel");
     }
 
+    try{
+        await prtt.read();
+    } catch (e){
+        prtt.create(420, "Skole");
+        prtt.create(440, "daginstitution");
+    }
+
 }
 
 /**
  * Function for creating a new property (ejendom).
  */
-exports.createProperty = async function (propertyName, propertySize = 1000, propertyTypeId = 420, electricityMeter, heatMeter) {
+exports.createProperty = async function (propertyName, propertySize = 1000, propertyTypeId = 1, electricityMeter, heatMeter) {
     try {
         let propertiesTable = getPropertiesTable();
 
@@ -991,13 +1006,21 @@ exports.calculateScore = async function () {
 // exports.calculateScore();
 
 // CRUD for helpdesk categories stored in an Object that's being exportet. - Team Cyclone
-var hct = {}
+var hct = {};
 hct.create = (categoryName) => helpdeskCategories.createHelpdeskCategory(categoryName, sequelize, Sequelize);
 hct.read = (id) => helpdeskCategories.readHelpdeskCategory(id, sequelize, Sequelize);
 hct.update = (id, categoryName) => helpdeskCategories.updateHelpdeskCategory(id, categoryName, sequelize, Sequelize);
 hct.delete = (id) => helpdeskCategories.deleteHelpdeskCategory(id, sequelize, Sequelize);
 
 exports.hct = hct;
+
+var prtt = {};
+prtt.create = (typeId, name) => propertyTypes.createPropertyType(typeId, name, sequelize, Sequelize);
+prtt.read = (id) => propertyTypes.readPropertyType(id, sequelize, Sequelize);
+prtt.update = (typeId, name) => propertyTypes.updatePropertyType(typeId, name, sequelize, Sequelize);
+prtt.delete = (id) => propertyTypes.deletePropertyType(id, sequelize, Sequelize);
+
+exports.prtt = prtt;
 
 // DB Tools export from ThresholdDbTools - Team Cyclone
 exports.createHelpdeskThreshold = (yellowThreshold, redThreshold, categoryId, propertyId) => {htt.createHelpdeskThreshold(yellowThreshold, redThreshold, categoryId, propertyId, sequelize, Sequelize)};
@@ -1039,7 +1062,7 @@ exports.deleteEnergiWeight = (propertyId) => ewt.deleteEnergiWeight(propertyId, 
 // DB Tools export from helpdeksWeightDbTools - Team Hurricane
 exports.createHelpdeskWeightTable = (categoryId, propertyId, weight) => {hwt.createHelpdeskWeight(propertyId, categoryId, weight, sequelize, Sequelize)};
 exports.readHelpdeskWeight = (id) => {hwt.readHelpdeskWeight(id, sequelize, Sequelize)};
-exports.updateHelpdeskWeightTable = (id, categoryId, propertyId, weight) => hwt.updateHelpdeskWeight(propertyId, categoryId, weight, sequelize, Sequelize);
+exports.updateHelpdeskWeightTable = (categoryId, propertyId, weight) => hwt.updateHelpdeskWeight(propertyId, categoryId, weight, sequelize, Sequelize);
 exports.deleteHelpdeskWeight = (id) => hwt.deleteHelpdeskWeight(id, sequelize, Sequelize);
 exports.getHelpdeskWeightTable = hwt.getHelpdeskWeightTable(sequelize,Sequelize);
 
@@ -1048,3 +1071,8 @@ exports.createStateWeightTable = (categoryId, propertyId, weight) => {swt.create
 exports.readStateWeight = (id) => {swt.readStateWeight(id, sequelize, Sequelize)};
 exports.updateStateWeightTable = (propertyId, categoryId, weight) => swt.updateStateWeight(propertyId, categoryId, weight, sequelize, Sequelize);
 exports.deleteStateWeight = (id) => swt.deleteStateWeight(id, sequelize, Sequelize);
+
+// DB Tools export from powerTable - Team Hurricane
+exports.createPower = (power) =>  {pt.createPower(power, sequelize, Sequelize)};
+exports.readPower = (installationNumber) =>  {pt.readPower(installationNumber, sequilize, Sequilize)};
+exports.deletePower = (id) => {pt.deletePower(id, sequilize, Sequilize)};

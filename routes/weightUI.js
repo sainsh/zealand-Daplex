@@ -9,11 +9,13 @@ router.get('/helpdesk', async function (req, res, next) {
   var result = await db.readHelpdeskWeight(420);
   var resultArray = [];
   var leftArray = [];
-  console.log(result);
-  for (var value in result){
-    resultArray.push(result[value]);
-    leftArray.push(`left:` + (0) + `px`);
-  }
+
+    await result.forEach(element => {
+     resultArray.push(element.weight);
+    leftArray.push(`left:` + (0) + `px`); 
+    });
+    console.log(resultArray);
+    
   resultArray.shift();
   leftArray.shift();
   res.render('weightUIhelpdesk', {values: resultArray, left_array: leftArray});
@@ -23,6 +25,8 @@ router.get('/state', async function (req, res, next) {
   var result = await db.readStateWeight(420);
   var resultArray = [];
   var leftArray = [];
+  await console.log(result);
+  
   for (var value in result){
     resultArray.push(value.weight);
     console.log(value + "Value");

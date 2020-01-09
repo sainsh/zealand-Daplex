@@ -63,7 +63,10 @@ readHelpdeskWeight = async function(property_id, sequelize, Sequelize){
             console.log(debugMessage +" Weight " + element.weight + 
             " property type id: " +  element.property_id + " helpdesk category id = " + element.helpdesk_category_id);
         }); 
-
+        console.log(result[0].dataValues);
+        console.log("^----This is from ToolsDB (result[0].datavalues)----^");
+        
+        
         return result.length === 0 ? await Promise.reject(new Error("No helpdesk Weight data found")) : result;
     } catch(e){
         throw e;
