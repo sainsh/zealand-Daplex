@@ -343,10 +343,10 @@ exports.setupTables = async function () {
 
     helpdeskTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
     maintenanceTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
-    propertiesTable.belongsTo(propertyTypeTable, {foreignKey: 'id'});
+    propertiesTable.belongsTo(propertyTypeTable, {foreignKey: 'property_type_id'});
 
-    await propertiesTable.sync({force: false});
     await propertyTypeTable.sync({force: false});
+    await propertiesTable.sync({force: false});
     await helpdeskCategoriesTable.sync({force: false});
     await helpdeskTable.sync({force: false});
     await helpdeskWeightTable.sync({force: false});
