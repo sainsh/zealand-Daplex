@@ -9,11 +9,12 @@ router.get('/helpdesk', async function (req, res, next) {
   var result = await db.readHelpdeskWeight(420);
   var resultArray = [];
   var leftArray = [];
-
-    await result.forEach(element => {
-     resultArray.push(element.weight);
-    leftArray.push(`left:` + (0) + `px`); 
-    });
+//KIG HER
+  for (var value in result){
+    resultArray.push(value);
+    console.log(value + "Value");
+    leftArray.push(`left:` + (0) + `px`);
+  }
     console.log(resultArray);
     
   resultArray.shift();

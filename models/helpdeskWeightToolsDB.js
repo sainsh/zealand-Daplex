@@ -47,15 +47,15 @@ createHelpdeskWeight = async function(propertyId, categoryId, weight, sequelize,
 /**
  * READ method helpdesk Weight
  */
-readHelpdeskWeight = async function(property_id, sequelize, Sequelize){
-
+readHelpdeskWeight = async function(id, sequelize, Sequelize){
+//KIG HER
     let debugMessage = headerName + 'readHelpdeskWeightTable: '; 
 
     console.log(debugMessage + 'Read initialized...');
     
     try {
         let helpdeskWeights = getHelpdeskWeightTable(sequelize, Sequelize);
-        let result = await helpdeskWeights.findAll((property_id ? {where: {property_id: property_id}} : {}));
+        let result = await helpdeskWeights.findAll((id ? {where: {property_id: id}} : {}));
 
         let answer = result.length === 0 ? result : 'nothing was found with the specified id';
 
