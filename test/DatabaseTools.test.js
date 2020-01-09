@@ -55,3 +55,16 @@ test('try reading from properties where id is not a number', async(done)=>{
     done()
 })*/
 
+
+/*
+test('create water data', async(done)=>{
+    await databaseTools.setupTables()
+    let jsonResult = await conversionTools.convertCsvToJson('./test/testfiles/Vanddata fra Parkvej 48 - 4.11 til 11.11 kl 15.csv',"Dato;");
+    let result = await databaseTools.createWaterData(jsonResult,'./test/testfiles/Vanddata fra Parkvej 48 - 4.11 til 11.11 kl 15.csv');
+    let res = await databaseTools.readWaterData(5);
+    let resultJSON = {date:res[0].dataValues.date, volume:res[0].dataValues.volume};
+    await expect(resultJSON).toEqual({date: new Date('10-11-2019 00:05'), volume:875.055})
+    done()
+})
+*/
+
