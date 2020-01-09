@@ -1,0 +1,17 @@
+extends layout
+
+block content
+    link(rel="stylesheet", href="/assets/stylesheets/common.css")
+    h1 Indtast ejendomme
+    a(href="http://localhost:3000/" class="btn") Home
+    br
+    hr
+    br
+    form(action='/import/heatData', method='post')
+        h2 Angiv ejendomme hørende til følgende varmemålere:
+        each value, key in unknownProperties
+            |Målernummer #{key}:
+            br
+            input(type='text', name=key required='')
+            br
+        input(type='submit', value='Send')

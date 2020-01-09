@@ -5,48 +5,50 @@ block content
 
     link(rel="stylesheet", href="/assets/stylesheets/dashboard.css")
 
-
     .sidenav
 
         p.top-nav-text Daplex
 
         button.dropdown-btn
             a(href='#helpdesk') Helpdesk
-            i.dropdown-icon
-        .dropdown-container
-            a(href='#cat1') Category 1
-            a(href='#cat2') Category 2
-            a(href='#cat3') Category 3
 
         button.dropdown-btn
             a(href='#condition') Tilstand
-            i.dropdown-icon
-        .dropdown-container
-            a(href='#cat11') Tilstand 1
-            a(href='#cat21') Tilstand 2
-            a(href='#cat31') Tilstand 3
 
         button.dropdown-btn
             a(href='#energy') Energi
-            i.dropdown-icon
-        .dropdown-container
-            a(href='#cat12') Energi 1
-            a(href='#cat22') Energi 2
-            a(href='#cat32') Energi 3   
 
-    div.pop-out
-        p.pop-out-header Header 
+    div.pop-out(id='pop-out')
+        p.pop-out-header(id='pop-out-header') Header 
 
-        form.input-container
+        select(id='helpdesk-category') 
+            option(value=0 id='category-helpdesk-global') Global Helpdesk
+                each helpdeskCategory in helpdeskCategories
+                    option(value=helpdeskCategory.id) #{helpdeskCategory.name}
+
+        select(id='condition-category') 
+            option(value=0 id='category-condition-global') Global Tilstand
+                each conditionCategory in conditionCategories
+                    option(value=conditionCategory.id) #{conditionCategory.name}            
+
+        select(id='energy-category') 
+            option(value=0 id='category-energy-global') Global Energi
+            option(value=1 id='category-electricity') El
+            option(value=2 id='category-water') Vand
+            option(value=3 id='category-heat') Varme
+
+        form.input-container(id='submitForm' name="inputForm" onSubmit='return saveInputData()')
             label Gul grænseværdi
-            input(type="number" id="thresholdYellow")
+            input(type="number" id="thresholdYellow" name='yellowThreshold')
             label Rød grænseværdi
-            input(type="number" id="thresholdRed")
+            input(type="number" id="thresholdRed" name='redThreshold')
+            input(type="hidden" name='category' id='formCategory')
 
-            div.slide-container    
-                input(type="range" min="1" max="100" value="50" class="slider" id="myRange")
+            div.slide-container
+                label(for="weightslider" id='weightslider') Vægtning
+                input(type="range" min="0" max="100" value="50" class="slider" id="myRange" name='weightslider')
 
-            button(type="submit") Gem
+            button(type="submit" value='Submit') Gem
             
      
     script(src="/assets/javascripts/dashboard.js") 
