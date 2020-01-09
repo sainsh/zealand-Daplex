@@ -1041,6 +1041,7 @@ exports.createHelpdeskWeightTable = (categoryId, propertyId, weight) => {hwt.cre
 exports.readHelpdeskWeight = (id) => {hwt.readHelpdeskWeight(id, sequelize, Sequelize)};
 exports.updateHelpdeskWeightTable = (id, categoryId, propertyId, weight) => hwt.updateHelpdeskWeight(id, categoryId, propertyId, weight, sequelize, Sequelize);
 exports.deleteHelpdeskWeight = (id) => hwt.deleteHelpdeskWeight(id, sequelize, Sequelize);
+exports.getHelpdeskWeightTable = hwt.getHelpdeskWeightTable(sequelize,Sequelize);
 
 // DB Tools export from stateWeightDbTools - Team Hurricane
 exports.createStateWeightTable = (categoryId, propertyId, weight) => {swt.createStateWeight(categoryId, propertyId, weight, sequelize, Sequelize)};
