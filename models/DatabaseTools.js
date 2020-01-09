@@ -11,7 +11,9 @@ const wtt = require('./WaterThresholdsDbTools');
 const ptt = require('./PowerThresholdsDbTools');
 const hett = require('./HeatThresholdsDbTools');
 const dtt = require('./DamageThresholdDbTools');
-const pt = require('./powerDBTools.js');
+
+// database tools import for power data
+const pt = require('./PowerDBTools');
 
 const host = '127.0.0.1';
 const user = 'root';
