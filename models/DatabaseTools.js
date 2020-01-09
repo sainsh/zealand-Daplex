@@ -399,7 +399,7 @@ generateStartData = async() => {
 /**
  * Function for creating a new property (ejendom).
  */
-exports.createProperty = async function (propertyName, propertySize = 1000, propertyTypeId = 420, electricityMeter, heatMeter) {
+exports.createProperty = async function (propertyName, propertySize = 1000, propertyTypeId = 1, electricityMeter, heatMeter) {
     try {
         let propertiesTable = getPropertiesTable();
 
