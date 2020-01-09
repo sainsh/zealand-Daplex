@@ -368,20 +368,16 @@ exports.setupTables = async function () {
  */
 generateStartData = async() => {
 
-    console.log("Trying to generate helpdesk category data");
-
     let read;
 
     try{
         read = await hct.read();
-        console.log("Read data: " + read);
     } catch(e){
-        console.log("No data detected in helpdesk categories table")
+        throw e;
     }
 
     if(read == undefined){
         //Helpdesk Categories
-        console.log("Inserting helpdesk category data");
 
         hct.create("Indeklima");
         hct.create("Tekniske Anlæg");
@@ -394,10 +390,7 @@ generateStartData = async() => {
         hct.create("Vinduer og Udvendige Døre");
         hct.create("Fundament og Sokkel");
 
-        console.log("Data inserted Success")
-    } else {
-        console.log("There is already data in the helpdesk categories database");
-    }
+    } 
 
 }
 
@@ -713,11 +706,12 @@ exports.createWaterData = async function (waterDataArray, propertyName) {
         let waterTable = getWaterTable();
         let resultsArray = [];
 
-        let trimmedPropertyName = propertyName.slice(13, propertyName.lastIndexOf("-") - 1); // Trim property name
+        let trimmedPropertyName1 = propertyName.replace("Vanddata fra ", "");
+        let trimmedPropertyName2 = trimmedPropertyName1.slice(0, trimmedPropertyName1.lastIndexOf("-") - 1); // Trim property name
         let propertiesTable = getPropertiesTable();
-        let propertyId = await propertiesTable.findAll(({where: {property_name: trimmedPropertyName}})); // Check whether the property exists
+        let propertyId = await propertiesTable.findAll(({where: {property_name: trimmedPropertyName2}})); // Check whether the property exists
         if (propertyId.length === 0) // If the results array have a length of 0, the property doesn't exist
-            propertyId = await exports.createProperty(trimmedPropertyName); // Create a new property
+            propertyId = await exports.createProperty(trimmedPropertyName2); // Create a new property
         else
             propertyId = propertyId[0].dataValues.property_id;
 
@@ -739,21 +733,21 @@ exports.createWaterData = async function (waterDataArray, propertyName) {
     }
 };
 
-exports.createHeatData = async function (heatDataArray) {
+exports.createHeatData = async function (heatDataArray, propertiesObject) {
     try {
         let heatTable = getHeatTable();
+        let propertiesTable = getPropertiesTable();
         let resultsArray = [];
 
         for (let heatObject of heatDataArray) { // Loop through all the data
             if (heatObject['3'].search("23:") >= 0) { // Only save 1 heat data per day (the one from 23:XX)
                 let heatMeter = heatObject['1'];
-                let propertyName = "Teatergade 8"; // Målernummer 69881738 = Teatergade 8
 
-                let propertiesTable = getPropertiesTable();
                 let propertyId = await propertiesTable.findAll(({where: {heat_meter: heatMeter}})); // Check whether the property exists
-                if (propertyId.length === 0) // If the results array have a length of 0, the property doesn't exist
+                if (propertyId.length === 0) { // If the results array have a length of 0, the property doesn't exist
+                    let propertyName = propertiesObject[heatMeter]; // Get property name
                     propertyId = await exports.createProperty(propertyName, undefined, undefined, undefined, heatMeter); // Create a new property
-                else
+                } else
                     propertyId = propertyId[0].dataValues.property_id;
 
                 let result = await heatTable.create({
@@ -771,6 +765,25 @@ exports.createHeatData = async function (heatDataArray) {
         throw e;
     }
 };
+
+exports.checkProperties = async function (heatDataArray) {
+    let unknownProperties = {};
+    let propertiesTable = getPropertiesTable();
+
+    for (let heatObject of heatDataArray) {
+        if (heatObject['3'].search("23:") >= 0) {
+            let heatMeter = heatObject['1'];
+            if (heatMeter) {
+                let propertyId = await propertiesTable.findAll(({where: {heat_meter: heatMeter}})); // Check whether the property exists
+                if (propertyId.length === 0) // If the results array have a length of 0, the property doesn't exist
+                    unknownProperties[heatMeter] = null;
+            }
+        }
+    }
+
+    return unknownProperties;
+};
+
 
 exports.readProperty = async function (id) {
     try {
@@ -851,6 +864,16 @@ exports.readWaterData = async function (id) {
         let waterTable = getWaterTable();
         let result = await waterTable.findAll((id ? {where: {property_id: id}} : {})); // Add the "where" option, if the ID is not undefined
         return result.length === 0 ? await Promise.reject(new Error("No water data found")) : result; // Return an error, if 0 results are found, else return the result(s)
+    } catch (e) {
+        throw e;
+    }
+};
+
+exports.readHeatData = async function (id) {
+    try {
+        let heatTable = getHeatTable();
+        let result = await heatTable.findAll((id ? {where: {property_id: id}} : {})); // Add the "where" option, if the ID is not undefined
+        return result.length === 0 ? await Promise.reject(new Error("No heat data found")) : result; // Return an error, if 0 results are found, else return the result(s)
     } catch (e) {
         throw e;
     }
