@@ -109,6 +109,7 @@ router.post('/state', (req, res, next) => {
 
 
   var data = [select, tekSlider, udvSlider, osvSlider];
+  
   db.createStateWeightTable(data);
   db.updateStateWeightTable(data);
   res.redirect("/weightUI/");

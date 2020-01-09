@@ -11,6 +11,12 @@ const ptt = require('./PowerThresholdsDbTools');
 const hett = require('./HeatThresholdsDbTools');
 const dtt = require('./DamageThresholdDbTools');
 
+// database tools import for weight - Team Hurricane
+const ewt = require('./energiWeightToolsDB');
+const hwt = require('./helpdeskWeightToolsDB');
+const swt = require('./stateWeightToolsDB');
+
+
 const host = '127.0.0.1';
 const user = 'root';
 const password = 'password';
