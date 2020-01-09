@@ -7,8 +7,14 @@ var db = require('../models/DatabaseTools');
 router.get('/', async function(req, res, next) {
 
   var helpdeskCategories = await db.hct.read();
+  var propertyTypes = await db.prtt.read();
 
-  res.render('dashboard', { helpdeskCategories: helpdeskCategories, conditionCategories: helpdeskCategories});
+  console.log('READ:::::::::::::' + propertyTypes)
+
+  res.render('dashboard', { 
+    helpdeskCategories: helpdeskCategories, 
+    conditionCategories: helpdeskCategories, 
+    propertyTypes: propertyTypes});
 
 });
 

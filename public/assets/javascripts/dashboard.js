@@ -14,8 +14,9 @@ window.onhashchange = function () {
         weightslidertext.innerText = 'Vægtning = ' + slider.value;
     })
 
-    // getting url including # and after fx. www.example.com/dashboard#energy returns #energy
+    // getting url including # and after. fx. www.example.com/dashboard#energy returns #energy
     let urlhash = window.location.hash;
+
 
     // checking if hash exits
     if (urlhash != '') {
@@ -27,6 +28,9 @@ window.onhashchange = function () {
 
         // getting different selectboxes for different menu categories in array 
         let selectBoxes = [this.document.getElementById('helpdesk-category'), this.document.getElementById('condition-category'), this.document.getElementById('energy-category')];
+
+        //show property type select box
+        this.document.getElementById('property-types').style.display = 'block';
 
         // if helpdesk category is chosen
         if (urlhash == "#helpdesk") {

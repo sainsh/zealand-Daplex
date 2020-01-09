@@ -69,7 +69,6 @@ html {
 }
 
 /* popout bar style */
-
 #pop-out {
     width: 350px;
     height: 100%;
@@ -89,17 +88,18 @@ html {
     margin-bottom: 50px;
 }
 
-#helpdesk-category, #condition-category, #energy-category {
+#helpdesk-category, #condition-category, #energy-category, #property-types {
 
     width: 80%;
     height: 32px;
     font-size: 16px;
-    margin: 0 auto 50px auto;
+    margin: 0 auto 30px auto;
     border-radius: 4px;
     background-color: #0175cc;
     color: white;
     border-color: #0175cc;
     padding: 5px;
+    display: none;
 
 }
 

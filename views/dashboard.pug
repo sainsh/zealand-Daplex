@@ -21,6 +21,11 @@ block content
     div.pop-out(id='pop-out')
         p.pop-out-header(id='pop-out-header') Header 
 
+        select(id='property-types') 
+            option(value=0 id='all-property-types') Alle Bygningstyper
+                each propertyType in propertyTypes
+                    option(value=propertyType.id) #{propertyType.name} #{propertyType.type_id}
+
         select(id='helpdesk-category') 
             option(value=0 id='category-helpdesk-global') Global Helpdesk
                 each helpdeskCategory in helpdeskCategories

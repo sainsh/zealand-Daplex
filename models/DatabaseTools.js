@@ -394,7 +394,7 @@ generateStartData = async() => {
         await prtt.read();
     } catch (e){
         prtt.create(420, "Skole");
-        prtt.create(440, "daginstitution");
+        prtt.create(440, "Daginstitution");
     }
 
 }
