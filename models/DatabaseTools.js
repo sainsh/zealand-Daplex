@@ -10,6 +10,7 @@ const wtt = require('./WaterThresholdsDbTools');
 const ptt = require('./PowerThresholdsDbTools');
 const hett = require('./HeatThresholdsDbTools');
 const dtt = require('./DamageThresholdDbTools');
+const pt = require('./powerDBTools');
 
 const host = '127.0.0.1';
 const user = 'root';
@@ -338,6 +339,7 @@ exports.setupTables = async function () {
     let overallWeightTable = getOverallWeightTable();
     let waterTable = getWaterTable();
     let heatTable = getHeatTable();
+    let powerTable = pt.getPowerTable(sequelize, Sequelize);
 
     helpdeskTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
     maintenanceTable.belongsTo(propertiesTable, {foreignKey: 'property_id'});
@@ -356,6 +358,7 @@ exports.setupTables = async function () {
     await overallWeightTable.sync({force: false});
     await waterTable.sync({force: false});
     await heatTable.sync({force: false});
+    await powerTable.sync({force: false});
 
     // Generation of start data for the database
     await generateStartData();
@@ -1007,3 +1010,8 @@ exports.createDamageThreshold = (yellowThreshold, redThreshold, propertyId) => {
 exports.readDamageThreshold = (id) => {hett.createHeatThreshold(id, sequelize, Sequelize)};
 exports.updateDamageThreshold = (id, propertyId, yellowThreshold, redThreshold) => hett.updateHeatThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
 exports.deleteDamageThreshold = (id) => hett.deleteHeatThreshold(id, sequelize, Sequelize);
+
+// DB Tools export from powerTable - Team Hurricane
+exports.createPower = (power) =>  {pt.createPower(power, sequelize, Sequelize)};
+exports.readPower = (installationNumber) =>  {pt.readPower(installationNumber, sequilize, Sequilize)};
+exports.deletePower = (id) => {pt.deletePower(id, sequilize, Sequilize)};

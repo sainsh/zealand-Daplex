@@ -21,7 +21,7 @@ const databaseTools = require('../models/DatabaseTools');
 const conversionTools = require('../models/ConversionTools');
 
 router.get('/', function (req, res, next) {
-    res.render('import', (req.query.xlsxFileUploaded ? {xlsxFileUploaded: true} : {}));
+    res.render('import', (req.query.xlsxFileUploaded ? { xlsxFileUploaded: true } : {}));
 });
 
 router.post('/csv', upload.single('csv-file'), async function (req, res, next) {
@@ -45,6 +45,10 @@ router.post('/csv', upload.single('csv-file'), async function (req, res, next) {
             jsonResult = await conversionTools.convertCsvToJson(filePath, "#Energi;", false);
             idResults = databaseTools.createHeatData(jsonResult);
             break;
+        case 'El':
+            jsonResult = await conversionTools.convertCsvToJson(filePath, "#E17", false);
+            idResults = databaseTools.createPower(jsonResult);
+            break;
     }
     console.log(`${req.body.kategori}:  ${new Date()}`);
     res.redirect("/import/");
@@ -63,6 +67,10 @@ router.post('/xlsx', upload.single('xlsx-file'), async function (req, res, next)
         case 'Tilstand':
             jsonResult = await conversionTools.convertCsvToJson(outputFilePath, "Status;");
             idResults = databaseTools.createMaintenanceData(jsonResult);
+            break;
+        case 'El':
+            jsonResult = await conversionTools.convertCsvToJson(outputFilePath, "#E17;");
+            idResults = databaseTools.createPower(jsonResult);
             break;
     }
     console.log(`${req.body.kategori}: ${new Date()}`);
