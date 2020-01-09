@@ -376,17 +376,9 @@ exports.setupTables = async function () {
  */
 generateStartData = async() => {
 
-    let read;
-
     try{
-        read = await hct.read();
-    } catch(e){
-        throw e;
-    }
-
-    if(read == undefined){
-        //Helpdesk Categories
-
+        await hct.read()
+    } catch (e){
         hct.create("Indeklima");
         hct.create("Tekniske Anlæg");
         hct.create("Udvendig Belægning");
@@ -397,8 +389,7 @@ generateStartData = async() => {
         hct.create("Tagrender og Nedløb");
         hct.create("Vinduer og Udvendige Døre");
         hct.create("Fundament og Sokkel");
-
-    } 
+    }
 
 }
 
