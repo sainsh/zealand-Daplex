@@ -333,14 +333,15 @@ exports.setupTables = async function () {
     let propertiesTable = getPropertiesTable();
     let helpdeskCategoriesTable = helpdeskCategories.getHelpdeskCategoriesTable(sequelize, Sequelize);
     let helpdeskTable = getHelpdeskTable();
-    let helpdeskWeightTable = getHelpdeskWeightTable();
+    let helpdeskWeightTable = hwt.getHelpdeskWeightTable(sequelize, Sequelize);
     let helpdeskThresholdTable = htt.getHelpdeskThresholdsTable(sequelize, Sequelize);
     let waterThresholdTable = wtt.getWaterThresholdsTable(sequelize, Sequelize);
     let powerThresholdTable = ptt.getPowerThresholdsTable(sequelize, Sequelize);
     let heatThresholdTable = hett.getHeatThresholdsTable(sequelize, Sequelize);
     let damageThresholdtable = dtt.getDamageThresholdsTable(sequelize, Sequelize);
     let maintenanceTable = getMaintenanceTable();
-    let stateWeightTable = getStateWeightTable();
+    let stateWeightTable = swt.getStateWeightTable(sequelize, Sequelize);
+    let energiWeightTable = ewt.getEnergiWeightTable(sequelize, Sequelize);
     let overallWeightTable = getOverallWeightTable();
     let waterTable = getWaterTable();
     let heatTable = getHeatTable();
@@ -362,6 +363,7 @@ exports.setupTables = async function () {
     await overallWeightTable.sync({force: false});
     await waterTable.sync({force: false});
     await heatTable.sync({force: false});
+    await energiWeightTable.sync({force: false});
 
     // Generation of start data for the database
     await generateStartData();
@@ -1036,3 +1038,21 @@ exports.createDamageThreshold = (yellowThreshold, redThreshold, propertyId) => {
 exports.readDamageThreshold = (id) => {hett.createHeatThreshold(id, sequelize, Sequelize)};
 exports.updateDamageThreshold = (id, propertyId, yellowThreshold, redThreshold) => hett.updateHeatThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
 exports.deleteDamageThreshold = (id) => hett.deleteHeatThreshold(id, sequelize, Sequelize);
+//-------------------------------------------------------------//
+// DB Tools export from energiWeightDbTools - Team Hurricane
+exports.createEnergiWeight = (categoryId, propertyId, weight) => {ewt.createEnergiWeight(categoryId, propertyId, weight, sequelize, Sequelize)};
+exports.readEnergiWeight = (id) => {ewt.readEnergiWeight(id, sequelize, Sequelize)};
+exports.updateEnergiWeight = (id, categoryId, propertyId, weight) => ewt.updateEnergiWeight(id, categoryId, propertyId, weight, sequelize, Sequelize);
+exports.deleteEnergiWeight = (id) => ewt.deleteEnergiWeight(id, sequelize, Sequelize); 
+
+// DB Tools export from helpdeksWeightDbTools - Team Hurricane
+exports.createHelpdeskWeightTable = (categoryId, propertyId, weight) => {hwt.createHelpdeskWeight(categoryId, propertyId, weight, sequelize, Sequelize)};
+exports.readHelpdeskWeight = (id) => {hwt.readHelpdeskWeight(id, sequelize, Sequelize)};
+exports.updateHelpdeskWeightTable = (id, categoryId, propertyId, weight) => hwt.updateHelpdeskWeight(id, categoryId, propertyId, weight, sequelize, Sequelize);
+exports.deleteHelpdeskWeight = (id) => hwt.deleteHelpdeskWeight(id, sequelize, Sequelize);
+
+// DB Tools export from stateWeightDbTools - Team Hurricane
+exports.createStateWeightTable = (categoryId, propertyId, weight) => {swt.createStateWeight(categoryId, propertyId, weight, sequelize, Sequelize)};
+exports.readStateWeight = (id) => {swt.readStateWeight(id, sequelize, Sequelize)};
+exports.updateStateWeightTable = (id, categoryId, propertyId, weight) => swt.updateStateWeight(id, categoryId, propertyId, weight, sequelize, Sequelize);
+exports.deleteStateWeight = (id) => swt.deleteStateWeight(id, sequelize, Sequelize);
