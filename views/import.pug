@@ -4,7 +4,7 @@ block content
     link(rel="stylesheet", href="/assets/stylesheets/common.css")
     h1 Import af XLSX og CSV filer
 
-    
+
     a(href="http://localhost:3000/" class="btn") Home
 
     br
@@ -27,6 +27,10 @@ block content
         input(type='submit', value='Upload' class="btn")
 
     br
+    if (fileTypeUploaded === 'csv')
+        p csv-fil uploadet
+
+    br
     hr
     br
 
@@ -43,6 +47,7 @@ block content
         br
         br
         input(type='submit', value='Upload' class="btn")
-        br
-        if (xlsxFileUploaded)
-            p File successfully uploaded
+
+    br
+    if (fileTypeUploaded === 'xlsx')
+        p xlsx-fil uploadet
