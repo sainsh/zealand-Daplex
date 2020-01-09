@@ -9,12 +9,21 @@ router.get('/', async function(req, res, next) {
   var helpdeskCategories = await db.hct.read();
   var propertyTypes = await db.prtt.read();
 
-  console.log('READ:::::::::::::' + propertyTypes)
+  var helpdeskTresholdData;
+  var conditionThresholdData;
+  var energyThresholdData;
+
+  try{
+    helpdeskTresholdData = await db.ht.read();
+  } catch(e){
+    helpdeskTresholdData = fillThresholdObjOnError();
+  }
 
   res.render('dashboard', { 
     helpdeskCategories: helpdeskCategories, 
     conditionCategories: helpdeskCategories, 
-    propertyTypes: propertyTypes});
+    propertyTypes: propertyTypes, 
+    helpdeskThresholdData: helpdeskTresholdData});
 
 });
 
@@ -66,7 +75,20 @@ router.post('/energy', async function(req, res, next) {
 
   res.redirect('/dashboard#energy');
   
-
 });
+
+fillThresholdObjOnError = () => {
+
+  /* id	property_id	helpdesk_category_id	threshold_yellow	threshold_red */
+
+  let obj = {};
+  obj.id = 'no data'
+  obj.property_id = 'no data'
+  obj.helpdesk_category_id = 'no data'
+  obj.threshold_yellow = '0'
+  obj.threshold_red = '0'
+
+  return obj;
+}
 
 module.exports = router;

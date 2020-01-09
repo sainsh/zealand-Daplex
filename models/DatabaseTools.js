@@ -6,7 +6,7 @@ const helpdeskCategories = require('./helpdeskCategoriesTable');
 const propertyTypes = require('./propertyTypesDbTools');
 
 // database tools import for thresholds - Team Cyclone
-const htt = require('./ThresholdsDbTools');
+const helpdeskTresholds = require('./ThresholdsDbTools');
 const wtt = require('./WaterThresholdsDbTools');
 const ptt = require('./PowerThresholdsDbTools');
 const hett = require('./HeatThresholdsDbTools');
@@ -333,7 +333,7 @@ exports.setupTables = async function () {
     let helpdeskCategoriesTable = helpdeskCategories.getHelpdeskCategoriesTable(sequelize, Sequelize);
     let helpdeskTable = getHelpdeskTable();
     let helpdeskWeightTable = getHelpdeskWeightTable();
-    let helpdeskThresholdTable = htt.getHelpdeskThresholdsTable(sequelize, Sequelize);
+    let helpdeskThresholdTable = helpdeskTresholds.getHelpdeskThresholdsTable(sequelize, Sequelize);
     let waterThresholdTable = wtt.getWaterThresholdsTable(sequelize, Sequelize);
     let powerThresholdTable = ptt.getPowerThresholdsTable(sequelize, Sequelize);
     let heatThresholdTable = hett.getHeatThresholdsTable(sequelize, Sequelize);
@@ -1016,10 +1016,14 @@ prtt.delete = (id) => propertyTypes.deletePropertyType(id, sequelize, Sequelize)
 exports.prtt = prtt;
 
 // DB Tools export from ThresholdDbTools - Team Cyclone
-exports.createHelpdeskThreshold = (yellowThreshold, redThreshold, categoryId, propertyId) => {htt.createHelpdeskThreshold(yellowThreshold, redThreshold, categoryId, propertyId, sequelize, Sequelize)};
-exports.readHelpdeskThreshold = (id) => {htt.readHelpdeskThreshold(id, sequelize, Sequelize)};
-exports.updateHelpdeskThreshold = (id, propertyId, categoryId, yellowThreshold, redThreshold) => htt.updateHelpdeskThreshold(id, propertyId,  categoryId, yellowThreshold, redThreshold, sequelize, Sequelize);
-exports.deleteHelpdeskThreshold = (id) => htt.deleteHelpdeskThreshold(id, sequelize, Sequelize);
+
+var ht = {};
+ht.create = (yellowThreshold, redThreshold, categoryId, propertyId) => helpdeskTresholds.createHelpdeskThreshold(yellowThreshold, redThreshold, categoryId, propertyId, sequelize, Sequelize);
+ht.read = (id) => helpdeskTresholds.readHelpdeskThreshold(id, sequelize, Sequelize);
+ht.update = (id, propertyId, categoryId, yellowThreshold, redThreshold) => helpdeskTresholds.updateHelpdeskThreshold(id, propertyId,  categoryId, yellowThreshold, redThreshold, sequelize, Sequelize);
+ht.delete = (id) => helpdeskTresholds.deleteHelpdeskThreshold(id, sequelize, Sequelize);
+
+exports.ht = ht;
 
 
 // DB Tools export from WaterThresholdDbTools - Team Cyclone

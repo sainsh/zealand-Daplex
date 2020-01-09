@@ -54,24 +54,35 @@ readHelpdeskThreshold = async function(id, sequelize, Sequelize){
     let debugMessage = headerName + 'readHelpdeskThresholdTable: '; 
 
     console.log(debugMessage + 'Read initialized...');
+
+    if(id){
+
+        try {
+            let helpdeskThresholds = getHelpdeskThresholdsTable(sequelize, Sequelize);
+            let result = await helpdeskThresholds.findAll((id ? {where: {id: id}} : {}));
     
-    try {
-        let helpdeskThresholds = getHelpdeskThresholdsTable(sequelize, Sequelize);
-        let result = await helpdeskThresholds.findAll((id ? {where: {id: id}} : {}));
+            let answer = result.length === 0 ? result : 'nothing was found with the specified id';
+    
+            return result.length === 0 ? await Promise.reject(new Error("No helpdesk threshold data found")) : result;
+        } catch(e){
+            throw e;
+        }
 
-        let answer = result.length === 0 ? result : 'nothing was found with the specified id';
+    } else {
 
-        result.forEach(element => {
-            console.log(debugMessage + "id: " + element.id + " threshold yellow: " + 
-            element.threshold_yellow + " threshold red " + element.threshold_red + 
-            " property type id: " +  element.property_id + " helpdesk category id = " + element.helpdesk_category_id);
-        }); 
+        try {
+            let helpdeskThresholds = getHelpdeskThresholdsTable(sequelize, Sequelize);
+            let result = await helpdeskThresholds.findAll();
+    
+            let answer = result.length === 0 ? result : 'nothing was found with the specified id';
 
-        return result.length === 0 ? await Promise.reject(new Error("No helpdesk threshold data found")) : result;
-    } catch(e){
-        throw e;
+            return result.length === 0 ? await Promise.reject(new Error("No helpdesk threshold data found")) : result;
+        } catch(e){
+            throw e;
+        }
+
     }
-
+    
 }
 
 
@@ -80,8 +91,6 @@ readHelpdeskThreshold = async function(id, sequelize, Sequelize){
 updateHelpdeskThreshold = async function(id, propertyId, categoryId, yellowThreshold, redThreshold, sequelize, Sequelize){
     
     let debugMessage = headerName + 'updateHelpdeskThresholdTable: '; 
-
-    console.log(debugMessage + 'Update initialized...');
 
     try {
         console.log(debugMessage + 'Getting Table...');

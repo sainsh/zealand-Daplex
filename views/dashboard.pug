@@ -44,9 +44,9 @@ block content
 
         form.input-container(id='submitForm' name="inputForm" onSubmit='return saveInputData()')
             label Gul grænseværdi
-            input(type="number" id="thresholdYellow" name='yellowThreshold')
+            input(type="number" id="thresholdYellow" name='yellowThreshold' value= helpdeskThresholdData.threshold_yellow)
             label Rød grænseværdi
-            input(type="number" id="thresholdRed" name='redThreshold')
+            input(type="number" id="thresholdRed" name='redThreshold' value= helpdeskThresholdData.threshold_red)
             input(type="hidden" name='category' id='formCategory')
 
             div.slide-container
