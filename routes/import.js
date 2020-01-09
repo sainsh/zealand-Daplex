@@ -23,7 +23,7 @@ let unknownProperties;
 let savedJsonResult;
 
 router.get('/', function (req, res, next) {
-    res.render('import', (req.query.xlsxFileUploaded ? { xlsxFileUploaded: true } : {}));
+    res.render('import', (req.query.fileTypeUploaded ? {fileTypeUploaded: req.query.fileTypeUploaded} : {}));
 });
 
 router.post('/csv', upload.single('csv-file'), async function (req, res, next) {
@@ -48,7 +48,7 @@ router.post('/csv', upload.single('csv-file'), async function (req, res, next) {
             unknownProperties = await databaseTools.checkProperties(jsonResult);
             if (Object.keys(unknownProperties).length > 0) {
                 savedJsonResult = jsonResult;
-                res.render('inputProperties', {unknownProperties: unknownProperties});
+                res.render('inputProperties', {unknownProperties: unknownProperties, sendPostRequestTo: '/import/heatData'});
                 return;
             } else
                 idResults = databaseTools.createHeatData(jsonResult);
@@ -59,7 +59,8 @@ router.post('/csv', upload.single('csv-file'), async function (req, res, next) {
             break;
     }
     console.log(`${req.body.kategori}:  ${new Date()}`);
-    res.redirect("/import/");
+    // res.redirect("/import/");
+    res.redirect("/import?fileTypeUploaded=csv");
 });
 
 router.post('/xlsx', upload.single('xlsx-file'), async function (req, res, next) {
@@ -83,14 +84,14 @@ router.post('/xlsx', upload.single('xlsx-file'), async function (req, res, next)
     }
     console.log(`${req.body.kategori}: ${new Date()}`);
     // res.redirect("/import/");
-    res.redirect("/import?xlsxFileUploaded=true");
+    res.redirect("/import?fileTypeUploaded=xlsx");
 });
 
 router.post('/heatData', function (req, res, next) {
     let idResults = databaseTools.createHeatData(savedJsonResult, req.body);
     unknownProperties = null;
     savedJsonResult = null;
-    res.redirect("/import/");
+    res.redirect("/import?fileTypeUploaded=xlsx");
 });
 
 module.exports = router;
