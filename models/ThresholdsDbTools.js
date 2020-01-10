@@ -102,7 +102,7 @@ updateHelpdeskThreshold = async function(id, propertyId, categoryId, yellowThres
             helpdesk_category_id: categoryId,
             threshold_yellow: yellowThreshold,
             threshold_red: redThreshold
-        }, {returning: true, where: {id: id}});
+        }, {returning: true, where: {property_id: propertyId, helpdesk_category_id: categoryId}});
     
         console.log(debugMessage + "Result = " + result);
 

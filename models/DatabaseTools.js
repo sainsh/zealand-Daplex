@@ -7,12 +7,12 @@ const propertyTypes = require('./propertyTypesDbTools');
 
 // database tools import for thresholds - Team Cyclone
 const helpdeskTresholds = require('./ThresholdsDbTools');
-const wtt = require('./WaterThresholdsDbTools');
-const ptt = require('./PowerThresholdsDbTools');
-const hett = require('./HeatThresholdsDbTools');
-const dtt = require('./DamageThresholdDbTools');
+const waterThresholds = require('./WaterThresholdsDbTools');
+const powerThresholds = require('./PowerThresholdsDbTools');
+const heatThresholds = require('./HeatThresholdsDbTools');
+const conditionThresholds = require('./DamageThresholdDbTools');
 
-// database tools import for weight - Team Hurricane
+// database tools import for weight - Team Tempest
 const ewt = require('./energiWeightToolsDB');
 const hwt = require('./helpdeskWeightToolsDB');
 const swt = require('./stateWeightToolsDB');
@@ -339,10 +339,10 @@ exports.setupTables = async function () {
     let helpdeskTable = getHelpdeskTable();
     let helpdeskWeightTable = hwt.getHelpdeskWeightTable(sequelize, Sequelize);
     let helpdeskThresholdTable = helpdeskTresholds.getHelpdeskThresholdsTable(sequelize, Sequelize);
-    let waterThresholdTable = wtt.getWaterThresholdsTable(sequelize, Sequelize);
-    let powerThresholdTable = ptt.getPowerThresholdsTable(sequelize, Sequelize);
-    let heatThresholdTable = hett.getHeatThresholdsTable(sequelize, Sequelize);
-    let damageThresholdtable = dtt.getDamageThresholdsTable(sequelize, Sequelize);
+    let waterThresholdTable = waterThresholds.getWaterThresholdsTable(sequelize, Sequelize);
+    let powerThresholdTable = powerThresholds.getPowerThresholdsTable(sequelize, Sequelize);
+    let heatThresholdTable = heatThresholds.getHeatThresholdsTable(sequelize, Sequelize);
+    let damageThresholdtable = conditionThresholds.getDamageThresholdsTable(sequelize, Sequelize);
     let maintenanceTable = getMaintenanceTable();
     let stateWeightTable = swt.getStateWeightTable(sequelize, Sequelize);
     let energiWeightTable = ewt.getEnergiWeightTable(sequelize, Sequelize);
@@ -382,11 +382,11 @@ exports.setupTables = async function () {
  * Generates data for the database that should be present at
  * the start of system. - Team Cyclone
  */
-generateStartData = async() => {
+generateStartData = async () => {
 
-    try{
+    try {
         await hct.read();
-    } catch (e){
+    } catch (e) {
         hct.create("Indeklima");
         hct.create("Tekniske Anlæg");
         hct.create("Udvendig Belægning");
@@ -399,9 +399,9 @@ generateStartData = async() => {
         hct.create("Fundament og Sokkel");
     }
 
-    try{
+    try {
         await prtt.read();
-    } catch (e){
+    } catch (e) {
         prtt.create(420, "Skole");
         prtt.create(440, "Daginstitution");
     }
@@ -433,8 +433,8 @@ exports.updatePropertyColor = async function (id, color) {
     try {
         let propertiesTable = getPropertiesTable();
         await propertiesTable.update(
-            {color: color},
-            {where: {property_id: id}});
+            { color: color },
+            { where: { property_id: id } });
     } catch (e) {
         throw e;
     }
@@ -452,7 +452,7 @@ exports.createHelpdeskData = async function (helpdeskArray) {
         let propertiesTable = getPropertiesTable();
 
         for (let helpdeskObject of helpdeskArray) { // Loop through all the data
-            let propertyId = await propertiesTable.findAll(({where: {property_name: helpdeskObject['Ejendom']}})); // Check whether the property exists
+            let propertyId = await propertiesTable.findAll(({ where: { property_name: helpdeskObject['Ejendom'] } })); // Check whether the property exists
 
             if (propertyId.length === 0) // If the results array have a length of 0, the property doesn't exist
                 propertyId = await exports.createProperty(helpdeskObject['Ejendom']); // Create a new property
@@ -464,7 +464,7 @@ exports.createHelpdeskData = async function (helpdeskArray) {
                 subject: helpdeskObject['Emne'],
                 description: helpdeskObject['Beskrivelse'],
                 submission_date: helpdeskObject['Indmeldelsesdato'],
-                expected_execution_date: helpdeskObject['Forventet udførelsesdato'] == '' ? null: helpdeskObject['Forventet udførelsesdato'],
+                expected_execution_date: helpdeskObject['Forventet udførelsesdato'] == '' ? null : helpdeskObject['Forventet udførelsesdato'],
                 submitter_name: helpdeskObject['Indmelders navn'],
                 submitter_email: helpdeskObject['Indmelders e-mail'],
                 submitter_phone: helpdeskObject['Indmelders tlfnr.'],
@@ -566,7 +566,7 @@ exports.updateHelpdeskWeightTable = async function (helpdeskWeightArray) {
             helpdesk_tag_ned: helpdeskWeightArray[8],
             helpdesk_vinduer: helpdeskWeightArray[9],
             helpdesk_fundament: helpdeskWeightArray[10]
-        }, {returning: true, where: {property_type_id: helpdeskWeightArray[0]}});
+        }, { returning: true, where: { property_type_id: helpdeskWeightArray[0] } });
 
 
         resultsArray.push(result.dataValues);
@@ -587,7 +587,7 @@ exports.updateStateWeightTable = async function (stateWeightArray) {
             state_tekniske: stateWeightArray[1],
             state_udvendige: stateWeightArray[2],
             state_osv: stateWeightArray[3],
-        }, {returning: true, where: {property_type_id: stateWeightArray[0]}});
+        }, { returning: true, where: { property_type_id: stateWeightArray[0] } });
 
 
         resultsArray.push(result.dataValues);
@@ -607,7 +607,7 @@ exports.updateOverallWeightTable = async function (overallWeightArray) {
             overall_tilstand: overallWeightArray[1],
             overall_energi: overallWeightArray[2],
             overall_helpdesk: overallWeightArray[3],
-        }, {returning: true, where: {property_type_id: overallWeightArray[0]}});
+        }, { returning: true, where: { property_type_id: overallWeightArray[0] } });
 
 
         resultsArray.push(result.dataValues);
@@ -622,7 +622,7 @@ exports.updateOverallWeightTable = async function (overallWeightArray) {
 exports.readHelpdeskWeightData = async function (id) {
     try {
         let weightTable = getHelpdeskWeightTable();
-        let result = await weightTable.findAll((id ? {where: {property_type_id: id}} : {}));// Add the "where" option, if the ID is not undefined
+        let result = await weightTable.findAll((id ? { where: { property_type_id: id } } : {}));// Add the "where" option, if the ID is not undefined
         let defaultData = [id, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50]; // Deafault values for sliders
         return result.length === 0 ? defaultData : result[0].dataValues; // Return deafaultData if 0 results are found, else return the result(s)
     } catch (e) {
@@ -633,7 +633,7 @@ exports.readHelpdeskWeightData = async function (id) {
 exports.readStateWeightData = async function (id) {
     try {
         let weightTable = getStateWeightTable();
-        let result = await weightTable.findAll((id ? {where: {property_type_id: id}} : {}));// Add the "where" option, if the ID is not undefined
+        let result = await weightTable.findAll((id ? { where: { property_type_id: id } } : {}));// Add the "where" option, if the ID is not undefined
         let defaultData = [id, 50, 50, 50]; // Default values for sliders
         return result.length === 0 ? defaultData : result[0].dataValues; // Return defaultData if 0 results are found, else return the result(s)
     } catch (e) {
@@ -644,7 +644,7 @@ exports.readStateWeightData = async function (id) {
 exports.readOverallWeightData = async function (id) {
     try {
         let weightTable = getOverallWeightTable();
-        let result = await weightTable.findAll((id ? {where: {property_type_id: id}} : {}));// Add the "where" option, if the ID is not undefined
+        let result = await weightTable.findAll((id ? { where: { property_type_id: id } } : {}));// Add the "where" option, if the ID is not undefined
         let defaultData = [id, 50, 50, 50]; // Default values for sliders
         return result.length === 0 ? defaultData : result[0].dataValues; // Return defaultData if 0 results are found, else return the result(s)
     } catch (e) {
@@ -689,14 +689,14 @@ exports.createMaintenanceData = async function (maintenanceDataArray) {
 
             let year = Object.keys(maintenanceObject)[0];
 
-            let propertyId = await propertiesTable.findAll(({where: {property_name: propertyNameTrimmed}})); // Check whether the property exists
+            let propertyId = await propertiesTable.findAll(({ where: { property_name: propertyNameTrimmed } })); // Check whether the property exists
 
             if (propertyId.length === 0) // If the results array have a length of 0, the property doesn't exist
                 propertyId = await exports.createProperty(propertyNameTrimmed); // Create a new property
             else
                 propertyId = propertyId[0].dataValues.property_id;
 
-            let propertyExistsInMaintenanceTable = await maintenanceTable.findAll(({where: {property_id: propertyId, year: year}})); // Check whether the property exists in the maintenance table
+            let propertyExistsInMaintenanceTable = await maintenanceTable.findAll(({ where: { property_id: propertyId, year: year } })); // Check whether the property exists in the maintenance table
 
             if (propertyExistsInMaintenanceTable.length === 0) { // Only create maintenance data if the property doesn't already exist in the maintenance table
                 let result = await maintenanceTable.create({
@@ -723,7 +723,7 @@ exports.createWaterData = async function (waterDataArray, propertyName) {
         let trimmedPropertyName1 = propertyName.replace("Vanddata fra ", "");
         let trimmedPropertyName2 = trimmedPropertyName1.slice(0, trimmedPropertyName1.lastIndexOf("-") - 1); // Trim property name
         let propertiesTable = getPropertiesTable();
-        let propertyId = await propertiesTable.findAll(({where: {property_name: trimmedPropertyName2}})); // Check whether the property exists
+        let propertyId = await propertiesTable.findAll(({ where: { property_name: trimmedPropertyName2 } })); // Check whether the property exists
         if (propertyId.length === 0) // If the results array have a length of 0, the property doesn't exist
             propertyId = await exports.createProperty(trimmedPropertyName2); // Create a new property
         else
@@ -757,7 +757,7 @@ exports.createHeatData = async function (heatDataArray, propertiesObject) {
             if (heatObject['3'].search("23:") >= 0) { // Only save 1 heat data per day (the one from 23:XX)
                 let heatMeter = heatObject['1'];
 
-                let propertyId = await propertiesTable.findAll(({where: {heat_meter: heatMeter}})); // Check whether the property exists
+                let propertyId = await propertiesTable.findAll(({ where: { heat_meter: heatMeter } })); // Check whether the property exists
                 if (propertyId.length === 0) { // If the results array have a length of 0, the property doesn't exist
                     let propertyName = propertiesObject[heatMeter]; // Get property name
                     propertyId = await exports.createProperty(propertyName, undefined, undefined, undefined, heatMeter); // Create a new property
@@ -788,7 +788,7 @@ exports.checkProperties = async function (heatDataArray) {
         if (heatObject['3'].search("23:") >= 0) {
             let heatMeter = heatObject['1'];
             if (heatMeter) {
-                let propertyId = await propertiesTable.findAll(({where: {heat_meter: heatMeter}})); // Check whether the property exists
+                let propertyId = await propertiesTable.findAll(({ where: { heat_meter: heatMeter } })); // Check whether the property exists
                 if (propertyId.length === 0) // If the results array have a length of 0, the property doesn't exist
                     unknownProperties[heatMeter] = null;
             }
@@ -802,7 +802,7 @@ exports.checkProperties = async function (heatDataArray) {
 exports.readProperty = async function (id) {
     try {
         let propertiesTable = getPropertiesTable();
-        let result = await propertiesTable.findAll((id ? {where: {property_id: id}} : {})); // Add the "where" option, if the ID is not undefined
+        let result = await propertiesTable.findAll((id ? { where: { property_id: id } } : {})); // Add the "where" option, if the ID is not undefined
         return result.length === 0 ? await Promise.reject(new Error("No properties found")) : result; // Return an error, if 0 results are found, else return the result(s)
     } catch (e) {
         throw e;
@@ -812,7 +812,7 @@ exports.readProperty = async function (id) {
 exports.readHelpdeskData = async function (id) {
     try {
         let helpdeskTable = getHelpdeskTable();
-        let result = await helpdeskTable.findAll((id ? {where: {property_type_id: id}} : {})); // Add the "where" option, if the ID is not undefined
+        let result = await helpdeskTable.findAll((id ? { where: { property_type_id: id } } : {})); // Add the "where" option, if the ID is not undefined
         return result.length === 0 ? await Promise.reject(new Error("No helpdesk data found")) : result; // Return an error, if 0 results are found, else return the result(s)
     } catch (e) {
         throw e;
@@ -843,7 +843,7 @@ exports.readHelpdeskDataOneYearBack = async function () {
 /*exports.readHelpdeskWeights = async function (id) {
     try {
         let helpdeskWeightTable = getHelpdeskWeightTable();
-        let result = await helpdeskWeightTable.findAll((id ? {where: {property_type_id: id}} : {})); // Add the "where" option, if the ID is not undefined
+        let result = await helpdeskWeightTable.findAll((id ? { where: { property_type_id: id } } : {})); // Add the "where" option, if the ID is not undefined
         return result.length === 0 ? await Promise.reject(new Error("No helpdesk weight data found")) : result; // Return an error, if 0 results are found, else return the result(s)
     } catch (e) {
         throw e;
@@ -853,7 +853,7 @@ exports.readHelpdeskDataOneYearBack = async function () {
 exports.readMaintenanceData = async function (id) {
     try {
         let maintenanceTable = getMaintenanceTable();
-        let result = await maintenanceTable.findAll((id ? {where: {property_id: id}} : {})); // Add the "where" option, if the ID is not undefined
+        let result = await maintenanceTable.findAll((id ? { where: { property_id: id } } : {})); // Add the "where" option, if the ID is not undefined
         return result.length === 0 ? await Promise.reject(new Error("No maintenance data found")) : result; // Return an error, if 0 results are found, else return the result(s)
     } catch (e) {
         throw e;
@@ -866,7 +866,7 @@ exports.readMaintenanceDataOneYearBack = async function () {
     try {
         let currentYear = new Date().getFullYear();
         let maintenanceTable = getMaintenanceTable();
-        let result = await maintenanceTable.findAll({where: {year: currentYear}});
+        let result = await maintenanceTable.findAll({ where: { year: currentYear } });
         return result.length === 0 ? await Promise.reject(new Error("No maintenance data found for this year")) : result; // Return an error, if 0 results are found, else return the result(s)
     } catch (e) {
         throw e;
@@ -876,7 +876,7 @@ exports.readMaintenanceDataOneYearBack = async function () {
 exports.readWaterData = async function (id) {
     try {
         let waterTable = getWaterTable();
-        let result = await waterTable.findAll((id ? {where: {property_id: id}} : {})); // Add the "where" option, if the ID is not undefined
+        let result = await waterTable.findAll((id ? { where: { property_id: id } } : {})); // Add the "where" option, if the ID is not undefined
         return result.length === 0 ? await Promise.reject(new Error("No water data found")) : result; // Return an error, if 0 results are found, else return the result(s)
     } catch (e) {
         throw e;
@@ -886,7 +886,7 @@ exports.readWaterData = async function (id) {
 exports.readHeatData = async function (id) {
     try {
         let heatTable = getHeatTable();
-        let result = await heatTable.findAll((id ? {where: {property_id: id}} : {})); // Add the "where" option, if the ID is not undefined
+        let result = await heatTable.findAll((id ? { where: { property_id: id } } : {})); // Add the "where" option, if the ID is not undefined
         return result.length === 0 ? await Promise.reject(new Error("No heat data found")) : result; // Return an error, if 0 results are found, else return the result(s)
     } catch (e) {
         throw e;
@@ -964,7 +964,7 @@ exports.processMaintenanceData = async function (resultPerProperty) {
         if (!resultPerProperty[propertyId])
             resultPerProperty[propertyId] = {};
 
-        let property = await propertiesTable.findAll(({where: {property_id: propertyId}}));
+        let property = await propertiesTable.findAll(({ where: { property_id: propertyId } }));
         let propertySize = property[0].dataValues.property_size;
         resultPerProperty[propertyId].maintenanceScore = data.dataValues.cost / propertySize;
     }
@@ -1006,6 +1006,8 @@ exports.calculateScore = async function () {
 // exports.calculateScore();
 
 // CRUD for helpdesk categories stored in an Object that's being exportet. - Team Cyclone
+
+// helpdesk categories db tools
 var hct = {};
 hct.create = (categoryName) => helpdeskCategories.createHelpdeskCategory(categoryName, sequelize, Sequelize);
 hct.read = (id) => helpdeskCategories.readHelpdeskCategory(id, sequelize, Sequelize);
@@ -1014,6 +1016,7 @@ hct.delete = (id) => helpdeskCategories.deleteHelpdeskCategory(id, sequelize, Se
 
 exports.hct = hct;
 
+// property types db tools 
 var prtt = {};
 prtt.create = (typeId, name) => propertyTypes.createPropertyType(typeId, name, sequelize, Sequelize);
 prtt.read = (id) => propertyTypes.readPropertyType(id, sequelize, Sequelize);
@@ -1022,34 +1025,57 @@ prtt.delete = (id) => propertyTypes.deletePropertyType(id, sequelize, Sequelize)
 
 exports.prtt = prtt;
 
-// DB Tools export from ThresholdDbTools - Team Cyclone
-
+// helpdesk thresholds db tools
 var ht = {};
 ht.create = (yellowThreshold, redThreshold, categoryId, propertyId) => helpdeskTresholds.createHelpdeskThreshold(yellowThreshold, redThreshold, categoryId, propertyId, sequelize, Sequelize);
 ht.read = (id) => helpdeskTresholds.readHelpdeskThreshold(id, sequelize, Sequelize);
-ht.update = (id, propertyId, categoryId, yellowThreshold, redThreshold) => helpdeskTresholds.updateHelpdeskThreshold(id, propertyId,  categoryId, yellowThreshold, redThreshold, sequelize, Sequelize);
+ht.update = (id, propertyId, categoryId, yellowThreshold, redThreshold) => helpdeskTresholds.updateHelpdeskThreshold(id, propertyId, categoryId, yellowThreshold, redThreshold, sequelize, Sequelize);
 ht.delete = (id) => helpdeskTresholds.deleteHelpdeskThreshold(id, sequelize, Sequelize);
 
 exports.ht = ht;
 
+// condition db tools 
+var ct = {};
+// DB Tools export from DamageThresholdDbTools - Team Cyclone
+ct.create = (yellowThreshold, redThreshold, propertyId) => conditionThresholds.createDamageThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize);
+ct.read = (id) => conditionThresholds.readDamageThreshold(id, sequelize, Sequelize);
+ct.update = (id, propertyId, yellowThreshold, redThreshold) => conditionThresholds.updateDamageThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
+ct.delete = (id) => conditionThresholds.deleteDamageThreshold(id, sequelize, Sequelize);
 
+var ewth = {};
 // DB Tools export from WaterThresholdDbTools - Team Cyclone
-exports.createWaterThreshold = (yellowThreshold, redThreshold, propertyId) => {wtt.createWaterThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};
-exports.readWaterThreshold = (id) => {wtt.createWaterThreshold(id, sequelize, Sequelize)};
-exports.updateWaterThreshold = (id, propertyId, yellowThreshold, redThreshold) => wtt.updateWaterThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
-exports.deleteWaterThreshold = (id) => wtt.deleteWaterThreshold(id, sequelize, Sequelize);
+ewth.create = (yellowThreshold, redThreshold, propertyId) => waterThresholds.createWaterThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize);
+ewth.read = (id) => { waterThresholds.readWaterThreshold(id, sequelize, Sequelize) };
+ewth.update = (id, propertyId, yellowThreshold, redThreshold) => waterThresholds.updateWaterThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
+ewth.delete = (id) => waterThresholds.deleteWaterThreshold(id, sequelize, Sequelize);
 
+exports.ewth = ewth;
+
+var  epth = {};
 // DB Tools export from PowerThresholdDbTools - Team Cyclone
-exports.createPowerThreshold = (yellowThreshold, redThreshold, propertyId) => {ptt.createPowerThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};
-exports.readPowerThreshold = (id) => {ptt.createPowerThreshold(id, sequelize, Sequelize)};
-exports.updatePowerThreshold = (id, propertyId, yellowThreshold, redThreshold) => ptt.updatePowerThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
-exports.deletePowerThreshold = (id) => ptt.deletePowerThreshold(id, sequelize, Sequelize);
+epth.create = (yellowThreshold, redThreshold, propertyId) => { powerThresholds.createPowerThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize) };
+epth.read = (id) => { powerThresholds.readPowerThreshold(id, sequelize, Sequelize) };
+epth.update = (id, propertyId, yellowThreshold, redThreshold) => powerThresholds.updatePowerThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
+epth.delete = (id) => powerThresholds.deletePowerThreshold(id, sequelize, Sequelize);
 
+exports.epth = epth;
+
+var ehth = {};
 // DB Tools export from HeatThresholdDbTools - Team Cyclone
-exports.createHeatThreshold = (yellowThreshold, redThreshold, propertyId) => {hett.createHeatThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};
-exports.readHeatThreshold = (id) => {hett.createHeatThreshold(id, sequelize, Sequelize)};
-exports.updateHeatThreshold = (id, propertyId, yellowThreshold, redThreshold) => hett.updateHeatThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
-exports.deleteHeatThreshold = (id) => hett.deleteHeatThreshold(id, sequelize, Sequelize);
+ehth.create = (yellowThreshold, redThreshold, propertyId) => heatThresholds.createHeatThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize);
+ehth.read = (id) => heatThresholds.createHeatThreshold(id, sequelize, Sequelize);
+ehth.update = (id, propertyId, yellowThreshold, redThreshold) => heatThresholds.updateHeatThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
+ehth.delete = (id) => heatThresholds.deleteHeatThreshold(id, sequelize, Sequelize);
+
+exports.ehth = ehth;
+
+propt = {};
+propt.create = (typeId, name) => propertyTypes.createPropertyType(typeId, name, sequelize, Sequelize);
+propt.read = (id) => propertyTypes.readPropertyType(id, sequelize, Sequelize);
+propt.update = (typeId, name) => propertyTypes.updatePropertyType(typeId, name, sequelize, Sequelize);
+propt.delete = (id) => propertyTypes.deletePropertyType(id, sequelize, Sequelize);
+
+exports.propt = propt;
 
 // DB Tools export from DamageThresholdDbTools - Team Cyclone
 exports.createDamageThreshold = (yellowThreshold, redThreshold, propertyId) => {hett.createHeatThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};
@@ -1077,6 +1103,6 @@ exports.updateStateWeightTable = (propertyId, categoryId, weight) => swt.updateS
 exports.deleteStateWeight = (id) => swt.deleteStateWeight(id, sequelize, Sequelize);
 
 // DB Tools export from powerTable - Team Hurricane
-exports.createPower = (power) =>  {pt.createPower(power, sequelize, Sequelize)};
-exports.readPower = (installationNumber) =>  {pt.readPower(installationNumber, sequilize, Sequilize)};
-exports.deletePower = (id) => {pt.deletePower(id, sequilize, Sequilize)};
+exports.createPower = (power) => { pt.createPower(power, sequelize, Sequelize) };
+exports.readPower = (installationNumber) => { pt.readPower(installationNumber, sequilize, Sequilize) };
+exports.deletePower = (id) => { pt.deletePower(id, sequilize, Sequilize) };
