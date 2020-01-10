@@ -4,19 +4,24 @@ block content
     link(rel="stylesheet", href="/assets/stylesheets/common.css")
     h1 FTP
 
-    
+
     a(href="http://localhost:3000/" class="btn") Home
     br
     hr
     br
-    p vælg kategori ud for den fil du vil uploade.
-    p tryk på fil for at uploade indhold til database.
-    ul
-        each item in dir
-            form(action=`/ftp/${item.name.split('.').pop()}`, method="post")
-                input(type="hidden", name='file' value=item.name)
-                select(name="kategori" class="categorySelect")
-                    option(value="Helpdesk") Helpdesk
-                    option(value="Tilstand") Tilstand
-                    option(value="energy") Energy
-                input(type="submit", value=item.name class="btn")
+    if (Array.isArray(dir))
+        p vælg kategori ud for den fil du vil uploade.
+        p tryk på fil for at uploade indhold til database.
+        ul
+            each item in dir
+                form(action=`/ftp/${item.name.split('.').pop()}`, method="post")
+                    input(type="hidden", name='file' value=item.name)
+                    select(name="kategori" class="categorySelect")
+                        option(value="Helpdesk") Helpdesk
+                        option(value="Tilstand") Tilstand
+                        option(value="El") El
+                        option(value="Varmedata") Varmedata
+                        option(value="Vanddata") Vanddata
+                    input(type="submit", value=item.name class="btn")
+    else
+        p= dir

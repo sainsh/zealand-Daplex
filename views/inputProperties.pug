@@ -7,7 +7,7 @@ block content
     br
     hr
     br
-    form(action='/import/heatData', method='post')
+    form(action=sendPostRequestTo, method='post')
         h2 Angiv ejendomme hørende til følgende varmemålere:
         each value, key in unknownProperties
             |Målernummer #{key}:
