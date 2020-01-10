@@ -1,6 +1,12 @@
 
 /* Script for dashboard client side */
 
+//Select HTML Elements
+let property = document.getElementById('property-types');
+let helpdesk = document.getElementById('helpdesk-category');
+let condition = document.getElementById('condition-category');
+let energy = document.getElementById('energy-category');
+
 /* function called on page update or menu click */
 window.onhashchange = function () {
     //code  
@@ -152,43 +158,49 @@ saveInputData = () => {
 };
 
 initEventListeners = () =>{
-    let property = document.getElementById('property-types');
-    let helpdesk = document.getElementById('helpdesk-category');
-    let condition = document.getElementById('condition-category');
-    let energy = document.getElementById('energy-category');
-
 
     property.addEventListener("change", () =>{
-        let urlhash = window.location.hash;
-        console.log(urlhash);
-
         var http = new XMLHttpRequest();
         http.open('POST', '/dashboard/getData');
         http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        let categoryOption = "";
-        if(urlhash == "#helpdesk"){
-            categoryOption = helpdesk.options[helpdesk.selectedIndex].value;
-        } else if(urlhash == "#condition"){
-            categoryOption = condition.options[condition.selectedIndex].value;
-        } else if(urlhash == "#energy"){
-            categoryOption = energy.options[energy.selectedIndex].value;
-        }
-        http.send(JSON.stringify({"category": `${urlhash.substr(1)}`, "property-type" : `${property.options[property.selectedIndex].value}`, "category-option": `${categoryOption}`}));
+        http.send(getBodyJson());
     });
 
     helpdesk.addEventListener("change", () =>{
-        console.log("changed");
+        var http = new XMLHttpRequest();
+        http.open('POST', '/dashboard/getData');
+        http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        http.send(getBodyJson());
     });
 
     condition.addEventListener("change", () =>{
-
-        console.log("changed");
+        var http = new XMLHttpRequest();
+        http.open('POST', '/dashboard/getData');
+        http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        http.send(getBodyJson());
     });
 
     energy.addEventListener("change", () =>{
-        console.log("changed");
+        var http = new XMLHttpRequest();
+        http.open('POST', '/dashboard/getData');
+        http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        http.send(getBodyJson());
     });
 };
+
+getBodyJson = () =>{
+    let urlhash = window.location.hash;
+
+    let categoryOption = "";
+    if(urlhash == "#helpdesk"){
+        categoryOption = helpdesk.options[helpdesk.selectedIndex].value;
+    } else if(urlhash == "#condition"){
+        categoryOption = condition.options[condition.selectedIndex].value;
+    } else if(urlhash == "#energy"){
+        categoryOption = energy.options[energy.selectedIndex].value;
+    }
+    return JSON.stringify({"category": `${urlhash.substr(1)}`, "property_type" : `${property.options[property.selectedIndex].value}`, "category_option": `${categoryOption}`});
+}
 
 initEventListeners();
 // calling method on page load and page reload
