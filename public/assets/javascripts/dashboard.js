@@ -32,15 +32,20 @@ window.onhashchange = function () {
         //show property type select box
         this.document.getElementById('property-types').style.display = 'block';
 
+        //Setting propertytypes to Global option everytime category changes
+        this.document.getElementById('property-types').selectedIndex = "0";
+
         // if helpdesk category is chosen
         if (urlhash == "#helpdesk") {
-
             // changing popout header text and showing correct select box
             headertext.innerText = 'Helpdesk';
 
             selectBoxes[0].style.display = 'block';
             selectBoxes[1].style.display = 'none';
             selectBoxes[2].style.display = 'none';
+
+            //Setting select to default option in case it was changed earlier
+            this.document.getElementById('helpdesk-category').selectedIndex = "0";
 
             // if condition category is chosen
         } else if (urlhash == "#condition") {
@@ -52,6 +57,9 @@ window.onhashchange = function () {
             selectBoxes[1].style.display = 'block';
             selectBoxes[2].style.display = 'none';
 
+            //Setting select to default option in case it was changed earlier
+            this.document.getElementById('condition-category').selectedIndex = "0";
+
             // if energy category is chosen
         } else if (urlhash == "#energy") {
 
@@ -61,6 +69,9 @@ window.onhashchange = function () {
             selectBoxes[0].style.display = 'none';
             selectBoxes[1].style.display = 'none';
             selectBoxes[2].style.display = 'block';
+
+            //Setting select to default option in case it was changed earlier
+            this.document.getElementById('energy-category').selectedIndex = "0";
 
         }
 
@@ -138,9 +149,48 @@ saveInputData = () => {
 
     return false;
 
-}
+};
+
+initEventListeners = () =>{
+    let property = document.getElementById('property-types');
+    let helpdesk = document.getElementById('helpdesk-category');
+    let condition = document.getElementById('condition-category');
+    let energy = document.getElementById('energy-category');
 
 
+    property.addEventListener("change", () =>{
+        let urlhash = window.location.hash;
+        console.log(urlhash);
+
+        var http = new XMLHttpRequest();
+        http.open('POST', '/dashboard/getData');
+        http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        let categoryOption = "";
+        if(urlhash == "#helpdesk"){
+            categoryOption = helpdesk.options[helpdesk.selectedIndex].value;
+        } else if(urlhash == "#condition"){
+            categoryOption = condition.options[condition.selectedIndex].value;
+        } else if(urlhash == "#energy"){
+            categoryOption = energy.options[energy.selectedIndex].value;
+        }
+        http.send(JSON.stringify({"category": `${urlhash.substr(1)}`, "property-type" : `${property.options[property.selectedIndex].value}`, "category-option": `${categoryOption}`}));
+    });
+
+    helpdesk.addEventListener("change", () =>{
+        console.log("changed");
+    });
+
+    condition.addEventListener("change", () =>{
+
+        console.log("changed");
+    });
+
+    energy.addEventListener("change", () =>{
+        console.log("changed");
+    });
+};
+
+initEventListeners();
 // calling method on page load and page reload
 window.onhashchange();
 

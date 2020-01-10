@@ -79,6 +79,24 @@ router.post('/energy', async function(req, res, next) {
   
 });
 
+router.post('/getData', async function(req, res, next) {
+
+  console.log("getData");
+
+  console.log(req.body);
+
+  //take and handle form data!!!
+
+  console.log("Yellow = " + req.body.yellowThreshold);
+  console.log("Red = " + req.body.redThreshold);
+  console.log("Weight = " + req.body.weightslider);
+  console.log("category = " + req.body.category);
+
+  res.redirect('/dashboard#helpdesk');
+
+
+});
+
 fillThresholdObjOnError = () => {
 
   /* id	property_id	helpdesk_category_id	threshold_yellow	threshold_red */
