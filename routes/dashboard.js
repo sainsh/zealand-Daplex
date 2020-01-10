@@ -15,6 +15,8 @@ router.get('/', async function(req, res, next) {
 
   try{
     helpdeskTresholdData = await db.ht.read();
+    //conditionThresholdData = await db.ct.read();
+    //energyThresholdData = [await db.ept.read(), await db.ewt.read(), await db.eht.read()]
   } catch(e){
     helpdeskTresholdData = fillThresholdObjOnError();
   }
