@@ -1042,32 +1042,40 @@ ct.read = (id) => conditionThresholds.readDamageThreshold(id, sequelize, Sequeli
 ct.update = (id, propertyId, yellowThreshold, redThreshold) => conditionThresholds.updateDamageThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
 ct.delete = (id) => conditionThresholds.deleteDamageThreshold(id, sequelize, Sequelize);
 
-var ewt = {};
+var ewth = {};
 // DB Tools export from WaterThresholdDbTools - Team Cyclone
-ewt.create = (yellowThreshold, redThreshold, propertyId) => waterThresholds.createWaterThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize);
-ewt.read = (id) => { waterThresholds.readWaterThreshold(id, sequelize, Sequelize) };
-ewt.update = (id, propertyId, yellowThreshold, redThreshold) => waterThresholds.updateWaterThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
-ewt.delete = (id) => waterThresholds.deleteWaterThreshold(id, sequelize, Sequelize);
+ewth.create = (yellowThreshold, redThreshold, propertyId) => waterThresholds.createWaterThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize);
+ewth.read = (id) => { waterThresholds.readWaterThreshold(id, sequelize, Sequelize) };
+ewth.update = (id, propertyId, yellowThreshold, redThreshold) => waterThresholds.updateWaterThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
+ewth.delete = (id) => waterThresholds.deleteWaterThreshold(id, sequelize, Sequelize);
 
-exports.ewt = ewt;
+exports.ewth = ewth;
 
-var  ept = {};
+var  epth = {};
 // DB Tools export from PowerThresholdDbTools - Team Cyclone
-ept.create = (yellowThreshold, redThreshold, propertyId) => { powerThresholds.createPowerThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize) };
-ept.read = (id) => { powerThresholds.readPowerThreshold(id, sequelize, Sequelize) };
-ept.update = (id, propertyId, yellowThreshold, redThreshold) => powerThresholds.updatePowerThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
-ept.delete = (id) => powerThresholds.deletePowerThreshold(id, sequelize, Sequelize);
+epth.create = (yellowThreshold, redThreshold, propertyId) => { powerThresholds.createPowerThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize) };
+epth.read = (id) => { powerThresholds.readPowerThreshold(id, sequelize, Sequelize) };
+epth.update = (id, propertyId, yellowThreshold, redThreshold) => powerThresholds.updatePowerThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
+epth.delete = (id) => powerThresholds.deletePowerThreshold(id, sequelize, Sequelize);
 
-exports.ept = ept;
+exports.epth = epth;
 
-var eht = {};
+var ehth = {};
 // DB Tools export from HeatThresholdDbTools - Team Cyclone
-eht.create = (yellowThreshold, redThreshold, propertyId) => heatThresholds.createHeatThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize);
-eht.read = (id) => heatThresholds.createHeatThreshold(id, sequelize, Sequelize);
-eht.update = (id, propertyId, yellowThreshold, redThreshold) => heatThresholds.updateHeatThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
-eht.delete = (id) => heatThresholds.deleteHeatThreshold(id, sequelize, Sequelize);
+ehth.create = (yellowThreshold, redThreshold, propertyId) => heatThresholds.createHeatThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize);
+ehth.read = (id) => heatThresholds.createHeatThreshold(id, sequelize, Sequelize);
+ehth.update = (id, propertyId, yellowThreshold, redThreshold) => heatThresholds.updateHeatThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
+ehth.delete = (id) => heatThresholds.deleteHeatThreshold(id, sequelize, Sequelize);
 
-exports.eht = eht;
+exports.ehth = ehth;
+
+propt = {};
+propt.create = (typeId, name) => propertyTypes.createPropertyType(typeId, name, sequelize, Sequelize);
+propt.read = (id) => propertyTypes.readPropertyType(id, sequelize, Sequelize);
+propt.update = (typeId, name) => propertyTypes.updatePropertyType(typeId, name, sequelize, Sequelize);
+propt.delete = (id) => propertyTypes.deletePropertyType(id, sequelize, Sequelize);
+
+exports.propt = propt;
 
 // DB Tools export from DamageThresholdDbTools - Team Cyclone
 exports.createDamageThreshold = (yellowThreshold, redThreshold, propertyId) => {hett.createHeatThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};
