@@ -31,7 +31,7 @@ createHelpdeskWeight = async function(propertyId, categoryId, weight, sequelize,
         let weightTable = getHelpdeskWeightTable(sequelize, Sequelize);
 
         let result = await weightTable.create({
-            property_id: propertyId, 
+            property_type_id: propertyId, 
             helpdesk_category_id: categoryId,
             weight: weight
         });
@@ -53,21 +53,13 @@ readHelpdeskWeight = async function(id, sequelize, Sequelize){
 
     console.log(debugMessage + 'Read initialized...');
     
+    
     try {
         let helpdeskWeights = getHelpdeskWeightTable(sequelize, Sequelize);
-        let result = await helpdeskWeights.findAll((id ? {where: {property_id: id}} : {}));
+        let result = await helpdeskWeights.findAll((id ? {where: {property_type_id: id}} : {}));
 
-        let answer = result.length === 0 ? result : 'nothing was found with the specified id';
-
-        result.forEach(element => {
-            console.log(debugMessage +" Weight " + element.weight + 
-            " property type id: " +  element.property_id + " helpdesk category id = " + element.helpdesk_category_id);
-        }); 
-        console.log(result[0].dataValues);
-        console.log("^----This is from ToolsDB (result[0].datavalues)----^");
-        
-        
-        return result.length === 0 ? await Promise.reject(new Error("No helpdesk Weight data found")) : result;
+        return result.length === 0 ? console.log("nothing in db")
+         : result;
     } catch(e){
         throw e;
     }
@@ -76,7 +68,7 @@ readHelpdeskWeight = async function(id, sequelize, Sequelize){
 
 
 
-
+//Not sure if works
 updateHelpdeskWeight = async function(propertyId, categoryId, weight , sequelize, Sequelize){
     
     let debugMessage = headerName + 'updateHelpdeskWeightTable: '; 
@@ -90,7 +82,7 @@ updateHelpdeskWeight = async function(propertyId, categoryId, weight , sequelize
         console.log(debugMessage + 'Updating Table...');
         let result = await WeightTable.update({
             weight: weight
-        }, {returning: true, where: {property_id: propertyId, helpdesk_category_id: categoryId}});
+        }, {returning: true, where: {property_type_id: propertyId, helpdesk_category_id: categoryId}});
         console.log(debugMessage + "Result = " + result);
 
         return result[0]; // Return an array containing all inserted IDs
@@ -116,10 +108,10 @@ deleteHelpdeskWeight = async function(propertyId, sequelize, Sequelize){
 
         console.log(debugMessage + 'deleting id from Table...');
         let result = weightTable.destroy({ //removed await
-            where: {property_id: propertyId}
-        }, {returning: true, where: {property_id: propertyId}});
+            where: {property_type_id: propertyId}
+        }, {returning: true, where: {property_type_id: propertyId}});
     
-        console.log(debugMessage + "Deleted ID = " + result.property_id);
+        console.log(debugMessage + "Deleted ID = " + result.property_type_id);
 
         return result; // Return an array containing all inserted IDs
     
@@ -141,9 +133,9 @@ deleteHelpdeskWeight = async function(propertyId, sequelize, Sequelize){
  */
 getHelpdeskWeightTable = (sequelize, Sequelize) => {
     return sequelize.define('helpdesk_weight', {
-        property_id: {
+        property_type_id: {
             type: Sequelize.INTEGER,
-            refrences: {model: 'properties', key: 'property_id'}
+            refrences: {model: 'property_types', key: 'type_id'}
             // refrencesKey: 'property_id'
         },
         helpdesk_category_id: {

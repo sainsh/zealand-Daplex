@@ -7,16 +7,16 @@ router.get('/', function (req, res, next) {
 });
 router.get('/helpdesk', async function (req, res, next) {
   var result = await db.readHelpdeskWeight(420);
+  console.log(`result: ${result}`)
   var resultArray = [];
   var leftArray = [];
-//KIG HER
-  for (var value in result){
-    resultArray.push(value);
-    console.log(value + "Value");
+if(typeof result !== 'undefined'){
+  for (let i = 0; i < result.length; i++){
+    await resultArray.push(result[i].weight);
+    console.log(result[i].weight);
     leftArray.push(`left:` + (0) + `px`);
-  }
-    console.log(resultArray);
-    
+  }//KIG HER
+}
   resultArray.shift();
   leftArray.shift();
   res.render('weightUIhelpdesk', {values: resultArray, left_array: leftArray});
@@ -26,12 +26,13 @@ router.get('/state', async function (req, res, next) {
   var result = await db.readStateWeight(420);
   var resultArray = [];
   var leftArray = [];
-  await console.log(result);
-  
-  for (var value in result){
-    resultArray.push(value.weight);
-    console.log(value + "Value");
-    leftArray.push(`left:` + (0) + `px`);
+
+  if(typeof result !== 'undefined'){
+    for (let i = 0; i < result.length; i++){
+      await resultArray.push(result[i].weight);
+      console.log(result[i].weight);
+      leftArray.push(`left:` + (0) + `px`);
+    }//KIG HER
   }
   console.log(resultArray);
   resultArray.shift();
@@ -103,9 +104,7 @@ router.post('/helpdesk', (req, res, next) => {
   //-TODO- Lav if statement der bruger read+ lav read til også at bruge bygningstype. samt i update.
   //De er sat i data så det passer med de relevante helpdesk catogorier så data[1] = indeklima værdi, samt catogory id 1. 
   var data = [select, indeSlider, udvSlider, tekSlider, tagSlider, murSlider, udSlider, tagDækSlider, tagrenSlider, vinSlider, funSlider];
-  db.deleteHelpdeskWeight(data[0]);
-  console.log("Clearing database.....");
-  console.log("inserting new data in database....."); //These console logs slows the process enough to make this work
+
   db.createHelpdeskWeightTable(1, data[0], data[1]); // så Catogori id, bygningstype, weight.
   db.createHelpdeskWeightTable(2, data[0], data[2]);
   db.createHelpdeskWeightTable(3, data[0], data[3]);
