@@ -6,28 +6,35 @@ router.get('/', function (req, res, next) {
   res.render('weightUI');
 });
 router.get('/helpdesk', async function (req, res, next) {
-  var result = await db.readHelpdeskWeightData(420);
+  var result = await db.readHelpdeskWeight(420);
+  console.log(`result: ${result}`)
   var resultArray = [];
   var leftArray = [];
-  console.log(result);
-  for (var value in result){
-    resultArray.push(result[value]);
+if(typeof result !== 'undefined'){
+  for (let i = 0; i < result.length; i++){
+    await resultArray.push(result[i].weight);
+    console.log(result[i].weight);
     leftArray.push(`left:` + (0) + `px`);
-  }
+  }//KIG HER
+}
   resultArray.shift();
   leftArray.shift();
   res.render('weightUIhelpdesk', {values: resultArray, left_array: leftArray});
 });
 
 router.get('/state', async function (req, res, next) {
-  var result = await db.readStateWeightData(420);
+  var result = await db.readStateWeight(420);
   var resultArray = [];
   var leftArray = [];
-  console.log(result);
-  for (var value in result){
-    resultArray.push(result[value]);
-    leftArray.push(`left:` + (0) + `px`);
+
+  if(typeof result !== 'undefined'){
+    for (let i = 0; i < result.length; i++){
+      await resultArray.push(result[i].weight);
+      console.log(result[i].weight);
+      leftArray.push(`left:` + (0) + `px`);
+    }//KIG HER
   }
+  console.log(resultArray);
   resultArray.shift();
   leftArray.shift();
   res.render('weightUIstate', {values: resultArray, left_array: leftArray});
@@ -49,7 +56,7 @@ router.get('/overall', async function (req, res, next) {
 
 //function to set sliders to current value from database
 router.post('/helpdesk/sliders', async function (req, res) {
-  var result = await db.readHelpdeskWeightData(req.body.id);
+  var result = await db.readHelpdeskWeight(req.body.id);
   var resultArray = [];
   for (var value in result){
     resultArray.push(result[value]);
@@ -59,7 +66,7 @@ router.post('/helpdesk/sliders', async function (req, res) {
 });
 
 router.post('/state/sliders', async function (req, res) {
-  var result = await db.readStateWeightData(req.body.id);
+  var result = await db.readStateWeight(req.body.id);
   var resultArray = [];
   console.log(result);
   for (var value in result){
@@ -94,14 +101,24 @@ router.post('/helpdesk', (req, res, next) => {
   var vinSlider = req.body.vinSlider;
   var funSlider = req.body.funSlider;
 
-  var data = [select, indeSlider, tekSlider, udvSlider, murSlider, tagSlider, udSlider, tagDækSlider, tagrenSlider, vinSlider, funSlider];
-  db.createHelpdeskWeightTable(data);
-  db.updateHelpdeskWeightTable(data);
+  //-TODO- Lav if statement der bruger read+ lav read til også at bruge bygningstype. samt i update.
+  //De er sat i data så det passer med de relevante helpdesk catogorier så data[1] = indeklima værdi, samt catogory id 1. 
+  var data = [select, indeSlider, udvSlider, tekSlider, tagSlider, murSlider, udSlider, tagDækSlider, tagrenSlider, vinSlider, funSlider];
+
+  db.createHelpdeskWeightTable(1, data[0], data[1]); // så Catogori id, bygningstype, weight.
+  db.createHelpdeskWeightTable(2, data[0], data[2]);
+  db.createHelpdeskWeightTable(3, data[0], data[3]);
+  db.createHelpdeskWeightTable(4, data[0], data[4]);
+  db.createHelpdeskWeightTable(5, data[0], data[5]);
+  db.createHelpdeskWeightTable(6, data[0], data[6]);
+  db.createHelpdeskWeightTable(7, data[0], data[7]);
+  db.createHelpdeskWeightTable(8, data[0], data[8]);
+  db.createHelpdeskWeightTable(9, data[0], data[9]);
+  db.createHelpdeskWeightTable(10, data[0], data[10]);
   res.redirect("/weightUI");
 })
 
 router.post('/state', (req, res, next) => {
-
   var select = req.body.select;
   var tekSlider = req.body.tekSlider;
   var udvSlider = req.body.udvSlider;
@@ -109,10 +126,14 @@ router.post('/state', (req, res, next) => {
 
 
   var data = [select, tekSlider, udvSlider, osvSlider];
-  db.createStateWeightTable(data);
-  db.updateStateWeightTable(data);
+  db.deleteStateWeight(data[0]);
+  console.log("Clearing database.....");
+  console.log("inserting new data in database.....");
+  db.readStateWeight(data[0]); //Added read to avoid nothing in database. cant read propperly
+  db.createStateWeightTable(3, data[0], data[1]);
+  db.createStateWeightTable(2, data[0], data[2]);
+  db.createStateWeightTable(1, data[0], data[3]);
   res.redirect("/weightUI/");
-  //res.redirect('/weightUI/');
 })
 
 router.post('/overall', (req, res, next) => {

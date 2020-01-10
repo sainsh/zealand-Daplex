@@ -16,7 +16,7 @@ const headerName = "energiWeightToolsDB.js: ";
  /**
   * Create method for energi Weight
   */
-createEnergiWeight = async function(categoryId, propertyId, weight, sequelize, Sequelize){
+createEnergiWeight = async function(propertyId, categoryId, weight, sequelize, Sequelize){
 
     let debugMessage = headerName + "createWeightEnergi: ";
 
@@ -28,10 +28,10 @@ createEnergiWeight = async function(categoryId, propertyId, weight, sequelize, S
 
     try{
         console.log(debugMessage + "Getting weightEnergiTabel.")
-        let weightTable = getWeightEnergiTable(sequelize, Sequelize);
+        let weightTable = getEnergiWeightTable(sequelize, Sequelize);
 
         let result = await weightTable.create({
-            property_id: propertyId, 
+            property_type_id: propertyId, 
             energi_category_id: categoryId,
             weight: weight
         });
@@ -47,7 +47,7 @@ createEnergiWeight = async function(categoryId, propertyId, weight, sequelize, S
 /**
  * READ method Energi Weight
  */
-readEnergiWeight = async function(id, sequelize, Sequelize){
+readEnergiWeight = async function(property_type_id, sequelize, Sequelize){
 
     let debugMessage = headerName + 'readEnergiWeightTable: '; 
 
@@ -55,16 +55,17 @@ readEnergiWeight = async function(id, sequelize, Sequelize){
     
     try {
         let energiWeights = getEnergiWeightTable(sequelize, Sequelize);
-        let result = await energiWeights.findAll((id ? {where: {id: id}} : {}));
+        let result = await energiWeights.findAll((property_type_id ? {where: {property_type_id: property_type_id}} : {}));
 
         let answer = result.length === 0 ? result : 'nothing was found with the specified id';
 
         result.forEach(element => {
-            console.log(debugMessage + "id: " + element.id + " Weight " + element.weight + 
-            " property type id: " +  element.property_id + " Energi category id = " + element.energi_category_id);
+            console.log(debugMessage +" Weight " + element.weight + 
+            " property type id: " +  element.property_type_id + " Energi category id = " + element.energi_category_id);
         }); 
 
-        return result.length === 0 ? await Promise.reject(new Error("No Energi Weight data found")) : result;
+        return result.length === 0 ? console.log("nothing in db")
+         : result;
     } catch(e){
         throw e;
     }
@@ -73,8 +74,8 @@ readEnergiWeight = async function(id, sequelize, Sequelize){
 
 
 
-
-updateEnergiWeight = async function(id, propertyId, categoryId, weight , sequelize, Sequelize){
+//Not sure if works
+updateEnergiWeight = async function(propertyId, categoryId, weight , sequelize, Sequelize){
     
     let debugMessage = headerName + 'updateEnergiWeightTable: '; 
 
@@ -86,10 +87,9 @@ updateEnergiWeight = async function(id, propertyId, categoryId, weight , sequeli
 
         console.log(debugMessage + 'Updating Table...');
         let result = await WeightTable.update({
-            property_id: propertyId,
             energi_category_id: categoryId,
             weight: weight
-        }, {returning: true, where: {id: id}});
+        }, {returning: true, where: {property_type_id: propertyid, energi_category_id: categoryId}});
     
         console.log(debugMessage + "Result = " + result);
 
@@ -103,7 +103,7 @@ updateEnergiWeight = async function(id, propertyId, categoryId, weight , sequeli
 
 }
 
-deleteEnergiWeight = async function(id, sequelize, Sequelize){
+deleteEnergiWeight = async function(propertyid, sequelize, Sequelize){
     
     let debugMessage = headerName + 'deleteEnergiWeightTable: '; 
 
@@ -114,9 +114,9 @@ deleteEnergiWeight = async function(id, sequelize, Sequelize){
         let weightTable = getEnergiWeightTable(sequelize, Sequelize);
 
         console.log(debugMessage + 'deleting id from Table...');
-        let result = await weightTable.destroy({
-            where: {id: id}
-        }, {returning: true, where: {id: id}});
+        let result = weightTable.destroy({ //removed await
+            where: {property_type_id: propertyid}
+        }, {returning: true, where: {property_type_id: propertyid}});
     
         console.log(debugMessage + "Deleted ID = " + result.id);
 
@@ -140,16 +140,10 @@ deleteEnergiWeight = async function(id, sequelize, Sequelize){
  */
 getEnergiWeightTable = (sequelize, Sequelize) => {
     return sequelize.define('energi_weight', {
-        id: {
+        property_type_id: {
             type: Sequelize.INTEGER,
-            allowNull: false,
-            autoIncrement: true, 
-            primaryKey: true
-        },
-        property_id: {
-            type: Sequelize.INTEGER,
-            refrences: {model: 'properties', key: 'property_id'}
-            // refrencesKey: 'property_id'
+            refrences: {model: 'property_types', key: 'type_id'}
+            // refrencesKey: 'property_type_id'
         },
         energi_category_id: {
             type: Sequelize.INTEGER, 

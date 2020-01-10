@@ -16,7 +16,7 @@ const headerName = "helpdeskWeightToolsDB.js: ";
  /**
   * Create method for helpdesk Weight
   */
-createHelpdeskWeight = async function(categoryId, propertyId, weight, sequelize, Sequelize){
+createHelpdeskWeight = async function(propertyId, categoryId, weight, sequelize, Sequelize){
 
     let debugMessage = headerName + "createWeightHelpdesk: ";
 
@@ -28,10 +28,10 @@ createHelpdeskWeight = async function(categoryId, propertyId, weight, sequelize,
 
     try{
         console.log(debugMessage + "Getting weightHelpdeskTabel.")
-        let weightTable = getWeightHelpdeskTable(sequelize, Sequelize);
+        let weightTable = getHelpdeskWeightTable(sequelize, Sequelize);
 
         let result = await weightTable.create({
-            property_id: propertyId, 
+            property_type_id: propertyId, 
             helpdesk_category_id: categoryId,
             weight: weight
         });
@@ -48,23 +48,18 @@ createHelpdeskWeight = async function(categoryId, propertyId, weight, sequelize,
  * READ method helpdesk Weight
  */
 readHelpdeskWeight = async function(id, sequelize, Sequelize){
-
+//KIG HER
     let debugMessage = headerName + 'readHelpdeskWeightTable: '; 
 
     console.log(debugMessage + 'Read initialized...');
     
+    
     try {
         let helpdeskWeights = getHelpdeskWeightTable(sequelize, Sequelize);
-        let result = await helpdeskWeights.findAll((id ? {where: {id: id}} : {}));
+        let result = await helpdeskWeights.findAll((id ? {where: {property_type_id: id}} : {}));
 
-        let answer = result.length === 0 ? result : 'nothing was found with the specified id';
-
-        result.forEach(element => {
-            console.log(debugMessage + "id: " + element.id + " Weight " + element.weight + 
-            " property type id: " +  element.property_id + " helpdesk category id = " + element.helpdesk_category_id);
-        }); 
-
-        return result.length === 0 ? await Promise.reject(new Error("No helpdesk Weight data found")) : result;
+        return result.length === 0 ? console.log("nothing in db")
+         : result;
     } catch(e){
         throw e;
     }
@@ -73,8 +68,8 @@ readHelpdeskWeight = async function(id, sequelize, Sequelize){
 
 
 
-
-updateHelpdeskWeight = async function(id, propertyId, categoryId, weight , sequelize, Sequelize){
+//Not sure if works
+updateHelpdeskWeight = async function(propertyId, categoryId, weight , sequelize, Sequelize){
     
     let debugMessage = headerName + 'updateHelpdeskWeightTable: '; 
 
@@ -86,11 +81,8 @@ updateHelpdeskWeight = async function(id, propertyId, categoryId, weight , seque
 
         console.log(debugMessage + 'Updating Table...');
         let result = await WeightTable.update({
-            property_id: propertyId,
-            helpdesk_category_id: categoryId,
             weight: weight
-        }, {returning: true, where: {id: id}});
-    
+        }, {returning: true, where: {property_type_id: propertyId, helpdesk_category_id: categoryId}});
         console.log(debugMessage + "Result = " + result);
 
         return result[0]; // Return an array containing all inserted IDs
@@ -103,22 +95,23 @@ updateHelpdeskWeight = async function(id, propertyId, categoryId, weight , seque
 
 }
 
-deleteHelpdeskWeight = async function(id, sequelize, Sequelize){
+deleteHelpdeskWeight = async function(propertyId, sequelize, Sequelize){
     
     let debugMessage = headerName + 'deleteHelpdeskWeightTable: '; 
 
-    console.log(debugMessage + 'Delete initialized...');
+
+    console.log(debugMessage + 'Delete initialized...' + propertyId);
 
     try {
         console.log(debugMessage + 'Getting Weight Table...');
         let weightTable = getHelpdeskWeightTable(sequelize, Sequelize);
 
         console.log(debugMessage + 'deleting id from Table...');
-        let result = await weightTable.destroy({
-            where: {id: id}
-        }, {returning: true, where: {id: id}});
+        let result = weightTable.destroy({ //removed await
+            where: {property_type_id: propertyId}
+        }, {returning: true, where: {property_type_id: propertyId}});
     
-        console.log(debugMessage + "Deleted ID = " + result.id);
+        console.log(debugMessage + "Deleted ID = " + result.property_type_id);
 
         return result; // Return an array containing all inserted IDs
     
@@ -140,15 +133,9 @@ deleteHelpdeskWeight = async function(id, sequelize, Sequelize){
  */
 getHelpdeskWeightTable = (sequelize, Sequelize) => {
     return sequelize.define('helpdesk_weight', {
-        id: {
+        property_type_id: {
             type: Sequelize.INTEGER,
-            allowNull: false,
-            autoIncrement: true, 
-            primaryKey: true
-        },
-        property_id: {
-            type: Sequelize.INTEGER,
-            refrences: {model: 'properties', key: 'property_id'}
+            refrences: {model: 'property_types', key: 'type_id'}
             // refrencesKey: 'property_id'
         },
         helpdesk_category_id: {
