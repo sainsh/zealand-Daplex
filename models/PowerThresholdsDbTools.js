@@ -42,7 +42,7 @@
         console.log(debugMessage + "\n"  + e);
     }
 
- }
+ };
 
  /**
  * READ method power Thresholds
@@ -56,7 +56,7 @@ readPowerThreshold = async function(id, sequelize, Sequelize){
     let powerThresholds = getPowerThresholdsTable(sequelize, Sequelize);
     let result = await powerThresholds.findAll((id ? {where: {property_id: id}} : {}));
 
-    console.log(debugMessage + result.length === 0 ? result : 'nothing was found with the specified id'); 
+    console.log(debugMessage + result.length === 0 ? result : 'nothing was found with the specified id');
 
     return result.length === 0 ? await Promise.reject(new Error("No power threshold data found")) : result;
 }

@@ -28,7 +28,7 @@ createDamageThreshold = async function(yellowThreshold, redThreshold, propertyId
  
     try{
         console.log(debugMessage + "Getting DamageThresholdsTable.")
-        let thresholdTable = getHeatThresholdsTable(sequelize, Sequelize);
+        let thresholdTable = getDamageThresholdsTable(sequelize, Sequelize);
  
         let result = await thresholdTable.create({
             property_id: propertyId, 
@@ -54,7 +54,7 @@ readDamageThreshold = async function(id, sequelize, Sequelize){
     console.log(debugMessage + 'Read initialized...');
  
     let damageThresholds = getDamageThresholdsTable(sequelize, Sequelize);
-    let result = await heatThresholds.findAll((id ? {where: {property_id: id}} : {}));
+    let result = await damageThresholds.findAll((id ? {where: {property_id: id}} : {}));
  
     console.log(debugMessage + result.length === 0 ? result : 'nothing was found with the specified id'); 
  

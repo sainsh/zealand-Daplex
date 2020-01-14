@@ -397,6 +397,12 @@ generateStartData = async () => {
         hct.create("Tagrender og Nedløb");
         hct.create("Vinduer og Udvendige Døre");
         hct.create("Fundament og Sokkel");
+
+        ht.create(1, 1, 0, 0);
+        ct.create(1, 1, 0);
+        epth.create(1, 1, 0);
+
+        this.createOverallWeightTable([0, 50, 50, 50]);
     }
 
     try {
@@ -635,7 +641,7 @@ exports.readStateWeightData = async function (id) {
         let weightTable = getStateWeightTable();
         let result = await weightTable.findAll((id ? { where: { property_type_id: id } } : {}));// Add the "where" option, if the ID is not undefined
         let defaultData = [id, 50, 50, 50]; // Default values for sliders
-        return result.length === 0 ? defaultData : result[0].dataValues; // Return defaultData if 0 results are found, else return the result(s)
+        return result.length === 0 ? defaultData : result; // Return defaultData if 0 results are found, else return the result(s)
     } catch (e) {
         throw e;
     }
@@ -645,8 +651,22 @@ exports.readOverallWeightData = async function (id) {
     try {
         let weightTable = getOverallWeightTable();
         let result = await weightTable.findAll((id ? { where: { property_type_id: id } } : {}));// Add the "where" option, if the ID is not undefined
-        let defaultData = [id, 50, 50, 50]; // Default values for sliders
-        return result.length === 0 ? defaultData : result[0].dataValues; // Return defaultData if 0 results are found, else return the result(s)
+        return result.length === 0 ? await Promise.reject(new Error("No overall wight data data found")) : result; // Return defaultData if 0 results are found, else return the result(s)
+    } catch (e) {
+        throw e;
+    }
+};
+
+exports.createOverallWeightData = async function (typeId, condition, energy, helpdesk) {
+    try {
+        let weightTable = getOverallWeightTable();
+
+        await weightTable.create({
+            property_type_id: typeId,
+            overall_tilstand: condition,
+            overall_energi: energy,
+            overall_helpdesk: helpdesk
+        });
     } catch (e) {
         throw e;
     }
@@ -1028,7 +1048,7 @@ exports.prtt = prtt;
 // helpdesk thresholds db tools
 var ht = {};
 ht.create = (yellowThreshold, redThreshold, categoryId, propertyId) => helpdeskTresholds.createHelpdeskThreshold(yellowThreshold, redThreshold, categoryId, propertyId, sequelize, Sequelize);
-ht.read = (id) => helpdeskTresholds.readHelpdeskThreshold(id, sequelize, Sequelize);
+ht.read = async (id) => await helpdeskTresholds.readHelpdeskThreshold(id, sequelize, Sequelize);
 ht.update = (id, propertyId, categoryId, yellowThreshold, redThreshold) => helpdeskTresholds.updateHelpdeskThreshold(id, propertyId, categoryId, yellowThreshold, redThreshold, sequelize, Sequelize);
 ht.delete = (id) => helpdeskTresholds.deleteHelpdeskThreshold(id, sequelize, Sequelize);
 
@@ -1038,9 +1058,11 @@ exports.ht = ht;
 var ct = {};
 // DB Tools export from DamageThresholdDbTools - Team Cyclone
 ct.create = (yellowThreshold, redThreshold, propertyId) => conditionThresholds.createDamageThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize);
-ct.read = (id) => conditionThresholds.readDamageThreshold(id, sequelize, Sequelize);
+ct.read = async (id) => await conditionThresholds.readDamageThreshold(id, sequelize, Sequelize);
 ct.update = (id, propertyId, yellowThreshold, redThreshold) => conditionThresholds.updateDamageThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
 ct.delete = (id) => conditionThresholds.deleteDamageThreshold(id, sequelize, Sequelize);
+
+exports.ct = ct;
 
 var ewth = {};
 // DB Tools export from WaterThresholdDbTools - Team Cyclone
@@ -1054,7 +1076,7 @@ exports.ewth = ewth;
 var  epth = {};
 // DB Tools export from PowerThresholdDbTools - Team Cyclone
 epth.create = (yellowThreshold, redThreshold, propertyId) => { powerThresholds.createPowerThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize) };
-epth.read = (id) => { powerThresholds.readPowerThreshold(id, sequelize, Sequelize) };
+epth.read = async (id) => await powerThresholds.readPowerThreshold(id, sequelize, Sequelize) ;
 epth.update = (id, propertyId, yellowThreshold, redThreshold) => powerThresholds.updatePowerThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
 epth.delete = (id) => powerThresholds.deletePowerThreshold(id, sequelize, Sequelize);
 

@@ -185,10 +185,8 @@ initEventListeners = () =>{
         pop2Energy.style.display = "none";pop2Condition.style.display = "none";pop2Helpdesk.style.display = "none";
         pop3.style.display = "block";
         pop3.style.left = "700px";
-        var http = new XMLHttpRequest();
-        http.open('POST', '/dashboard/getData');
-        http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        http.send(getBodyJson());
+
+        fetchData();
     });
 
     buildingList.addEventListener("click", (ev) =>{
@@ -255,12 +253,29 @@ fetchData = () =>{
     http.open('POST', '/dashboard/getData');
     http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     http.onload = () =>{
-        console.log(http.responseText);
+        console.log(http.responseText)
+        let response = JSON.parse(http.responseText);
+        populateForm(response.yellow, response.red, response.weight);
     };
-    http.send(getBodyJson());
+    http.send(JSON.stringify({"category": `${optionsSelected[0]}`, "property_type" : `${optionsSelected[1]}`, "category_option": `${optionsSelected[2]}`}));
 };
 
-populateForm = () =>{
+populateForm = (y, r, s) =>{
+    let yellow = document.getElementById("thresholdYellow");
+    let red = document.getElementById("thresholdRed");
+    let slider = document.getElementById("myRange");
+
+    if(y >= 0){
+        yellow.value = y
+    }
+    if(r >= 0){
+        red.value = r;
+    }
+    if(s >= 0){
+        slider.value = s;
+        this.document.getElementById('weightslider').innerHTML = `Vægtning = ${s}`;
+
+    }
 
 }
 
