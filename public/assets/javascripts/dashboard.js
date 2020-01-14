@@ -160,11 +160,19 @@ initEventListeners = () =>{
     var superList = document.getElementById("super-list");
 
     superList.addEventListener("click", (ev) =>{
-        console.log(ev.target.attributes.value.value);
-        console.log(pop1.style);
+        let clickedIndex = ev.target.attributes.value.value;
+        let liItems = superList.getElementsByTagName("li");
+        for (let i = 0; i < liItems.length; i++){
+            if(i == clickedIndex){
+                liItems[i].classList.add("active")
+            } else{
+                liItems[i].classList.remove("active");
+            }
+        }
+
         pop1.style.display = "block";
         pop2.style.display = "none";
-        pop3.style.left = "700px";
+        pop3.style.display = "block";
         var http = new XMLHttpRequest();
         http.open('POST', '/dashboard/getData');
         http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");

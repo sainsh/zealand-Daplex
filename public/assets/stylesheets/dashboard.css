@@ -93,6 +93,7 @@ html {
 #pop-out3 {
     background-color: rgba(17, 17, 17, 0.78);
     left: 350px;
+    display: none;
 }
 
 .pop-out-header {
@@ -230,7 +231,12 @@ cursor: pointer;
 }
 
 /* Change the link color on hover */
- .nav-item a:hover, .active {
+ .nav-item a:hover{
     background-color: #555;
     color: white;
+}
+
+.active a , .active{
+    background-color: #7d7d7d;
+    color: #FFFFFF;
 }
