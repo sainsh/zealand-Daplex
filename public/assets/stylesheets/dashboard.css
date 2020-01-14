@@ -70,30 +70,37 @@ html {
     z-index: 1;
     top: 0;
     padding-top: 15px;
-    //display: none;
+    display: none;
 }
 
 #pop-out {
     background-color: rgba(17, 17, 17, 0.90);
     left: 0px;
+    display: block;
 }
 
 #pop-out1 {
     background-color: rgba(17, 17, 17, 0.86);
     left: 350px;
-    display: none
+
 }
 
-#pop-out2 {
+#pop-out2-energy {
     background-color: rgba(17, 17, 17, 0.82);
     left: 700px;
-    display: none;
+}
+#pop-out2-condition {
+    background-color: rgba(17, 17, 17, 0.82);
+    left: 700px;
+}
+#pop-out2-helpdesk {
+    background-color: rgba(17, 17, 17, 0.82);
+    left: 700px;
 }
 
 #pop-out3 {
     background-color: rgba(17, 17, 17, 0.78);
     left: 700px;
-    display: none;
 }
 
 .pop-out-header {

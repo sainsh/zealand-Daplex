@@ -27,9 +27,29 @@ block content
 
 
 
-    div.pop-out(id='pop-out2')
-        p.pop-out-header(id='pop-out-header2') Kategorier
-        ul#category-list.nav-list
+    div.pop-out(id='pop-out2-energy')
+        p.pop-out-header Kategorier
+        ul#category-list-energy.nav-list
+
+            li.nav-item
+                a(value="0") El
+            li.nav-item
+                a(value="1") Vand
+            li.nav-item
+                a(value="2") Varme
+
+
+    div.pop-out(id='pop-out2-condition')
+        p.pop-out-header Kategorier
+        ul#category-list-condition.nav-list
+            each conditionCategory in conditionCategories
+                li.nav-item
+                    - var indexString = "" + index
+                    a(value=indexString) #{conditionCategory.name}
+
+    div.pop-out(id='pop-out2-helpdesk')
+        p.pop-out-header Kategorier
+        ul#category-list-helpdesk.nav-list
             each helpdeskCategory, index in helpdeskCategories
                 li.nav-item
                     - var indexString = "" + index

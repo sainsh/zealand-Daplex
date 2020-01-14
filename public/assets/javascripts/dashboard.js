@@ -3,16 +3,25 @@
 
 //Select HTML Elements
 let pop1 = document.getElementById('pop-out1');
-let pop2 = document.getElementById('pop-out2');
+let pop2Energy = document.getElementById('pop-out2-energy');
+let pop2Condition = document.getElementById('pop-out2-condition');
+let pop2Helpdesk = document.getElementById('pop-out2-helpdesk');
 let pop3 = document.getElementById('pop-out3');
 
 var superList = document.getElementById("super-list");
 var buildingList = document.getElementById("building-list");
-var categoryList = document.getElementById("category-list");
+var energyCategoryList = document.getElementById("category-list-energy");
+var conditionCategoryList = document.getElementById("category-list-condition");
+var helpdeskCategoryList = document.getElementById("category-list-helpdesk");
 
 let superLiItems = superList.getElementsByTagName("li");
 let buildingLiItems = buildingList.getElementsByTagName("li");
-let categoryLiItems = categoryList.getElementsByTagName("li");
+let energyCategoryLiItems = energyCategoryList.getElementsByTagName("li");
+let conditionCategoryLiItems = conditionCategoryList.getElementsByTagName("li");
+let helpdeskCategoryLiItems = helpdeskCategoryList.getElementsByTagName("li");
+
+let optionsSelected = [-1, -1, -1];
+
 
 /* function called on page update or menu click */
 window.onhashchange = function () {
@@ -167,12 +176,13 @@ saveInputData = () => {
 initEventListeners = () =>{
     superList.addEventListener("click", (ev) =>{
         let clickedIndex = ev.target.attributes.value.value;
+        optionsSelected = [clickedIndex, -1, -1];
         setActive(superLiItems, clickedIndex);
 
-        clearListActive(categoryLiItems);
+        clearListActive(energyCategoryLiItems);clearListActive(conditionCategoryLiItems);clearListActive(helpdeskCategoryLiItems);
         clearListActive(buildingLiItems);
         pop1.style.display = "block";
-        pop2.style.display = "none";
+        pop2Energy.style.display = "none";pop2Condition.style.display = "none";pop2Helpdesk.style.display = "none";
         pop3.style.display = "block";
         pop3.style.left = "700px";
         var http = new XMLHttpRequest();
@@ -183,10 +193,26 @@ initEventListeners = () =>{
 
     buildingList.addEventListener("click", (ev) =>{
         let clickedIndex = ev.target.attributes.value.value;
+        optionsSelected[1] = clickedIndex;
+        console.log(optionsSelected[0]);
         setActive(buildingLiItems, clickedIndex);
+        if (optionsSelected[0] == 0) {
+            pop2Energy.style.display = "block";
+            pop2Condition.style.display = "none";
+            pop2Helpdesk.style.display = "none";
+            clearListActive(energyCategoryLiItems);
+        }else if(optionsSelected[0] == 1) {
+            pop2Energy.style.display = "none";
+            pop2Condition.style.display = "block";
+            pop2Helpdesk.style.display = "none";
+            clearListActive(conditionCategoryLiItems);
+        }else if(optionsSelected[0] == 2) {
+            pop2Energy.style.display = "none";
+            pop2Condition.style.display = "none";
+            pop2Helpdesk.style.display = "block";
+            clearListActive(helpdeskCategoryLiItems);
+        }
 
-        clearListActive(categoryLiItems);
-        pop2.style.display = "block";
         pop3.style.left = "1050px";
         var http = new XMLHttpRequest();
         http.open('POST', '/dashboard/getData');
@@ -194,14 +220,20 @@ initEventListeners = () =>{
         http.send(getBodyJson());
     });
 
-    categoryList.addEventListener("click", (ev) =>{
+    energyCategoryList.addEventListener("click", (ev) =>{
         let clickedIndex = ev.target.attributes.value.value;
-        setActive(categoryLiItems, clickedIndex);
-
-        var http = new XMLHttpRequest();
-        http.open('POST', '/dashboard/getData');
-        http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        http.send(getBodyJson());
+        optionsSelected[2] = clickedIndex;
+        setActive(energyCategoryLiItems, clickedIndex);
+    });
+    conditionCategoryList.addEventListener("click", (ev) =>{
+        let clickedIndex = ev.target.attributes.value.value;
+        optionsSelected[2] = clickedIndex;
+        setActive(conditionCategoryLiItems, clickedIndex);
+    });
+    helpdeskCategoryList.addEventListener("click", (ev) =>{
+        let clickedIndex = ev.target.attributes.value.value;
+        optionsSelected[2] = clickedIndex;
+        setActive(helpdeskCategoryLiItems, clickedIndex);
     });
 };
 
@@ -216,6 +248,20 @@ clearListActive = (list) =>{
     for (let i = 0; i < list.length; i++){
         list[i].classList.remove("active");
     }
+};
+
+fetchData = () =>{
+    var http = new XMLHttpRequest();
+    http.open('POST', '/dashboard/getData');
+    http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    http.onload = () =>{
+        console.log(http.responseText);
+    };
+    http.send(getBodyJson());
+};
+
+populateForm = () =>{
+
 }
 
 getBodyJson = () =>{
