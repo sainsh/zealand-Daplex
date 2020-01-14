@@ -14,6 +14,8 @@ var weightUIRouter = require('./routes/weightUI');
 var ftpRouter = require('./routes/ftp');
 var dashboardRouter = require('./routes/dashboard');
 
+var schedule = require('node-schedule');
+var ftp = require('./models/FtpTools');
 
 var app = express();
 
@@ -51,6 +53,10 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+var j = schedule.scheduleJob('*/30 * * * * *', async function(){
+  var res = await ftp.handleFiles();
 });
 
 module.exports = app;
