@@ -80,8 +80,8 @@ router.post('/energy', async function(req, res, next) {
 });
 
 router.post('/getData', async function(req, res, next) {
-  let propertyId = await db.readPro(req.property_id);
-  console.log(await db.readHelpdeskData(propertyId));
+  let propertyId = await db.propt.read(req.property_id);
+  console.log(propertyId);
 });
 
 fillThresholdObjOnError = () => {

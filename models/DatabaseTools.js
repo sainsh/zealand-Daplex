@@ -1071,7 +1071,7 @@ exports.ehth = ehth;
 
 propt = {};
 propt.create = (typeId, name) => propertyTypes.createPropertyType(typeId, name, sequelize, Sequelize);
-propt.read = (id) => propertyTypes.readPropertyType(id, sequelize, Sequelize);
+propt.read = async (id) => await propertyTypes.readPropertyType(id, sequelize, Sequelize);
 propt.update = (typeId, name) => propertyTypes.updatePropertyType(typeId, name, sequelize, Sequelize);
 propt.delete = (id) => propertyTypes.deletePropertyType(id, sequelize, Sequelize);
 

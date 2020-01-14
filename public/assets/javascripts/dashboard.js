@@ -2,10 +2,9 @@
 /* Script for dashboard client side */
 
 //Select HTML Elements
-let property = document.getElementById('property-types');
-let helpdesk = document.getElementById('helpdesk-category');
-let condition = document.getElementById('condition-category');
-let energy = document.getElementById('energy-category');
+let pop1 = document.getElementById('pop-out1');
+let pop2 = document.getElementById('pop-out2');
+let pop3 = document.getElementById('pop-out3');
 
 /* function called on page update or menu click */
 window.onhashchange = function () {
@@ -158,34 +157,43 @@ saveInputData = () => {
 };
 
 initEventListeners = () =>{
+    var superList = document.getElementById("super-list");
 
-    property.addEventListener("change", () =>{
+    superList.addEventListener("click", (ev) =>{
+        console.log(ev.target.attributes.value.value);
+        console.log(pop1.style);
+        pop1.style.display = "block";
+        pop2.style.display = "none";
+        pop3.style.left = "700px";
         var http = new XMLHttpRequest();
         http.open('POST', '/dashboard/getData');
         http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         http.send(getBodyJson());
     });
 
-    helpdesk.addEventListener("change", () =>{
+    var buildingList = document.getElementById("building-list");
+
+    buildingList.addEventListener("click", (ev) =>{
+        console.log(ev.target.attributes.value.value);
+        pop2.style.display = "block";
+        pop3.style.left = "1050px";
         var http = new XMLHttpRequest();
         http.open('POST', '/dashboard/getData');
         http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         http.send(getBodyJson());
     });
 
-    condition.addEventListener("change", () =>{
+    var categoryList = document.getElementById("category-list");
+
+    categoryList.addEventListener("click", (ev) =>{
+        console.log(ev.target.attributes.value.value);
         var http = new XMLHttpRequest();
         http.open('POST', '/dashboard/getData');
         http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         http.send(getBodyJson());
     });
 
-    energy.addEventListener("change", () =>{
-        var http = new XMLHttpRequest();
-        http.open('POST', '/dashboard/getData');
-        http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        http.send(getBodyJson());
-    });
+
 };
 
 getBodyJson = () =>{

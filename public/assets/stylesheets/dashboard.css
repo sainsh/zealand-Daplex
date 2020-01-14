@@ -62,23 +62,37 @@ html {
     color: #f1f1f1;
 }
 
-/* Add an active class to the active dropdown button */
-.active, .active a {
-    background-color: rgba(0, 83, 0);
-    color: white;
-}
-
 /* popout bar style */
-#pop-out {
+.pop-out {
     width: 350px;
     height: 100%;
-    background-color: rgba(17, 17, 17, 0.86);
     position: fixed;
     z-index: 1;
     top: 0;
-    left: 350px;
     padding-top: 15px;
+    //display: none;
+}
+
+#pop-out {
+    background-color: rgba(17, 17, 17, 0.90);
+    left: 0px;
+}
+
+#pop-out1 {
+    background-color: rgba(17, 17, 17, 0.86);
+    left: 350px;
+    display: none
+}
+
+#pop-out2 {
+    background-color: rgba(17, 17, 17, 0.82);
+    left: 700px;
     display: none;
+}
+
+#pop-out3 {
+    background-color: rgba(17, 17, 17, 0.78);
+    left: 350px;
 }
 
 .pop-out-header {
@@ -192,4 +206,31 @@ height: 25px;
 border-radius: 50%;
 background: #0175cc;
 cursor: pointer;
+}
+
+ .nav-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 350px;
+}
+
+ .nav-item a{
+    padding: 10px 0px 10px 22px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #b3b3b3;
+    display: block;
+    border: none;
+    background: none;
+    width: 328px;
+    text-align: left;
+    cursor: pointer;
+    outline: none;
+}
+
+/* Change the link color on hover */
+ .nav-item a:hover, .active {
+    background-color: #555;
+    color: white;
 }
