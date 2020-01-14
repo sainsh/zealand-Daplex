@@ -6,6 +6,14 @@ let pop1 = document.getElementById('pop-out1');
 let pop2 = document.getElementById('pop-out2');
 let pop3 = document.getElementById('pop-out3');
 
+var superList = document.getElementById("super-list");
+var buildingList = document.getElementById("building-list");
+var categoryList = document.getElementById("category-list");
+
+let superLiItems = superList.getElementsByTagName("li");
+let buildingLiItems = buildingList.getElementsByTagName("li");
+let categoryLiItems = categoryList.getElementsByTagName("li");
+
 /* function called on page update or menu click */
 window.onhashchange = function () {
     //code  
@@ -157,30 +165,16 @@ saveInputData = () => {
 };
 
 initEventListeners = () =>{
-    var superList = document.getElementById("super-list");
-    var buildingList = document.getElementById("building-list");
-    var categoryList = document.getElementById("category-list");
-
-    let superLiItems = superList.getElementsByTagName("li");
-    let buildingLiItems = buildingList.getElementsByTagName("li");
-    let categoryLiItems = categoryList.getElementsByTagName("li");
-
     superList.addEventListener("click", (ev) =>{
         let clickedIndex = ev.target.attributes.value.value;
-        for (let i = 0; i < superLiItems.length; i++){
-            if(i == clickedIndex){
-                superLiItems[i].classList.add("active")
-            } else{
-                superLiItems[i].classList.remove("active");
-            }
-        }
+        setActive(superLiItems, clickedIndex);
 
         clearListActive(categoryLiItems);
         clearListActive(buildingLiItems);
         pop1.style.display = "block";
         pop2.style.display = "none";
         pop3.style.display = "block";
-        pop3.style.left = "700px"
+        pop3.style.left = "700px";
         var http = new XMLHttpRequest();
         http.open('POST', '/dashboard/getData');
         http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -189,13 +183,7 @@ initEventListeners = () =>{
 
     buildingList.addEventListener("click", (ev) =>{
         let clickedIndex = ev.target.attributes.value.value;
-        for (let i = 0; i < buildingLiItems.length; i++){
-            if(i == clickedIndex){
-                buildingLiItems[i].classList.add("active")
-            } else{
-                buildingLiItems[i].classList.remove("active");
-            }
-        }
+        setActive(buildingLiItems, clickedIndex);
 
         clearListActive(categoryLiItems);
         pop2.style.display = "block";
@@ -208,19 +196,21 @@ initEventListeners = () =>{
 
     categoryList.addEventListener("click", (ev) =>{
         let clickedIndex = ev.target.attributes.value.value;
-        for (let i = 0; i < categoryLiItems.length; i++){
-            if(i == clickedIndex){
-                categoryLiItems[i].classList.add("active")
-            } else{
-                categoryLiItems[i].classList.remove("active");
-            }
-        }
+        setActive(categoryLiItems, clickedIndex);
+
         var http = new XMLHttpRequest();
         http.open('POST', '/dashboard/getData');
         http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         http.send(getBodyJson());
     });
 };
+
+setActive = (liList, index) =>{
+    clearListActive(liList);
+    liList[index].classList.add("active");
+}
+
+
 
 clearListActive = (list) =>{
     for (let i = 0; i < list.length; i++){
