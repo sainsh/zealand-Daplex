@@ -158,31 +158,46 @@ saveInputData = () => {
 
 initEventListeners = () =>{
     var superList = document.getElementById("super-list");
+    var buildingList = document.getElementById("building-list");
+    var categoryList = document.getElementById("category-list");
+
+    let superLiItems = superList.getElementsByTagName("li");
+    let buildingLiItems = buildingList.getElementsByTagName("li");
+    let categoryLiItems = categoryList.getElementsByTagName("li");
 
     superList.addEventListener("click", (ev) =>{
         let clickedIndex = ev.target.attributes.value.value;
-        let liItems = superList.getElementsByTagName("li");
-        for (let i = 0; i < liItems.length; i++){
+        for (let i = 0; i < superLiItems.length; i++){
             if(i == clickedIndex){
-                liItems[i].classList.add("active")
+                superLiItems[i].classList.add("active")
             } else{
-                liItems[i].classList.remove("active");
+                superLiItems[i].classList.remove("active");
             }
         }
 
+        clearListActive(categoryLiItems);
+        clearListActive(buildingLiItems);
         pop1.style.display = "block";
         pop2.style.display = "none";
         pop3.style.display = "block";
+        pop3.style.left = "700px"
         var http = new XMLHttpRequest();
         http.open('POST', '/dashboard/getData');
         http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         http.send(getBodyJson());
     });
 
-    var buildingList = document.getElementById("building-list");
-
     buildingList.addEventListener("click", (ev) =>{
-        console.log(ev.target.attributes.value.value);
+        let clickedIndex = ev.target.attributes.value.value;
+        for (let i = 0; i < buildingLiItems.length; i++){
+            if(i == clickedIndex){
+                buildingLiItems[i].classList.add("active")
+            } else{
+                buildingLiItems[i].classList.remove("active");
+            }
+        }
+
+        clearListActive(categoryLiItems);
         pop2.style.display = "block";
         pop3.style.left = "1050px";
         var http = new XMLHttpRequest();
@@ -191,18 +206,27 @@ initEventListeners = () =>{
         http.send(getBodyJson());
     });
 
-    var categoryList = document.getElementById("category-list");
-
     categoryList.addEventListener("click", (ev) =>{
-        console.log(ev.target.attributes.value.value);
+        let clickedIndex = ev.target.attributes.value.value;
+        for (let i = 0; i < categoryLiItems.length; i++){
+            if(i == clickedIndex){
+                categoryLiItems[i].classList.add("active")
+            } else{
+                categoryLiItems[i].classList.remove("active");
+            }
+        }
         var http = new XMLHttpRequest();
         http.open('POST', '/dashboard/getData');
         http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         http.send(getBodyJson());
     });
-
-
 };
+
+clearListActive = (list) =>{
+    for (let i = 0; i < list.length; i++){
+        list[i].classList.remove("active");
+    }
+}
 
 getBodyJson = () =>{
     let urlhash = window.location.hash;
