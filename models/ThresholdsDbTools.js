@@ -59,9 +59,7 @@ readHelpdeskThreshold = async function(id, sequelize, Sequelize){
 
         try {
             let helpdeskThresholds = getHelpdeskThresholdsTable(sequelize, Sequelize);
-            let result = await helpdeskThresholds.findAll((id ? {where: {id: id}} : {}));
-    
-            let answer = result.length === 0 ? result : 'nothing was found with the specified id';
+            let result = await helpdeskThresholds.findAll((id ? {where: {property_id: id}} : {}));
     
             return result.length === 0 ? await Promise.reject(new Error("No helpdesk threshold data found")) : result;
         } catch(e){

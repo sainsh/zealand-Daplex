@@ -85,6 +85,27 @@ router.post('/getData', async function(req, res, next) {
   if (req.body.category >= 0 && req.body.property_type >= 0 && req.body.category_option >= 0){
 
   }else if(req.body.category >= 0 && req.body.property_type >= 0){
+    let propertyIdSearch = await db.propt.read(req.property_id);
+    let propertyId = propertyIdSearch[0].dataValues.type_id;
+
+    let weightData = await db.readOverallWeightData(0);
+
+    if(req.body.category == 0){
+      let thresholdData = await db.epth.read(propertyId);
+      json.yellow = thresholdData[0].dataValues.threshold_yellow;
+      json.red = thresholdData[0].dataValues.threshold_red;
+      json.weight = weightData[0].dataValues.overall_energi;
+    }else if (req.body.category == 1){
+      let thresholdData = await db.ct.read(propertyId);
+      json.yellow = thresholdData[0].dataValues.threshold_yellow;
+      json.red = thresholdData[0].dataValues.threshold_red;
+      json.weight = weightData[0].dataValues.overall_tilstand;
+    }else if (req.body.category == 2){
+      let thresholdData = await db.ht.read(propertyId);
+      json.yellow = thresholdData[0].dataValues.threshold_yellow;
+      json.red = thresholdData[0].dataValues.threshold_red;
+      json.weight = weightData[0].dataValues.overall_helpdesk;
+    }
 
   }else if(req.body.category >= 0){
     let weightData = await db.readOverallWeightData(0);
@@ -108,9 +129,6 @@ router.post('/getData', async function(req, res, next) {
   }
   res.send(JSON.stringify(json));
 
-  //Retrieve propertyID from database
-  let propertyIdSearch = await db.propt.read(req.property_id);
-  let propertyId = propertyIdSearch[0].dataValues.type_id;
 });
 
 fillThresholdObjOnError = () => {

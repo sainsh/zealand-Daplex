@@ -56,8 +56,6 @@ readDamageThreshold = async function(id, sequelize, Sequelize){
     let damageThresholds = getDamageThresholdsTable(sequelize, Sequelize);
     let result = await damageThresholds.findAll((id ? {where: {property_id: id}} : {}));
  
-    console.log(debugMessage + result.length === 0 ? result : 'nothing was found with the specified id'); 
- 
     return result.length === 0 ? await Promise.reject(new Error("No damage threshold data found")) : result;
 }
 

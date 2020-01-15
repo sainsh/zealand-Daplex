@@ -212,10 +212,8 @@ initEventListeners = () =>{
         }
 
         pop3.style.left = "1050px";
-        var http = new XMLHttpRequest();
-        http.open('POST', '/dashboard/getData');
-        http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        http.send(getBodyJson());
+
+        fetchData();
     });
 
     energyCategoryList.addEventListener("click", (ev) =>{

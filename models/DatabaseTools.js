@@ -399,8 +399,16 @@ generateStartData = async () => {
         hct.create("Fundament og Sokkel");
 
         ht.create(1, 1, 0, 0);
+        ht.create(1,1, 0 ,420);
+        ht.create(1,1, 0 ,440);
+
         ct.create(1, 1, 0);
+        ct.create(1, 1, 420);
+        ct.create(1, 1, 440);
+
         epth.create(1, 1, 0);
+        epth.create(1, 1, 420);
+        epth.create(1, 1, 440);
 
         this.createOverallWeightTable([0, 50, 50, 50]);
     }
