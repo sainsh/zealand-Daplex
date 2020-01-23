@@ -42,7 +42,7 @@ block content
     div.pop-out(id='pop-out2-condition')
         p.pop-out-header Kategorier
         ul#category-list-condition.nav-list
-            each conditionCategory in conditionCategories
+            each conditionCategory, index in conditionCategories
                 li.nav-item
                     - var indexString = "" + index
                     a(value=indexString) #{conditionCategory.name}
