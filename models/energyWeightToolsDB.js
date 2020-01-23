@@ -6,7 +6,7 @@
  *  - Team Cyclone
  */
 
-const headerName = "energiWeightToolsDB.js: ";
+const headerName = "energyWeightToolsDB.js: ";
 
 
 /**
@@ -16,7 +16,7 @@ const headerName = "energiWeightToolsDB.js: ";
  /**
   * Create method for energi Weight
   */
-createEnergiWeight = async function(propertyId, categoryId, weight, sequelize, Sequelize){
+createEnergyWeight = async function(propertyId, categoryId, weight, sequelize, Sequelize){
 
     let debugMessage = headerName + "createWeightEnergi: ";
 
@@ -28,7 +28,7 @@ createEnergiWeight = async function(propertyId, categoryId, weight, sequelize, S
 
     try{
         console.log(debugMessage + "Getting weightEnergiTabel.")
-        let weightTable = getEnergiWeightTable(sequelize, Sequelize);
+        let weightTable = getEnergyWeightTable(sequelize, Sequelize);
 
         let result = await weightTable.create({
             property_type_id: propertyId, 
@@ -47,14 +47,14 @@ createEnergiWeight = async function(propertyId, categoryId, weight, sequelize, S
 /**
  * READ method Energi Weight
  */
-readEnergiWeight = async function(property_type_id, sequelize, Sequelize){
+readEnergyWeight = async function(property_type_id, sequelize, Sequelize){
 
     let debugMessage = headerName + 'readEnergiWeightTable: '; 
 
     console.log(debugMessage + 'Read initialized...');
     
     try {
-        let energiWeights = getEnergiWeightTable(sequelize, Sequelize);
+        let energiWeights = getEnergyWeightTable(sequelize, Sequelize);
         let result = await energiWeights.findAll((property_type_id ? {where: {property_type_id: property_type_id}} : {}));
 
         let answer = result.length === 0 ? result : 'nothing was found with the specified id';
@@ -75,7 +75,7 @@ readEnergiWeight = async function(property_type_id, sequelize, Sequelize){
 
 
 //Not sure if works
-updateEnergiWeight = async function(propertyId, categoryId, weight , sequelize, Sequelize){
+updateEnergyWeight = async function(propertyId, categoryId, weight , sequelize, Sequelize){
     
     let debugMessage = headerName + 'updateEnergiWeightTable: '; 
 
@@ -83,7 +83,7 @@ updateEnergiWeight = async function(propertyId, categoryId, weight , sequelize, 
 
     try {
         console.log(debugMessage + 'Getting Table...');
-        let WeightTable = getEnergiWeightTable(sequelize, Sequelize);
+        let WeightTable = getEnergyWeightTable(sequelize, Sequelize);
 
         console.log(debugMessage + 'Updating Table...');
         let result = await WeightTable.update({
@@ -103,7 +103,7 @@ updateEnergiWeight = async function(propertyId, categoryId, weight , sequelize, 
 
 }
 
-deleteEnergiWeight = async function(propertyid, sequelize, Sequelize){
+deleteEnergyWeight = async function (propertyid, sequelize, Sequelize){
     
     let debugMessage = headerName + 'deleteEnergiWeightTable: '; 
 
@@ -111,7 +111,7 @@ deleteEnergiWeight = async function(propertyid, sequelize, Sequelize){
 
     try {
         console.log(debugMessage + 'Getting Weight Table...');
-        let weightTable = getEnergiWeightTable(sequelize, Sequelize);
+        let weightTable = getEnergyWeightTable(sequelize, Sequelize);
 
         console.log(debugMessage + 'deleting id from Table...');
         let result = weightTable.destroy({ //removed await
@@ -138,7 +138,7 @@ deleteEnergiWeight = async function(propertyid, sequelize, Sequelize){
  * @param Sequelize: from DB tools
  * @returns table setup for Weight in daplex db
  */
-getEnergiWeightTable = (sequelize, Sequelize) => {
+getEnergyWeightTable = (sequelize, Sequelize) => {
     return sequelize.define('energi_weight', {
         property_type_id: {
             type: Sequelize.INTEGER,
@@ -158,10 +158,10 @@ getEnergiWeightTable = (sequelize, Sequelize) => {
 }
 
 
-exports.getEnergiWeightTable = getEnergiWeightTable;
-exports.createEnergiWeight = createEnergiWeight;
-exports.readEnergiWeight = readEnergiWeight;
-exports.updateEnergiWeight = updateEnergiWeight;
-exports.deleteEnergiWeight = deleteEnergiWeight;
+exports.getEnergyWeightTable = getEnergyWeightTable;
+exports.createEnergyWeight = createEnergyWeight;
+exports.readEnergyWeight = readEnergyWeight;
+exports.updateEnergyWeight = updateEnergyWeight;
+exports.deleteEnergyWeight = deleteEnergyWeight;
 
 

@@ -13,7 +13,7 @@ const heatThresholds = require('./HeatThresholdsDbTools');
 const conditionThresholds = require('./DamageThresholdDbTools');
 
 // database tools import for weight - Team Tempest
-const ewt = require('./energiWeightToolsDB');
+const ewt = require('./energyWeightToolsDB');
 const hwt = require('./helpdeskWeightToolsDB');
 const swt = require('./stateWeightToolsDB');
 
@@ -1005,10 +1005,10 @@ exports.updateDamageThreshold = (id, propertyId, yellowThreshold, redThreshold) 
 exports.deleteDamageThreshold = (id) => hett.deleteHeatThreshold(id, sequelize, Sequelize);
 //-------------------------------------------------------------//
 // DB Tools export from energiWeightDbTools - Team Tempest
-exports.createEnergiWeight = (categoryId, propertyId, weight) => {ewt.createEnergiWeight(propertyId, categoryId, weight, sequelize, Sequelize)};
-exports.readEnergiWeight = async (propertyId) => {return await ewt.readEnergiWeight(propertyId, sequelize, Sequelize)};
-exports.updateEnergiWeight = (propertyId, categoryId, weight) => ewt.updateEnergiWeight(propertyId, categoryId, weight, sequelize, Sequelize);
-exports.deleteEnergiWeight = (propertyId) => ewt.deleteEnergiWeight(propertyId, sequelize, Sequelize); 
+exports.createEnergyWeight = (categoryId, propertyId, weight) => {ewt.createEnergyWeight(propertyId, categoryId, weight, sequelize, Sequelize)};
+exports.readEnergyWeight = async (propertyId) => {return await ewt.readEnergyWeight(propertyId, sequelize, Sequelize)};
+exports.updateEnergyWeight = (propertyId, categoryId, weight) => ewt.updateEnergyWeight(propertyId, categoryId, weight, sequelize, Sequelize);
+exports.deleteEnergyWeight = (propertyId) => ewt.deleteEnergyWeight(propertyId, sequelize, Sequelize);
 
 // DB Tools export from helpdeksWeightDbTools - Team Tempest
 exports.createHelpdeskWeightTable = (categoryId, propertyId, weight) => {hwt.createHelpdeskWeight(propertyId, categoryId, weight, sequelize, Sequelize)};

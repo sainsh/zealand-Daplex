@@ -82,6 +82,26 @@ router.post('/energy', async function(req, res, next) {
 router.post('/getData', async function(req, res, next) {
   let json = {yellow: -1, red: -1, weight: -1};
   if (req.body.category >= 0 && req.body.property_type >= 0 && req.body.category_option >= 0){
+    let propertyIdSearch = await db.propt.read(req.body.property_type);
+    let propertyId = propertyIdSearch[0].dataValues.type_id;
+
+    if(req.body.category == 0){
+      let thresholdData = await db.epth.read(propertyId);
+      json.yellow = thresholdData[0].dataValues.threshold_yellow;
+      json.red = thresholdData[0].dataValues.threshold_red;
+      let weightData = await db.readEnergiWeight(propertyId);
+      json.weight = weightData[0].dataValues.overall_energi;
+    }else if (req.body.category == 1){
+      let thresholdData = await db.ct.read(propertyId);
+      json.yellow = thresholdData[0].dataValues.threshold_yellow;
+      json.red = thresholdData[0].dataValues.threshold_red;
+      json.weight = weightData[0].dataValues.overall_tilstand;
+    }else if (req.body.category == 2){
+      let thresholdData = await db.ht.read(propertyId);
+      json.yellow = thresholdData[0].dataValues.threshold_yellow;
+      json.red = thresholdData[0].dataValues.threshold_red;
+      json.weight = weightData[0].dataValues.overall_helpdesk;
+    }
 
   }else if(req.body.category >= 0 && req.body.property_type >= 0){
     let propertyIdSearch = await db.propt.read(req.body.property_type);
