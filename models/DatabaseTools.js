@@ -182,56 +182,6 @@ function getOverallWeightTable() {
     });
 }
 
-function getHelpdeskWeightTable() {
-    return sequelize.define('helpdesk_weight_data', {
-        property_type_id: {
-            type: Sequelize.INTEGER,
-            autoIncrement: false,
-            primaryKey: true
-        },
-        helpdesk_indeklima: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_teknisk: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_udv_b: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_mur_facade: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_tag: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_ud_gavl: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_tagdaekning: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_tag_ned: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_vinduer: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        helpdesk_fundament: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        }
-    });
-}
-
 function getMaintenanceTable() {
     return sequelize.define('maintenance_data', {
         maintenance_id: {
@@ -502,30 +452,6 @@ exports.createHelpdeskData = async function (helpdeskArray) {
     }
 };
 
-exports.createHelpdeskWeightTable = async function (helpdeskWeightArray) {
-    try {
-        let helpdeskWeightTable = getHelpdeskWeightTable();
-        let resultsArray = [];
-        let result = await helpdeskWeightTable.create({
-            property_type_id: helpdeskWeightArray[0],
-            helpdesk_indeklima: helpdeskWeightArray[1],
-            helpdesk_teknisk: helpdeskWeightArray[2],
-            helpdesk_udv_b: helpdeskWeightArray[3],
-            helpdesk_mur_facade: helpdeskWeightArray[4],
-            helpdesk_tag: helpdeskWeightArray[5],
-            helpdesk_ud_gavl: helpdeskWeightArray[6],
-            helpdesk_tagdaekning: helpdeskWeightArray[7],
-            helpdesk_tag_ned: helpdeskWeightArray[8],
-            helpdesk_vinduer: helpdeskWeightArray[9],
-            helpdesk_fundament: helpdeskWeightArray[10]
-        });
-        resultsArray.push(result.dataValues.property_type_id);
-        return resultsArray; // Return an array containing all inserted IDs
-    } catch (e) {
-        throw e;
-    }
-};
-
 exports.createOverallWeightTable = async function (helpdeskWeightArray) {
     try {
         let overallWeightTable = getOverallWeightTable();
@@ -567,32 +493,6 @@ exports.createStateWeightTable = async function (stateWeightArray) {
     }
 };
 
-exports.updateHelpdeskWeightTable = async function (helpdeskWeightArray) {
-    try {
-        let helpdeskWeightTable = getHelpdeskWeightTable();
-        let resultsArray = [];
-        let result = await helpdeskWeightTable.update({
-            helpdesk_indeklima: helpdeskWeightArray[1],
-            helpdesk_teknisk: helpdeskWeightArray[2],
-            helpdesk_udv_b: helpdeskWeightArray[3],
-            helpdesk_mur_facade: helpdeskWeightArray[4],
-            helpdesk_tag: helpdeskWeightArray[5],
-            helpdesk_ud_gavl: helpdeskWeightArray[6],
-            helpdesk_tagdaekning: helpdeskWeightArray[7],
-            helpdesk_tag_ned: helpdeskWeightArray[8],
-            helpdesk_vinduer: helpdeskWeightArray[9],
-            helpdesk_fundament: helpdeskWeightArray[10]
-        }, { returning: true, where: { property_type_id: helpdeskWeightArray[0] } });
-
-
-        resultsArray.push(result.dataValues);
-        console.log(resultsArray[0]);
-
-        return resultsArray; // Return an array containing all inserted IDs
-    } catch (e) {
-        throw e;
-    }
-};
 
 exports.updateStateWeightTable = async function (stateWeightArray) {
     try {
@@ -630,17 +530,6 @@ exports.updateOverallWeightTable = async function (overallWeightArray) {
         console.log(resultsArray[0]);
 
         return resultsArray; // Return an array containing all inserted IDs
-    } catch (e) {
-        throw e;
-    }
-};
-
-exports.readHelpdeskWeightData = async function (id) {
-    try {
-        let weightTable = getHelpdeskWeightTable();
-        let result = await weightTable.findAll((id ? { where: { property_type_id: id } } : {}));// Add the "where" option, if the ID is not undefined
-        let defaultData = [id, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50]; // Deafault values for sliders
-        return result.length === 0 ? defaultData : result[0].dataValues; // Return deafaultData if 0 results are found, else return the result(s)
     } catch (e) {
         throw e;
     }
