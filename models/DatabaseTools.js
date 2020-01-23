@@ -167,11 +167,11 @@ function getOverallWeightTable() {
             autoIncrement: false,
             primaryKey: true
         },
-        overall_tilstand: {
+        overall_energi: {
             type: Sequelize.INTEGER,
             allowNull: false
         },
-        overall_energi: {
+        overall_tilstand: {
             type: Sequelize.INTEGER,
             allowNull: false
         },
@@ -398,19 +398,21 @@ generateStartData = async () => {
         hct.create("Vinduer og Udvendige Døre");
         hct.create("Fundament og Sokkel");
 
-        ht.create(1, 1, 0, 0);
-        ht.create(1,1, 0 ,420);
-        ht.create(1,1, 0 ,440);
+        ht.create(2, 2, 0, 0);
+        ht.create(3,3, 0 ,420);
+        ht.create(4,4, 0 ,440);
 
         ct.create(1, 1, 0);
-        ct.create(1, 1, 420);
-        ct.create(1, 1, 440);
+        ct.create(2, 2, 420);
+        ct.create(3, 3, 440);
 
-        epth.create(1, 1, 0);
-        epth.create(1, 1, 420);
-        epth.create(1, 1, 440);
+        epth.create(3, 3, 0);
+        epth.create(1, 2, 420);
+        epth.create(2, 1, 440);
 
-        this.createOverallWeightTable([0, 50, 50, 50]);
+        this.createOverallWeightTable([0, 50, 55, 60]);
+        this.createOverallWeightTable([420, 51, 52, 63]);
+        this.createOverallWeightTable([440, 54, 56, 66]);
     }
 
     try {
@@ -530,8 +532,8 @@ exports.createOverallWeightTable = async function (helpdeskWeightArray) {
         let resultsArray = [];
         let result = await overallWeightTable.create({
             property_type_id: helpdeskWeightArray[0],
-            overall_tilstand: helpdeskWeightArray[1],
-            overall_energi: helpdeskWeightArray[2],
+            overall_energi: helpdeskWeightArray[1],
+            overall_tilstand: helpdeskWeightArray[2],
             overall_helpdesk: helpdeskWeightArray[3]
         });
         resultsArray.push(result.dataValues.property_type_id);
@@ -618,8 +620,8 @@ exports.updateOverallWeightTable = async function (overallWeightArray) {
         let overallWeightTable = getOverallWeightTable();
         let resultsArray = [];
         let result = await overallWeightTable.update({
-            overall_tilstand: overallWeightArray[1],
-            overall_energi: overallWeightArray[2],
+            overall_energi: overallWeightArray[1],
+            overall_tilstand: overallWeightArray[2],
             overall_helpdesk: overallWeightArray[3],
         }, { returning: true, where: { property_type_id: overallWeightArray[0] } });
 
@@ -665,14 +667,14 @@ exports.readOverallWeightData = async function (id) {
     }
 };
 
-exports.createOverallWeightData = async function (typeId, condition, energy, helpdesk) {
+exports.createOverallWeightData = async function (typeId, energy, condition, helpdesk) {
     try {
         let weightTable = getOverallWeightTable();
 
         await weightTable.create({
             property_type_id: typeId,
-            overall_tilstand: condition,
             overall_energi: energy,
+            overall_tilstad: condition,
             overall_helpdesk: helpdesk
         });
     } catch (e) {

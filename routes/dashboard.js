@@ -81,14 +81,12 @@ router.post('/energy', async function(req, res, next) {
 
 router.post('/getData', async function(req, res, next) {
   let json = {yellow: -1, red: -1, weight: -1};
-  console.log(req.body.category);
   if (req.body.category >= 0 && req.body.property_type >= 0 && req.body.category_option >= 0){
 
   }else if(req.body.category >= 0 && req.body.property_type >= 0){
-    let propertyIdSearch = await db.propt.read(req.property_id);
+    let propertyIdSearch = await db.propt.read(req.body.property_type);
     let propertyId = propertyIdSearch[0].dataValues.type_id;
-
-    let weightData = await db.readOverallWeightData(0);
+    let weightData = await db.readOverallWeightData(propertyId);
 
     if(req.body.category == 0){
       let thresholdData = await db.epth.read(propertyId);

@@ -191,8 +191,8 @@ initEventListeners = () =>{
 
     buildingList.addEventListener("click", (ev) =>{
         let clickedIndex = ev.target.attributes.value.value;
-        optionsSelected[1] = clickedIndex;
-        console.log(optionsSelected[0]);
+        optionsSelected[1] = parseInt(clickedIndex) + 1;
+        optionsSelected[2] = -1;
         setActive(buildingLiItems, clickedIndex);
         if (optionsSelected[0] == 0) {
             pop2Energy.style.display = "block";
