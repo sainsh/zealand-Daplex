@@ -16,6 +16,7 @@ const conditionThresholds = require('./DamageThresholdDbTools');
 const ewt = require('./energyWeightToolsDB');
 const hwt = require('./helpdeskWeightToolsDB');
 const swt = require('./stateWeightToolsDB');
+const taw = require('./ThresholdAndWeightDbTools');
 
 // database tools import for power data
 const pt = require('./PowerDBTools');
@@ -134,28 +135,6 @@ function getHelpdeskTable() {
         status: {
             type: Sequelize.STRING,
             allowNull: true
-        }
-    });
-}
-
-function getStateWeightTable() {
-    return sequelize.define('state_weight_data', {
-        property_type_id: {
-            type: Sequelize.INTEGER,
-            autoIncrement: false,
-            primaryKey: true
-        },
-        state_tekniske: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        state_udvendige: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-        state_osv: {
-            type: Sequelize.INTEGER,
-            allowNull: false
         }
     });
 }
@@ -295,6 +274,7 @@ exports.setupTables = async function () {
     let damageThresholdtable = conditionThresholds.getDamageThresholdsTable(sequelize, Sequelize);
     let maintenanceTable = getMaintenanceTable();
     let stateWeightTable = swt.getStateWeightTable(sequelize, Sequelize);
+    let thresholdsAndWeightsTable = taw.getThresholdsAndWeightsTable(sequelize, Sequelize);
     let energiWeightTable = ewt.getEnergiWeightTable(sequelize, Sequelize);
     let overallWeightTable = getOverallWeightTable();
     let waterTable = getWaterTable();
@@ -316,6 +296,7 @@ exports.setupTables = async function () {
     await heatThresholdTable.sync({force: false});
     await damageThresholdtable.sync({force: false});
     await stateWeightTable.sync({force: false});
+    await thresholdsAndWeightsTable.sync({force: false});
     await maintenanceTable.sync({force: false});
     await overallWeightTable.sync({force: false});
     await waterTable.sync({force: false});
@@ -349,8 +330,8 @@ generateStartData = async () => {
         hct.create("Fundament og Sokkel");
 
         ht.create(2, 2, 0, 0);
-        ht.create(3,3, 0 ,420);
-        ht.create(4,4, 0 ,440);
+        ht.create(3, 3, 0, 420);
+        ht.create(4, 4, 0, 440);
 
         ct.create(1, 1, 0);
         ct.create(2, 2, 420);
@@ -363,6 +344,22 @@ generateStartData = async () => {
         this.createOverallWeightTable([0, 50, 55, 60]);
         this.createOverallWeightTable([420, 51, 52, 63]);
         this.createOverallWeightTable([440, 54, 56, 66]);
+
+        var propertyTypeIdArray = [0, 420, 440];
+        var numberOfSubCategories = [3, 10, 10]
+        for (l = 0; l < 3; l++) {
+            for (i = 0; i < 3; i++) {
+                for (j = 0; j < numberOfSubCategories[i]; j++) {
+                    if( i === 0){
+                        this.createEnergyWeight(j, propertyTypeIdArray[l], 30 + j)
+                    }else if (i === 1){
+                        this.createStateWeightTable(j, propertyTypeIdArray[l], j + 20);
+                    }else if (i===2){
+                        this.createHelpdeskWeightTable(j, propertyTypeIdArray[l], 10 + j)
+                    }
+                }
+            }
+        }
     }
 
     try {
@@ -452,68 +449,6 @@ exports.createHelpdeskData = async function (helpdeskArray) {
     }
 };
 
-exports.createOverallWeightTable = async function (helpdeskWeightArray) {
-    try {
-        let overallWeightTable = getOverallWeightTable();
-        let resultsArray = [];
-        let result = await overallWeightTable.create({
-            property_type_id: helpdeskWeightArray[0],
-            overall_energi: helpdeskWeightArray[1],
-            overall_tilstand: helpdeskWeightArray[2],
-            overall_helpdesk: helpdeskWeightArray[3]
-        });
-        resultsArray.push(result.dataValues.property_type_id);
-        return resultsArray; // Return an array containing all inserted IDs
-    } catch (e) {
-        throw e;
-    }
-};
-
-// SLET VENLIGST IKKE DENNE LINJE
-// exports.createHelpdeskWeightTable([420, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]);
-// SLET VENLIGST IKKE DENNE LINJE
-
-exports.createStateWeightTable = async function (stateWeightArray) {
-    try {
-        let stateWeightTable = getStateWeightTable();
-        let resultsArray = [];
-        let result = await stateWeightTable.create({
-            property_type_id: stateWeightArray[0],
-            state_tekniske: stateWeightArray[1],
-            state_udvendige: stateWeightArray[2],
-            state_osv: stateWeightArray[3]
-        });
-
-        resultsArray.push(result.dataValues.property_type_id);
-        console.log(resultsArray[0]);
-
-        return resultsArray; // Return an array containing all inserted IDs
-    } catch (e) {
-        throw e;
-    }
-};
-
-
-exports.updateStateWeightTable = async function (stateWeightArray) {
-    try {
-        let stateWeightTable = getStateWeightTable();
-        let resultsArray = [];
-        console.log(stateWeightArray[1]);
-        let result = await stateWeightTable.update({
-            state_tekniske: stateWeightArray[1],
-            state_udvendige: stateWeightArray[2],
-            state_osv: stateWeightArray[3],
-        }, { returning: true, where: { property_type_id: stateWeightArray[0] } });
-
-
-        resultsArray.push(result.dataValues);
-        console.log(resultsArray[0]);
-
-        return resultsArray; // Return an array containing all inserted IDs
-    } catch (e) {
-        throw e;
-    }
-};
 
 exports.updateOverallWeightTable = async function (overallWeightArray) {
     try {
@@ -530,17 +465,6 @@ exports.updateOverallWeightTable = async function (overallWeightArray) {
         console.log(resultsArray[0]);
 
         return resultsArray; // Return an array containing all inserted IDs
-    } catch (e) {
-        throw e;
-    }
-};
-
-exports.readStateWeightData = async function (id) {
-    try {
-        let weightTable = getStateWeightTable();
-        let result = await weightTable.findAll((id ? { where: { property_type_id: id } } : {}));// Add the "where" option, if the ID is not undefined
-        let defaultData = [id, 50, 50, 50]; // Default values for sliders
-        return result.length === 0 ? defaultData : result; // Return defaultData if 0 results are found, else return the result(s)
     } catch (e) {
         throw e;
     }
@@ -759,15 +683,6 @@ exports.readHelpdeskDataOneYearBack = async function () {
     }
 };
 
-/*exports.readHelpdeskWeights = async function (id) {
-    try {
-        let helpdeskWeightTable = getHelpdeskWeightTable();
-        let result = await helpdeskWeightTable.findAll((id ? { where: { property_type_id: id } } : {})); // Add the "where" option, if the ID is not undefined
-        return result.length === 0 ? await Promise.reject(new Error("No helpdesk weight data found")) : result; // Return an error, if 0 results are found, else return the result(s)
-    } catch (e) {
-        throw e;
-    }
-};*/
 
 exports.readMaintenanceData = async function (id) {
     try {
@@ -1022,6 +937,19 @@ exports.createStateWeightTable = (categoryId, propertyId, weight) => {swt.create
 exports.readStateWeight = async (id) => {return await swt.readStateWeight(id, sequelize, Sequelize)};
 exports.updateStateWeightTable = (propertyId, categoryId, weight) => swt.updateStateWeight(propertyId, categoryId, weight, sequelize, Sequelize);
 exports.deleteStateWeight = (id) => swt.deleteStateWeight(id, sequelize, Sequelize);
+
+// DB Tools export from ThresholdsAndweightsDbTools - Team Tempest
+exports.createThresholdsAndWeights = (superCategoryId, categoryId, propertyId, thresholdYellow, thresholdRed,  weight) => {
+    taw.createThresholdsAndWeights(superCategoryId, propertyId, categoryId, weight, thresholdYellow, thresholdRed, sequelize, Sequelize)};
+
+exports.readThresholdsAndWeights = async (superCategoryId, categoryId, propertyId) =>{
+    return await taw.readThresholdsAndWeights(superCategoryId, categoryId, propertyId, sequelize, Sequelize)};
+
+exports.updateThresholdsAndWeights = (superCategoryId, categoryId, propertyId, thresholdYellow, thresholdRed,  weight) => {
+    taw.updateThresholdsAndWeights(superCategoryId, categoryId, propertyId, thresholdYellow, thresholdRed,  weight, sequelize, Sequelize)};
+
+exports.deleteThresholdsAndWeights = (superCategoryId, categoryId, propertyId) =>
+    taw.deleteThresholdsAndWeights(superCategoryId, categoryId, propertyId, sequelize, Sequelize);
 
 // DB Tools export from powerTable - Team Hurricane
 exports.createPower = (power) => { pt.createPower(power, sequelize, Sequelize) };
