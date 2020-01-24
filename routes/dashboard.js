@@ -81,72 +81,16 @@ router.post('/energy', async function(req, res, next) {
 
 router.post('/getData', async function(req, res, next) {
   let json = {yellow: -1, red: -1, weight: -1};
-  if (req.body.category >= 0 && req.body.property_type >= 0 && req.body.category_option >= 0){
-    let propertyIdSearch = await db.propt.read(req.body.property_type);
-    let propertyId = propertyIdSearch[0].dataValues.type_id;
+  let propertyIdSearch = req.body.property_type === '0' ? '0' : await db.propt.read(req.body.property_type);
+  let propertyId = propertyIdSearch === '0' ? '0' : propertyIdSearch[0].dataValues.type_id;
+  console.log(req.body.category + propertyId + req.body.category_option);
+  let weightsAndThresholds = await db.readThresholdsAndWeights(req.body.category, propertyId, req.body.category_option);
+  console.log(weightsAndThresholds);
 
-    if(req.body.category == 0){
-      let thresholdData = await db.epth.read(propertyId);
-      json.yellow = thresholdData[0].dataValues.threshold_yellow;
-      json.red = thresholdData[0].dataValues.threshold_red;
-      let weightData = await db.readEnergyWeight(propertyId);
-      json.weight = weightData[0].dataValues.weight;
-    }else if (req.body.category == 1){
-      let thresholdData = await db.ct.read(propertyId);
-      json.yellow = thresholdData[0].dataValues.threshold_yellow;
-      json.red = thresholdData[0].dataValues.threshold_red;
-      let weightData = await db.readStateWeight(propertyId);
-      json.weight = weightData[0].dataValues.weight;
-    }else if (req.body.category == 2){
-      let thresholdData = await db.ht.read(propertyId);
-      json.yellow = thresholdData[0].dataValues.threshold_yellow;
-      json.red = thresholdData[0].dataValues.threshold_red;
-      let weightData = await db.readHelpdeskWeight(propertyId);
-      json.weight = weightData[0].dataValues.weight;
-    }
+  json.yellow = weightsAndThresholds[0].dataValues.threshold_yellow;
+  json.red = weightsAndThresholds[0].dataValues.threshold_red;
+  json.weight = weightsAndThresholds[0].dataValues.weight;
 
-  }else if(req.body.category >= 0 && req.body.property_type >= 0){
-    let propertyIdSearch = await db.propt.read(req.body.property_type);
-    let propertyId = propertyIdSearch[0].dataValues.type_id;
-    let weightData = await db.readOverallWeightData(propertyId);
-
-    if(req.body.category == 0){
-      let thresholdData = await db.epth.read(propertyId);
-      json.yellow = thresholdData[0].dataValues.threshold_yellow;
-      json.red = thresholdData[0].dataValues.threshold_red;
-      json.weight = weightData[0].dataValues.overall_energi;
-    }else if (req.body.category == 1){
-      let thresholdData = await db.ct.read(propertyId);
-      json.yellow = thresholdData[0].dataValues.threshold_yellow;
-      json.red = thresholdData[0].dataValues.threshold_red;
-      json.weight = weightData[0].dataValues.overall_tilstand;
-    }else if (req.body.category == 2){
-      let thresholdData = await db.ht.read(propertyId);
-      json.yellow = thresholdData[0].dataValues.threshold_yellow;
-      json.red = thresholdData[0].dataValues.threshold_red;
-      json.weight = weightData[0].dataValues.overall_helpdesk;
-    }
-
-  }else if(req.body.category >= 0){
-    let weightData = await db.readOverallWeightData(0);
-
-    if(req.body.category == 0){
-      let thresholdData = await db.epth.read(0);
-      json.yellow = thresholdData[0].dataValues.threshold_yellow;
-      json.red = thresholdData[0].dataValues.threshold_red;
-      json.weight = weightData[0].dataValues.overall_energi;
-    }else if (req.body.category == 1){
-      let thresholdData = await db.ct.read(0);
-      json.yellow = thresholdData[0].dataValues.threshold_yellow;
-      json.red = thresholdData[0].dataValues.threshold_red;
-      json.weight = weightData[0].dataValues.overall_tilstand;
-    }else if (req.body.category == 2){
-      let thresholdData = await db.ht.read(0);
-      json.yellow = thresholdData[0].dataValues.threshold_yellow;
-      json.red = thresholdData[0].dataValues.threshold_red;
-      json.weight = weightData[0].dataValues.overall_helpdesk;
-    }
-  }
   res.send(JSON.stringify(json));
 
 });

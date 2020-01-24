@@ -275,7 +275,7 @@ exports.setupTables = async function () {
     let maintenanceTable = getMaintenanceTable();
     let stateWeightTable = swt.getStateWeightTable(sequelize, Sequelize);
     let thresholdsAndWeightsTable = taw.getThresholdsAndWeightsTable(sequelize, Sequelize);
-    let energiWeightTable = ewt.getEnergiWeightTable(sequelize, Sequelize);
+    let energiWeightTable = ewt.getEnergyWeightTable(sequelize, Sequelize);
     let overallWeightTable = getOverallWeightTable();
     let waterTable = getWaterTable();
     let heatTable = getHeatTable();
@@ -329,34 +329,27 @@ generateStartData = async () => {
         hct.create("Vinduer og Udvendige Døre");
         hct.create("Fundament og Sokkel");
 
-        ht.create(2, 2, 0, 0);
-        ht.create(3, 3, 0, 420);
-        ht.create(4, 4, 0, 440);
+        this.createThresholdsAndWeights(0, 0, 0, 6, 6, 61);
+        this.createThresholdsAndWeights(0, 420, 0, 5, 5, 71);
+        this.createThresholdsAndWeights(0, 440, 0, 4, 4, 81);
 
-        ct.create(1, 1, 0);
-        ct.create(2, 2, 420);
-        ct.create(3, 3, 440);
+        this.createThresholdsAndWeights(1, 0, 0, 9, 9, 65);
+        this.createThresholdsAndWeights(1, 420, 0, 8, 8, 75);
+        this.createThresholdsAndWeights(1, 440, 0, 7, 7, 85);
 
-        epth.create(3, 3, 0);
-        epth.create(1, 2, 420);
-        epth.create(2, 1, 440);
+        this.createThresholdsAndWeights(2, 0, 0, 4, 4, 60);
+        this.createThresholdsAndWeights(2, 420, 0, 3, 3, 70);
+        this.createThresholdsAndWeights(2, 440, 0, 2, 2, 80);
 
-        this.createOverallWeightTable([0, 50, 55, 60]);
-        this.createOverallWeightTable([420, 51, 52, 63]);
-        this.createOverallWeightTable([440, 54, 56, 66]);
 
         var propertyTypeIdArray = [0, 420, 440];
         var numberOfSubCategories = [3, 10, 10]
         for (l = 0; l < 3; l++) {
             for (i = 0; i < 3; i++) {
-                for (j = 0; j < numberOfSubCategories[i]; j++) {
-                    if( i === 0){
-                        this.createEnergyWeight(j, propertyTypeIdArray[l], 30 + j)
-                    }else if (i === 1){
-                        this.createStateWeightTable(j, propertyTypeIdArray[l], j + 20);
-                    }else if (i===2){
-                        this.createHelpdeskWeightTable(j, propertyTypeIdArray[l], 10 + j)
-                    }
+                for (j = 0; j <= numberOfSubCategories[i]; j++) {
+                    let rand = Math.floor(Math.random() * 10);
+                    let randy = Math.floor(Math.random() * 100);
+                    this.createThresholdsAndWeights(l, propertyTypeIdArray[i], j, rand, rand, randy)
                 }
             }
         }
@@ -939,17 +932,17 @@ exports.updateStateWeightTable = (propertyId, categoryId, weight) => swt.updateS
 exports.deleteStateWeight = (id) => swt.deleteStateWeight(id, sequelize, Sequelize);
 
 // DB Tools export from ThresholdsAndweightsDbTools - Team Tempest
-exports.createThresholdsAndWeights = (superCategoryId, categoryId, propertyId, thresholdYellow, thresholdRed,  weight) => {
-    taw.createThresholdsAndWeights(superCategoryId, propertyId, categoryId, weight, thresholdYellow, thresholdRed, sequelize, Sequelize)};
+exports.createThresholdsAndWeights = (superCategoryId, propertyId, categoryId, thresholdYellow, thresholdRed,  weight) => {
+    taw.createThresholdsAndWeights(superCategoryId, propertyId, categoryId, thresholdYellow, thresholdRed, weight, sequelize, Sequelize)};
 
-exports.readThresholdsAndWeights = async (superCategoryId, categoryId, propertyId) =>{
-    return await taw.readThresholdsAndWeights(superCategoryId, categoryId, propertyId, sequelize, Sequelize)};
+exports.readThresholdsAndWeights = async (superCategoryId, propertyId, categoryId) =>{
+    return await taw.readThresholdsAndWeights(superCategoryId, propertyId, categoryId, sequelize, Sequelize)};
 
-exports.updateThresholdsAndWeights = (superCategoryId, categoryId, propertyId, thresholdYellow, thresholdRed,  weight) => {
-    taw.updateThresholdsAndWeights(superCategoryId, categoryId, propertyId, thresholdYellow, thresholdRed,  weight, sequelize, Sequelize)};
+exports.updateThresholdsAndWeights = (superCategoryId, propertyId, categoryId, thresholdYellow, thresholdRed,  weight) => {
+    taw.updateThresholdsAndWeights(superCategoryId, propertyId, categoryId, thresholdYellow, thresholdRed,  weight, sequelize, Sequelize)};
 
-exports.deleteThresholdsAndWeights = (superCategoryId, categoryId, propertyId) =>
-    taw.deleteThresholdsAndWeights(superCategoryId, categoryId, propertyId, sequelize, Sequelize);
+exports.deleteThresholdsAndWeights = (superCategoryId, propertyId, categoryId) =>
+    taw.deleteThresholdsAndWeights(superCategoryId, propertyId, categoryId, sequelize, Sequelize);
 
 // DB Tools export from powerTable - Team Hurricane
 exports.createPower = (power) => { pt.createPower(power, sequelize, Sequelize) };

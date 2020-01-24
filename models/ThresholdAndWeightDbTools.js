@@ -16,8 +16,8 @@ createThresholdsAndWeights = async function(superCategoryId, propertyId, categor
 
     console.log(debugMessage + "Starting... \n" +
         "SuperCategoryId     = " + superCategoryId + "\n" +
-        "CategoryId = " + categoryId + "\n" +
         "propertyId = " + propertyId + "\n" +
+        "CategoryId = " + categoryId + "\n" +
         "ThresholdYellow     = " + thresholdYellow + "\n" +
         "ThresholdRed     = " + thresholdRed + "\n" +
         "weight     = " + weight);
@@ -42,40 +42,26 @@ createThresholdsAndWeights = async function(superCategoryId, propertyId, categor
         console.log(debugMessage + "\n"  + e);
     }
 
-}
+};
 
 /**
  * READ method State Weight
  */
-readThresholdsAndWeights = async function(superCategoryId, property_type_id, categoryId, sequelize, Sequelize){
+readThresholdsAndWeights = async function(superCategoryId, propertyId, categoryId, sequelize, Sequelize){
 
-    let debugMessage = headerName + 'readStateWeightTable: ';
+    let debugMessage = headerName + 'readPowerThresholdTable: ';
+
+    console.log(categoryId);
 
     console.log(debugMessage + 'Read initialized...');
 
-    try {
-        let thresholdsAndWeights = getThresholdsAndWeightsTable(sequelize, Sequelize);
-        let result = await thresholdsAndWeights.findAll((property_type_id ? {where: {
-            super_category_id: superCategoryId,
-            property_type_id: property_type_id,
-            category_id: categoryId}} : {}));
+    let thresholdAndWeights = getThresholdsAndWeightsTable(sequelize, Sequelize);
+    let result = await thresholdAndWeights.findAll((superCategoryId ? {where: {super_category_id: superCategoryId, property_type_id: propertyId, category_id: categoryId}} : {}));
 
-        let answer = result.length === 0 ? result : 'nothing was found with the specified id';
+    console.log(debugMessage + result.length === 0 ? result : 'nothing was found with the specified id');
 
-        result.forEach(element => {
-            console.log(debugMessage + " Weight " + element.weight +
-                " property type id: " +  element.property_type_id + " State category id = " + element.state_category_id);
-        });
-
-        return result.length === 0 ? console.log("nothing in db")
-            : result;
-    } catch(e){
-        throw e;
-    }
-
-}
-
-
+    return result.length === 0 ? await Promise.reject(new Error("No power threshold data found")) : result;
+};
 
 //Not sure if works
 updateThresholdsAndWeights = async function(superCategoryId, propertyId, categoryId, thresholdYellow, thresholdRed, weight, sequelize, Sequelize){
@@ -107,7 +93,7 @@ updateThresholdsAndWeights = async function(superCategoryId, propertyId, categor
         throw e;
     }
 
-}
+};
 
 deleteThresholdsAndWeights = async function(superCategoryId, propertyId, category_id, sequelize, Sequelize){
 
@@ -115,10 +101,10 @@ deleteThresholdsAndWeights = async function(superCategoryId, propertyId, categor
 
 
     try {
-        let ThresholdsAndWeights = getThresholdsAndWeightsTable(sequelize, Sequelize);
+        let thresholdsAndWeights = getThresholdsAndWeightsTable(sequelize, Sequelize);
 
         console.log(debugMessage + 'deleting id from Table...');
-        let result = weightTable.destroy({ //removed await
+        let result = thresholdsAndWeights.destroy({ //removed await
             where: {super_category_id: superCategoryId, property_type_id: propertyId, category_id: category_id}
         }, {returning: true, where: {property_type_id: propertyid}});
 
@@ -132,7 +118,7 @@ deleteThresholdsAndWeights = async function(superCategoryId, propertyId, categor
         throw e;
     }
 
-}
+};
 
 
 
@@ -143,8 +129,8 @@ deleteThresholdsAndWeights = async function(superCategoryId, propertyId, categor
  * @returns table setup for Weight in daplex db
  */
 getThresholdsAndWeightsTable = (sequelize, Sequelize) => {
-    return sequelize.define('state_weight', {
-        super_category: {
+    return sequelize.define('thresholds_and_weights', {
+        super_category_id: {
             type: Sequelize.INTEGER,
             allowNull: false
         } ,
@@ -153,15 +139,15 @@ getThresholdsAndWeightsTable = (sequelize, Sequelize) => {
             refrences: {model: 'property_types', key: 'type_id'}
             // refrencesKey: 'property_type_id'
         },
-        category: {
+        category_id: {
             type: Sequelize.INTEGER,
         },
         threshold_yellow: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.DOUBLE,
             allowNull: false
         },
         threshold_red: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.DOUBLE,
             allowNull: false
         },
         weight: {
@@ -169,7 +155,7 @@ getThresholdsAndWeightsTable = (sequelize, Sequelize) => {
             allowNull: false
         }
     });
-}
+};
 
 
 exports.getThresholdsAndWeightsTable = getThresholdsAndWeightsTable;

@@ -20,7 +20,7 @@ let energyCategoryLiItems = energyCategoryList.getElementsByTagName("li");
 let conditionCategoryLiItems = conditionCategoryList.getElementsByTagName("li");
 let helpdeskCategoryLiItems = helpdeskCategoryList.getElementsByTagName("li");
 
-let optionsSelected = [-1, -1, -1];
+let optionsSelected = [0, 0, 0];
 
 
 /* function called on page update or menu click */
@@ -176,7 +176,7 @@ saveInputData = () => {
 initEventListeners = () =>{
     superList.addEventListener("click", (ev) =>{
         let clickedIndex = ev.target.attributes.value.value;
-        optionsSelected = [clickedIndex, -1, -1];
+        optionsSelected = [clickedIndex, 0, 0];
         setActive(superLiItems, clickedIndex);
 
         clearListActive(energyCategoryLiItems);clearListActive(conditionCategoryLiItems);clearListActive(helpdeskCategoryLiItems);
@@ -192,7 +192,7 @@ initEventListeners = () =>{
     buildingList.addEventListener("click", (ev) =>{
         let clickedIndex = ev.target.attributes.value.value;
         optionsSelected[1] = parseInt(clickedIndex) + 1;
-        optionsSelected[2] = -1;
+        optionsSelected[2] = 0;
         setActive(buildingLiItems, clickedIndex);
         if (optionsSelected[0] == 0) {
             pop2Energy.style.display = "block";
@@ -220,16 +220,19 @@ initEventListeners = () =>{
         let clickedIndex = ev.target.attributes.value.value;
         optionsSelected[2] = parseInt(clickedIndex) + 1;
         setActive(energyCategoryLiItems, clickedIndex);
+        fetchData();
     });
     conditionCategoryList.addEventListener("click", (ev) =>{
         let clickedIndex = ev.target.attributes.value.value;
         optionsSelected[2] = clickedIndex;
         setActive(conditionCategoryLiItems, clickedIndex);
+        fetchData();
     });
     helpdeskCategoryList.addEventListener("click", (ev) =>{
         let clickedIndex = ev.target.attributes.value.value;
         optionsSelected[2] = clickedIndex;
         setActive(helpdeskCategoryLiItems, clickedIndex);
+        fetchData();
     });
 };
 
