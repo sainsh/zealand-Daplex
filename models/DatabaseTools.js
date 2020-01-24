@@ -5,17 +5,8 @@ const Sequelize = require('sequelize');
 const helpdeskCategories = require('./helpdeskCategoriesTable');
 const propertyTypes = require('./propertyTypesDbTools');
 
-// database tools import for thresholds - Team Cyclone
-const helpdeskTresholds = require('./ThresholdsDbTools');
-const waterThresholds = require('./WaterThresholdsDbTools');
-const powerThresholds = require('./PowerThresholdsDbTools');
-const heatThresholds = require('./HeatThresholdsDbTools');
-const conditionThresholds = require('./DamageThresholdDbTools');
 
 // database tools import for weight - Team Tempest
-const ewt = require('./energyWeightToolsDB');
-const hwt = require('./helpdeskWeightToolsDB');
-const swt = require('./stateWeightToolsDB');
 const taw = require('./ThresholdAndWeightDbTools');
 
 // database tools import for power data
@@ -266,16 +257,8 @@ exports.setupTables = async function () {
     let propertyTypeTable = propertyTypes.getPropertyTypesTable(sequelize, Sequelize);
     let helpdeskCategoriesTable = helpdeskCategories.getHelpdeskCategoriesTable(sequelize, Sequelize);
     let helpdeskTable = getHelpdeskTable();
-    let helpdeskWeightTable = hwt.getHelpdeskWeightTable(sequelize, Sequelize);
-    let helpdeskThresholdTable = helpdeskTresholds.getHelpdeskThresholdsTable(sequelize, Sequelize);
-    let waterThresholdTable = waterThresholds.getWaterThresholdsTable(sequelize, Sequelize);
-    let powerThresholdTable = powerThresholds.getPowerThresholdsTable(sequelize, Sequelize);
-    let heatThresholdTable = heatThresholds.getHeatThresholdsTable(sequelize, Sequelize);
-    let damageThresholdtable = conditionThresholds.getDamageThresholdsTable(sequelize, Sequelize);
     let maintenanceTable = getMaintenanceTable();
-    let stateWeightTable = swt.getStateWeightTable(sequelize, Sequelize);
     let thresholdsAndWeightsTable = taw.getThresholdsAndWeightsTable(sequelize, Sequelize);
-    let energiWeightTable = ewt.getEnergyWeightTable(sequelize, Sequelize);
     let overallWeightTable = getOverallWeightTable();
     let waterTable = getWaterTable();
     let heatTable = getHeatTable();
@@ -289,19 +272,11 @@ exports.setupTables = async function () {
     await propertiesTable.sync({force: false});
     await helpdeskCategoriesTable.sync({force: false});
     await helpdeskTable.sync({force: false});
-    await helpdeskWeightTable.sync({force: false});
-    await helpdeskThresholdTable.sync({force: false});
-    await waterThresholdTable.sync({force: false});
-    await powerThresholdTable.sync({force: false});
-    await heatThresholdTable.sync({force: false});
-    await damageThresholdtable.sync({force: false});
-    await stateWeightTable.sync({force: false});
     await thresholdsAndWeightsTable.sync({force: false});
     await maintenanceTable.sync({force: false});
     await overallWeightTable.sync({force: false});
     await waterTable.sync({force: false});
     await heatTable.sync({force: false});
-    await energiWeightTable.sync({force: false});
     await powerTable.sync({force: false});
 
     // Generation of start data for the database
@@ -435,77 +410,6 @@ exports.createHelpdeskData = async function (helpdeskArray) {
     }
 };
 
-
-exports.updateOverallWeightTable = async function (overallWeightArray) {
-    try {
-        let overallWeightTable = getOverallWeightTable();
-        let resultsArray = [];
-        let result = await overallWeightTable.update({
-            overall_energi: overallWeightArray[1],
-            overall_tilstand: overallWeightArray[2],
-            overall_helpdesk: overallWeightArray[3],
-        }, { returning: true, where: { property_type_id: overallWeightArray[0] } });
-
-
-        resultsArray.push(result.dataValues);
-        console.log(resultsArray[0]);
-
-        return resultsArray; // Return an array containing all inserted IDs
-    } catch (e) {
-        throw e;
-    }
-};
-
-exports.readOverallWeightData = async function (id) {
-    try {
-        let weightTable = getOverallWeightTable();
-        let result = await weightTable.findAll((id ? { where: { property_type_id: id } } : {}));// Add the "where" option, if the ID is not undefined
-        return result.length === 0 ? await Promise.reject(new Error("No overall wight data data found")) : result; // Return defaultData if 0 results are found, else return the result(s)
-    } catch (e) {
-        throw e;
-    }
-};
-
-exports.createOverallWeightData = async function (typeId, energy, condition, helpdesk) {
-    try {
-        let weightTable = getOverallWeightTable();
-
-        await weightTable.create({
-            property_type_id: typeId,
-            overall_energi: energy,
-            overall_tilstad: condition,
-            overall_helpdesk: helpdesk
-        });
-    } catch (e) {
-        throw e;
-    }
-};
-
-exports.createHelpdeskLimit = async function (helpdeskLimitArray) {
-    try {
-        let helpdeskLimitsTable = getHelpdeskLimitsTable();
-        let resultsArray = [];
-
-        let result = await helpdeskLimitsTable.create({
-            helpdesk_indeklima: helpdeskLimitArray[0],
-            helpdesk_tekniske_anlaeg: helpdeskLimitArray[1],
-            helpdesk_udv_belaegning: helpdeskLimitArray[2],
-            helpdesk_murwaerk_og_facade: helpdeskLimitArray[3],
-            helpdesk_tag: helpdeskLimitArray[4],
-            helpdesk_udhaeng_og_gavle: helpdeskLimitArray[5],
-            helpdesk_tagdaekning: helpdeskLimitArray[6],
-            helpdesk_tagrender_og_nedloeb: helpdeskLimitArray[7],
-            helpdesk_vinduer_og_udv_doere: helpdeskLimitArray[8],
-            helpdesk_fundament_og_sokkel: helpdeskLimitArray[9]
-        });
-
-        resultsArray.push(result.dataValues);
-
-        return resultsArray; // Return an array containing all inserted IDs
-    } catch (e) {
-        throw e;
-    }
-};
 
 exports.createMaintenanceData = async function (maintenanceDataArray) {
     try {
@@ -845,52 +749,6 @@ prtt.delete = (id) => propertyTypes.deletePropertyType(id, sequelize, Sequelize)
 
 exports.prtt = prtt;
 
-// helpdesk thresholds db tools
-var ht = {};
-ht.create = (yellowThreshold, redThreshold, categoryId, propertyId) => helpdeskTresholds.createHelpdeskThreshold(yellowThreshold, redThreshold, categoryId, propertyId, sequelize, Sequelize);
-ht.read = async (id) => await helpdeskTresholds.readHelpdeskThreshold(id, sequelize, Sequelize);
-ht.update = (id, propertyId, categoryId, yellowThreshold, redThreshold) => helpdeskTresholds.updateHelpdeskThreshold(id, propertyId, categoryId, yellowThreshold, redThreshold, sequelize, Sequelize);
-ht.delete = (id) => helpdeskTresholds.deleteHelpdeskThreshold(id, sequelize, Sequelize);
-
-exports.ht = ht;
-
-// condition db tools 
-var ct = {};
-// DB Tools export from DamageThresholdDbTools - Team Cyclone
-ct.create = (yellowThreshold, redThreshold, propertyId) => conditionThresholds.createDamageThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize);
-ct.read = async (id) => await conditionThresholds.readDamageThreshold(id, sequelize, Sequelize);
-ct.update = (id, propertyId, yellowThreshold, redThreshold) => conditionThresholds.updateDamageThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
-ct.delete = (id) => conditionThresholds.deleteDamageThreshold(id, sequelize, Sequelize);
-
-exports.ct = ct;
-
-var ewth = {};
-// DB Tools export from WaterThresholdDbTools - Team Cyclone
-ewth.create = (yellowThreshold, redThreshold, propertyId) => waterThresholds.createWaterThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize);
-ewth.read = (id) => { waterThresholds.readWaterThreshold(id, sequelize, Sequelize) };
-ewth.update = (id, propertyId, yellowThreshold, redThreshold) => waterThresholds.updateWaterThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
-ewth.delete = (id) => waterThresholds.deleteWaterThreshold(id, sequelize, Sequelize);
-
-exports.ewth = ewth;
-
-var  epth = {};
-// DB Tools export from PowerThresholdDbTools - Team Cyclone
-epth.create = (yellowThreshold, redThreshold, propertyId) => { powerThresholds.createPowerThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize) };
-epth.read = async (id) => await powerThresholds.readPowerThreshold(id, sequelize, Sequelize) ;
-epth.update = (id, propertyId, yellowThreshold, redThreshold) => powerThresholds.updatePowerThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
-epth.delete = (id) => powerThresholds.deletePowerThreshold(id, sequelize, Sequelize);
-
-exports.epth = epth;
-
-var ehth = {};
-// DB Tools export from HeatThresholdDbTools - Team Cyclone
-ehth.create = (yellowThreshold, redThreshold, propertyId) => heatThresholds.createHeatThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize);
-ehth.read = (id) => heatThresholds.createHeatThreshold(id, sequelize, Sequelize);
-ehth.update = (id, propertyId, yellowThreshold, redThreshold) => heatThresholds.updateHeatThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
-ehth.delete = (id) => heatThresholds.deleteHeatThreshold(id, sequelize, Sequelize);
-
-exports.ehth = ehth;
-
 propt = {};
 propt.create = (typeId, name) => propertyTypes.createPropertyType(typeId, name, sequelize, Sequelize);
 propt.read = async (id) => await propertyTypes.readPropertyType(id, sequelize, Sequelize);
@@ -898,31 +756,6 @@ propt.update = (typeId, name) => propertyTypes.updatePropertyType(typeId, name, 
 propt.delete = (id) => propertyTypes.deletePropertyType(id, sequelize, Sequelize);
 
 exports.propt = propt;
-
-// DB Tools export from DamageThresholdDbTools - Team Cyclone
-exports.createDamageThreshold = (yellowThreshold, redThreshold, propertyId) => {hett.createHeatThreshold(yellowThreshold, redThreshold, propertyId, sequelize, Sequelize)};
-exports.readDamageThreshold = (id) => {hett.createHeatThreshold(id, sequelize, Sequelize)};
-exports.updateDamageThreshold = (id, propertyId, yellowThreshold, redThreshold) => hett.updateHeatThreshold(id, propertyId, yellowThreshold, redThreshold, sequelize, Sequelize);
-exports.deleteDamageThreshold = (id) => hett.deleteHeatThreshold(id, sequelize, Sequelize);
-//-------------------------------------------------------------//
-// DB Tools export from energiWeightDbTools - Team Tempest
-exports.createEnergyWeight = (categoryId, propertyId, weight) => {ewt.createEnergyWeight(propertyId, categoryId, weight, sequelize, Sequelize)};
-exports.readEnergyWeight = async (propertyId) => {return await ewt.readEnergyWeight(propertyId, sequelize, Sequelize)};
-exports.updateEnergyWeight = (propertyId, categoryId, weight) => ewt.updateEnergyWeight(propertyId, categoryId, weight, sequelize, Sequelize);
-exports.deleteEnergyWeight = (propertyId) => ewt.deleteEnergyWeight(propertyId, sequelize, Sequelize);
-
-// DB Tools export from helpdeksWeightDbTools - Team Tempest
-exports.createHelpdeskWeightTable = (categoryId, propertyId, weight) => {hwt.createHelpdeskWeight(propertyId, categoryId, weight, sequelize, Sequelize)};
-exports.readHelpdeskWeight = async (id) => {return await hwt.readHelpdeskWeight(id, sequelize, Sequelize)};
-exports.updateHelpdeskWeightTable = (propertyId, categoryId, weight) => hwt.updateHelpdeskWeight(propertyId, categoryId, weight, sequelize, Sequelize);
-exports.deleteHelpdeskWeight = (id) => hwt.deleteHelpdeskWeight(id, sequelize, Sequelize);
-exports.getHelpdeskWeightTable = hwt.getHelpdeskWeightTable(sequelize,Sequelize);
-
-// DB Tools export from stateWeightDbTools - Team Tempest
-exports.createStateWeightTable = (categoryId, propertyId, weight) => {swt.createStateWeight(propertyId, categoryId, weight, sequelize, Sequelize)};
-exports.readStateWeight = async (id) => {return await swt.readStateWeight(id, sequelize, Sequelize)};
-exports.updateStateWeightTable = (propertyId, categoryId, weight) => swt.updateStateWeight(propertyId, categoryId, weight, sequelize, Sequelize);
-exports.deleteStateWeight = (id) => swt.deleteStateWeight(id, sequelize, Sequelize);
 
 // DB Tools export from ThresholdsAndweightsDbTools - Team Tempest
 exports.createThresholdsAndWeights = (superCategoryId, propertyId, categoryId, thresholdYellow, thresholdRed,  weight) => {
