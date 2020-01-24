@@ -89,18 +89,20 @@ router.post('/getData', async function(req, res, next) {
       let thresholdData = await db.epth.read(propertyId);
       json.yellow = thresholdData[0].dataValues.threshold_yellow;
       json.red = thresholdData[0].dataValues.threshold_red;
-      let weightData = await db.readEnergiWeight(propertyId);
-      json.weight = weightData[0].dataValues.overall_energi;
+      let weightData = await db.readEnergyWeight(propertyId);
+      json.weight = weightData[0].dataValues.weight;
     }else if (req.body.category == 1){
       let thresholdData = await db.ct.read(propertyId);
       json.yellow = thresholdData[0].dataValues.threshold_yellow;
       json.red = thresholdData[0].dataValues.threshold_red;
-      json.weight = weightData[0].dataValues.overall_tilstand;
+      let weightData = await db.readStateWeight(propertyId);
+      json.weight = weightData[0].dataValues.weight;
     }else if (req.body.category == 2){
       let thresholdData = await db.ht.read(propertyId);
       json.yellow = thresholdData[0].dataValues.threshold_yellow;
       json.red = thresholdData[0].dataValues.threshold_red;
-      json.weight = weightData[0].dataValues.overall_helpdesk;
+      let weightData = await db.readHelpdeskWeight(propertyId);
+      json.weight = weightData[0].dataValues.weight;
     }
 
   }else if(req.body.category >= 0 && req.body.property_type >= 0){
