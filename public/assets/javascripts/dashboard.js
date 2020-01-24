@@ -224,13 +224,13 @@ initEventListeners = () =>{
     });
     conditionCategoryList.addEventListener("click", (ev) =>{
         let clickedIndex = ev.target.attributes.value.value;
-        optionsSelected[2] = clickedIndex;
+        optionsSelected[2] = parseInt(clickedIndex) + 1;
         setActive(conditionCategoryLiItems, clickedIndex);
         fetchData();
     });
     helpdeskCategoryList.addEventListener("click", (ev) =>{
         let clickedIndex = ev.target.attributes.value.value;
-        optionsSelected[2] = clickedIndex;
+        optionsSelected[2] = parseInt(clickedIndex) + 1;
         setActive(helpdeskCategoryLiItems, clickedIndex);
         fetchData();
     });

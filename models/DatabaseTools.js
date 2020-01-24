@@ -329,27 +329,20 @@ generateStartData = async () => {
         hct.create("Vinduer og Udvendige Døre");
         hct.create("Fundament og Sokkel");
 
-        this.createThresholdsAndWeights(0, 0, 0, 6, 6, 61);
-        this.createThresholdsAndWeights(0, 420, 0, 5, 5, 71);
-        this.createThresholdsAndWeights(0, 440, 0, 4, 4, 81);
-
-        this.createThresholdsAndWeights(1, 0, 0, 9, 9, 65);
-        this.createThresholdsAndWeights(1, 420, 0, 8, 8, 75);
-        this.createThresholdsAndWeights(1, 440, 0, 7, 7, 85);
-
-        this.createThresholdsAndWeights(2, 0, 0, 4, 4, 60);
-        this.createThresholdsAndWeights(2, 420, 0, 3, 3, 70);
-        this.createThresholdsAndWeights(2, 440, 0, 2, 2, 80);
-
 
         var propertyTypeIdArray = [0, 420, 440];
         var numberOfSubCategories = [3, 10, 10]
         for (l = 0; l < 3; l++) {
             for (i = 0; i < 3; i++) {
-                for (j = 0; j <= numberOfSubCategories[i]; j++) {
-                    let rand = Math.floor(Math.random() * 10);
-                    let randy = Math.floor(Math.random() * 100);
-                    this.createThresholdsAndWeights(l, propertyTypeIdArray[i], j, rand, rand, randy)
+                for (j = 0; j <= numberOfSubCategories[l]; j++) {
+                    if(i !== 0) {
+                        let rand = Math.floor(Math.random() * 10);
+                        let randy = Math.floor(Math.random() * 100);
+                        this.createThresholdsAndWeights(l, propertyTypeIdArray[i], j, rand, rand, randy)
+                    }else{
+                        this.createThresholdsAndWeights(l, 0, 0, 10, 20, 30);
+                        break;
+                    }
                 }
             }
         }
