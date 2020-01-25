@@ -20,11 +20,15 @@ router.get('/', async function(req, res, next) {
 /* POST save data when save button is pressed */
 router.post('/save', async function(req, res, next) {
 
-  console.log('helpdesk post route');
+  console.log(req.body.property_type_id)
+  let propertyIdSearch = req.body.property_type_id === '0' ? '0' : await db.propt.read(req.body.property_type_id);
+  let propertyId = propertyIdSearch === '0' ? '0' : propertyIdSearch[0].dataValues.type_id;
 
   //take and handle form data!!!
 
-  console.log(req.body);
+  console.log(propertyId);
+  db.updateThresholdsAndWeights(req.body.super_category_id, propertyId,
+      req.body.category_id, req.body.threshold_yellow, req.body.threshold_red, req.body.weight);
 
   res.send();
   
@@ -38,7 +42,6 @@ router.post('/getData', async function(req, res, next) {
   let propertyId = propertyIdSearch === '0' ? '0' : propertyIdSearch[0].dataValues.type_id;
   console.log(req.body.category + propertyId + req.body.category_option);
   let weightsAndThresholds = await db.readThresholdsAndWeights(req.body.category, propertyId, req.body.category_option);
-  console.log(weightsAndThresholds);
 
   json.yellow = weightsAndThresholds[0].dataValues.threshold_yellow;
   json.red = weightsAndThresholds[0].dataValues.threshold_red;

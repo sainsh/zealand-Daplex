@@ -58,8 +58,6 @@ readThresholdsAndWeights = async function(superCategoryId, propertyId, categoryI
     let thresholdAndWeights = getThresholdsAndWeightsTable(sequelize, Sequelize);
     let result = await thresholdAndWeights.findAll((superCategoryId ? {where: {super_category_id: superCategoryId, property_type_id: propertyId, category_id: categoryId}} : {}));
 
-    console.log(debugMessage + result.length === 0 ? result : 'nothing was found with the specified id');
-
     return result.length === 0 ? await Promise.reject(new Error("No power threshold data found")) : result;
 };
 
@@ -71,7 +69,7 @@ updateThresholdsAndWeights = async function(superCategoryId, propertyId, categor
     console.log(debugMessage + 'Update initialized...');
 
     try {
-        console.log(debugMessage + 'Getting Table...');
+        console.log(debugMessage + superCategoryId+ propertyId+ categoryId+ thresholdYellow+ thresholdRed+ weight);
         let thresholdsAndWeights = getThresholdsAndWeightsTable(sequelize, Sequelize);
 
         console.log(debugMessage + 'Updating Table...');

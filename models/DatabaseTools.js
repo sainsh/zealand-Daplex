@@ -311,11 +311,9 @@ generateStartData = async () => {
             for (i = 0; i < 3; i++) {
                 for (j = 0; j <= numberOfSubCategories[l]; j++) {
                     if(i !== 0) {
-                        let rand = Math.floor(Math.random() * 10);
-                        let randy = Math.floor(Math.random() * 100);
-                        this.createThresholdsAndWeights(l, propertyTypeIdArray[i], j, rand, rand, randy)
+                        this.createThresholdsAndWeights(l, propertyTypeIdArray[i], j, 5, 5, 50)
                     }else{
-                        this.createThresholdsAndWeights(l, 0, 0, 10, 20, 30);
+                        this.createThresholdsAndWeights(l, 0, 0, 5, 5, 50);
                         break;
                     }
                 }
@@ -326,8 +324,8 @@ generateStartData = async () => {
     try {
         await prtt.read();
     } catch (e) {
-        prtt.create(420, "Skole");
-        prtt.create(440, "Daginstitution");
+        await prtt.create(420, "Skole");
+        await prtt.create(440, "Daginstitution");
     }
 
 }

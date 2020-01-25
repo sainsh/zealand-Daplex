@@ -65,8 +65,8 @@ saveInputData = () => {
     http.onload = () =>{
         console.log(http.responseText)
     };
-    http.send(JSON.stringify({"category": `${optionsSelected[0]}`, "property_type" : `${optionsSelected[1]}`,
-        "category_option": `${optionsSelected[2]}`, "threshold_yellow" : `${yellow}`, "threshold_red" : `${red}`, "weight" : `${weight}`}));
+    http.send(JSON.stringify({"super_category_id": `${optionsSelected[0]}`, "property_type_id" : `${optionsSelected[1]}`,
+        "category_id": `${optionsSelected[2]}`, "threshold_yellow" : `${yellow}`, "threshold_red" : `${red}`, "weight" : `${weight}`}));
 
 };
 

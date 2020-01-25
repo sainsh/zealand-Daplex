@@ -165,6 +165,15 @@ html {
     border: none;
     border-radius: 8px;
     margin: auto;
+    cursor: pointer;
+}
+
+.input-container button:hover {
+    background-color: #dbdbdb;
+}
+
+.input-container button:active {
+    background-color: #828282;
 }
 
 .slide-container {
