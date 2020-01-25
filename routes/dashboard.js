@@ -9,75 +9,28 @@ router.get('/', async function(req, res, next) {
   var helpdeskCategories = await db.hct.read();
   var propertyTypes = await db.prtt.read();
 
-  var helpdeskTresholdData;
-  var conditionThresholdData;
-  var energyThresholdData;
-
-  try{
-    helpdeskTresholdData = await db.ht.read();
-    //conditionThresholdData = await db.ct.read();
-    //energyThresholdData = [await db.ept.read(), await db.ewt.read(), await db.eht.read()]
-  } catch(e){
-    helpdeskTresholdData = fillThresholdObjOnError();
-  }
 
   res.render('dashboard', { 
     helpdeskCategories: helpdeskCategories, 
     conditionCategories: helpdeskCategories, 
-    propertyTypes: propertyTypes, 
-    helpdeskThresholdData: helpdeskTresholdData});
+    propertyTypes: propertyTypes});
 
 });
 
 /* POST save data when save button is pressed */
-router.post('/helpdesk', async function(req, res, next) {
+router.post('/save', async function(req, res, next) {
 
   console.log('helpdesk post route');
 
   //take and handle form data!!!
 
-  console.log("Yellow = " + req.body.yellowThreshold);
-  console.log("Red = " + req.body.redThreshold);
-  console.log("Weight = " + req.body.weightslider);
-  console.log("category = " + req.body.category);
+  console.log(req.body);
 
-  res.redirect('/dashboard#helpdesk');
+  res.send();
   
 
 });
 
-/* POST save data when save button is pressed */
-router.post('/condition', async function(req, res, next) {
-
-  console.log('condition post route');
-
-  //take and handle form data!!!
-
-  console.log("Yellow = " + req.body.yellowThreshold);
-  console.log("Red = " + req.body.redThreshold);
-  console.log("Weight = " + req.body.weightslider);
-  console.log("category = " + req.body.category);
-
-  res.redirect('/dashboard#condition');
-  
-
-});
-
-/* POST save data when save button is pressed */
-router.post('/energy', async function(req, res, next) {
-
-  console.log('energy post route');
-
-  //take and handle form data!!!
-
-  console.log("Yellow = " + req.body.yellowThreshold);
-  console.log("Red = " + req.body.redThreshold);
-  console.log("Weight = " + req.body.weightslider);
-  console.log("category = " + req.body.category);
-
-  res.redirect('/dashboard#energy');
-  
-});
 
 router.post('/getData', async function(req, res, next) {
   let json = {yellow: -1, red: -1, weight: -1};

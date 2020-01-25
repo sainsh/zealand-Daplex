@@ -58,18 +58,17 @@ block content
     div.pop-out(id='pop-out3')
         p.pop-out-header(id='pop-out-header3') Vægtning
 
-            form.input-container(id='submitForm' name="inputForm" onSubmit='return saveInputData()')
+            .input-container(id='submitForm')
                 label Gul grænseværdi
-                input(type="number" id="thresholdYellow" name='yellowThreshold' value= helpdeskThresholdData.threshold_yellow)
+                input(type="number" id="thresholdYellow" name='yellowThreshold')
                 label Rød grænseværdi
-                input(type="number" id="thresholdRed" name='redThreshold' value= helpdeskThresholdData.threshold_red)
+                input(type="number" id="thresholdRed" name='redThreshold')
                 input(type="hidden" name='category' id='formCategory')
 
                 div.slide-container
                     label(for="weightslider" id='weightslider') Vægtning
                     input(type="range" min="0" max="100" value="50" class="slider" id="myRange" name='weightslider')
-
-                button(type="submit" value='Submit') Gem
+                button(onclick="saveInputData()") Gem
 
 
 

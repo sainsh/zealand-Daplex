@@ -35,14 +35,6 @@ window.onhashchange = function () {
     slider.addEventListener('change', () => {
         weightslidertext.innerText = 'Vægtning = ' + slider.value;
     })
-
-    // getting url including # and after. fx. www.example.com/dashboard#energy returns #energy
-    let urlhash = window.location.hash;
-
-
-    // checking if hash exits
-    if (urlhash != '') {
-
         // showing popout view if menu item is selected
         this.document.getElementById('pop-out').style.display = 'block';
         // getting header text from popout view
@@ -57,119 +49,24 @@ window.onhashchange = function () {
         //Setting propertytypes to Global option everytime category changes
         this.document.getElementById('property-types').selectedIndex = "0";
 
-        // if helpdesk category is chosen
-        if (urlhash == "#helpdesk") {
-            // changing popout header text and showing correct select box
-            headertext.innerText = 'Helpdesk';
-
-            selectBoxes[0].style.display = 'block';
-            selectBoxes[1].style.display = 'none';
-            selectBoxes[2].style.display = 'none';
-
-            //Setting select to default option in case it was changed earlier
-            this.document.getElementById('helpdesk-category').selectedIndex = "0";
-
-            // if condition category is chosen
-        } else if (urlhash == "#condition") {
-
-            // changing popout header text and showing correct select box
-            headertext.innerText = 'Tilstand';
-
-            selectBoxes[0].style.display = 'none';
-            selectBoxes[1].style.display = 'block';
-            selectBoxes[2].style.display = 'none';
-
-            //Setting select to default option in case it was changed earlier
-            this.document.getElementById('condition-category').selectedIndex = "0";
-
-            // if energy category is chosen
-        } else if (urlhash == "#energy") {
-
-            // changing popout header text and showing correct select box
-            headertext.innerText = 'Energi';
-
-            selectBoxes[0].style.display = 'none';
-            selectBoxes[1].style.display = 'none';
-            selectBoxes[2].style.display = 'block';
-
-            //Setting select to default option in case it was changed earlier
-            this.document.getElementById('energy-category').selectedIndex = "0";
-
-        }
-
-    }
-
 }
 
 /* handle save button click and submit form to the right method and url */
 saveInputData = () => {
 
-    console.log('function called');
 
-    // getting url including # and after fx. www.example.com/dashboard#energy returns #energy
-    let urlhash = window.location.hash;
+        let yellow = document.getElementById('thresholdYellow').value;
+        let red = document.getElementById('thresholdRed').value;
+        let weight = document.getElementById('myRange').value;
 
-    // getting the data from the form, only used for debugging
-    let data = [document.getElementById('thresholdYellow').value, document.getElementById('thresholdRed').value, document.getElementById('myRange').value];
-
-    // getting form document
-    let submitForm = document.getElementById('submitForm');
-
-    // loggin data for debugging
-    console.log(data);
-
-    // handle form submit (save button)
-    // if hash is helpdesk
-    if (urlhash == "#helpdesk") {
-
-        console.log('helpdesk');
-
-        // adding the category value to the data array
-        data[3] = document.getElementById('helpdesk-category').value;
-
-        // adding category value to the hidden form element
-        document.getElementById('formCategory').value = data[3];
-
-        console.log(data);
-
-        // adding form attributes acording to url hash
-        submitForm.setAttribute('method', "post");
-        submitForm.setAttribute('action', "/dashboard/helpdesk");
-
-        // returning true to continue the submitting of the form
-        return true;
-
-    } else if (urlhash == "#condition") {
-        console.log('condition');
-
-        // adding the category value to the data array
-        data[3] = document.getElementById('condition-category').value;
-
-        // adding category value to the hidden form element
-        document.getElementById('formCategory').value = data[3];
-
-        submitForm.setAttribute('method', "post");
-        submitForm.setAttribute('action', "/dashboard/condition");
-
-        return true;
-
-    } else if (urlhash == "#energy") {
-        console.log('energy');
-
-        // adding the category value to the data array
-        data[3] = document.getElementById('energy-category').value;
-
-        // adding category value to the hidden form element
-        document.getElementById('formCategory').value = data[3];
-
-        submitForm.setAttribute('method', "post");
-        submitForm.setAttribute('action', "/dashboard/energy");
-
-        return true;
-
-    }
-
-    return false;
+    var http = new XMLHttpRequest();
+    http.open('POST', '/dashboard/save');
+    http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    http.onload = () =>{
+        console.log(http.responseText)
+    };
+    http.send(JSON.stringify({"category": `${optionsSelected[0]}`, "property_type" : `${optionsSelected[1]}`,
+        "category_option": `${optionsSelected[2]}`, "threshold_yellow" : `${yellow}`, "threshold_red" : `${red}`, "weight" : `${weight}`}));
 
 };
 
@@ -258,7 +155,8 @@ fetchData = () =>{
         let response = JSON.parse(http.responseText);
         populateForm(response.yellow, response.red, response.weight);
     };
-    http.send(JSON.stringify({"category": `${optionsSelected[0]}`, "property_type" : `${optionsSelected[1]}`, "category_option": `${optionsSelected[2]}`}));
+    http.send(JSON.stringify({"category": `${optionsSelected[0]}`, "property_type" : `${optionsSelected[1]}`,
+        "category_option": `${optionsSelected[2]}`}));
 };
 
 populateForm = (y, r, s) =>{
@@ -278,20 +176,6 @@ populateForm = (y, r, s) =>{
 
     }
 
-}
-
-getBodyJson = () =>{
-    let urlhash = window.location.hash;
-
-    let categoryOption = "";
-    if(urlhash == "#helpdesk"){
-        categoryOption = helpdesk.options[helpdesk.selectedIndex].value;
-    } else if(urlhash == "#condition"){
-        categoryOption = condition.options[condition.selectedIndex].value;
-    } else if(urlhash == "#energy"){
-        categoryOption = energy.options[energy.selectedIndex].value;
-    }
-    return JSON.stringify({"category": `${urlhash.substr(1)}`, "property_type" : `${property.options[property.selectedIndex].value}`, "category_option": `${categoryOption}`});
 }
 
 initEventListeners();
