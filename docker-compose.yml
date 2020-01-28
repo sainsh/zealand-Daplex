@@ -1,0 +1,28 @@
+version: '3.3'
+
+services:
+      
+  daplex-db:
+    image: easj/daplex-db:v2
+    build:
+      context: ./DaplexDB
+    deploy:
+        update_config:
+            delay: 30s
+    networks:
+      - daplex-net
+
+  daplex-app:
+    image: easj/daplex-app:v2
+    build:
+      context: ./Daplex
+    ports:
+      - "3000:3000"
+    depends_on:
+      - daplex-db
+    restart: on-failure
+    networks:
+      - daplex-net
+
+networks:
+  daplex-net:
