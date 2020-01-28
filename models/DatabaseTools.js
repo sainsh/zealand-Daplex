@@ -12,7 +12,7 @@ const taw = require('./ThresholdAndWeightDbTools');
 // database tools import for power data
 const pt = require('./PowerDBTools');
 
-const host = '127.0.0.1';
+const host = 'daplex-db';
 const user = 'root';
 const password = 'password';
 const database = 'daplex';
